@@ -1,0 +1,67 @@
+# macOS
+._*
+.DS_Store
+
+# Editor/IDE configs
+.idea/
+.vscode/
+.swp
+*.iml
+
+# General detritus
+logs/
+
+# Environment
+.env
+
+# Python environments
+env/
+venv/
+pip-log.txt
+
+# Python
+__pycache__/
+*.py[cod]
+.python-version
+
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+.pnpm-debug.log
+.pnpm-store/
+
+# Nuxt
+.nuxt
+
+# Airflow
+airflow.cfg
+airflow.db
+
+# Local certificates
+*.pem
+*.crt
+*.key
+
+# pre-commit
+pre-commit.pyz
+
+# Ruff
+.ruff_cache
+
+# ESLint
+.eslintcache
+
+# Vercel
+vercel.json
+.vercel
+
+# Grafana
+grafana.db
+
+# Ingestion server
+# TODO: This shouldn't be in root
+ingestion_server.log
+
+*.tsbuildinfo
+
+dist
