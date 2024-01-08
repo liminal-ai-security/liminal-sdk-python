@@ -1,5 +1,5 @@
+from msal import PublicClientApplication
 from msal.authority import AuthorityBuilder
-from msal import PublicClientApplication, TokenCache
 
 
 class _LoginService:

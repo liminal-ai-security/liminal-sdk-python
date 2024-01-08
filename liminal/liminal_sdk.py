@@ -1,5 +1,5 @@
-from auth.auth import _LoginService
 import requests
+from auth.auth import _LoginService
 
 
 class LiminalSDK:
