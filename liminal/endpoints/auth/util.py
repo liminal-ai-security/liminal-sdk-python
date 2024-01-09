@@ -1,4 +1,4 @@
-"""Define utilities."""
+"""Define utilities for the auth endpoint."""
 from typing import Any, cast
 
 import jwt

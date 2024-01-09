@@ -1,12 +1,18 @@
-"""Define helpers for the auth client service."""
+"""Define the auth endpoint."""
 import asyncio
-from abc import ABC
-from typing import cast
+import json
 
+import msgspec
 from msal import PublicClientApplication
 
 from liminal.const import LOGGER
 from liminal.errors import LiminalError
+
+from .models import (
+    AuthProvider,
+    MSALCacheTokenResponse,
+    MSALIdentityProviderTokenResponse,
+)
 
 DEFAULT_AUTH_CHALLENGE_TIMEOUT = 60
 
@@ -21,21 +27,6 @@ class AuthFailedError(AuthServiceError):
     """Define an error related to authentication failure."""
 
     pass
-
-
-class AuthProvider(ABC):
-    """Define an auth provider abstract base class."""
-
-    async def get_access_token(self) -> str:
-        """Retrieve an access token from the auth provider.
-
-        The working principle here is that the auth provider will return an access
-        token that can be used to authenticate with the Liminal API server.
-
-        Returns:
-            The access token.
-        """
-        raise NotImplementedError
 
 
 class MicrosoftAuthProvider(AuthProvider):
@@ -77,7 +68,10 @@ class MicrosoftAuthProvider(AuthProvider):
                 self.DEFAULT_SCOPES, account=accounts[0]
             ):
                 LOGGER.debug("Retrieved access token from existing cache")
-                return cast(str, result["access_token"])
+                cached_response = msgspec.json.decode(
+                    json.dumps(result), type=MSALCacheTokenResponse
+                )
+                return cached_response.access_token
 
         LOGGER.debug("No cached access token found; generating a new one")
 
@@ -91,9 +85,14 @@ class MicrosoftAuthProvider(AuthProvider):
                 )
                 result = await fut
         except asyncio.TimeoutError as err:
+            # Setting the flow to expire immediately will effectively kill the future
+            # that we're awaiting:
             flow["expires_at"] = 0
             raise AuthFailedError(
                 "Timed out waiting for authentication challenge"
             ) from err
 
-        return cast(str, result["access_token"])
+        identity_provider_response = msgspec.json.decode(
+            json.dumps(result), type=MSALIdentityProviderTokenResponse
+        )
+        return identity_provider_response.access_token

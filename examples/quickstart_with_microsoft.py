@@ -3,7 +3,8 @@ import asyncio
 import logging
 import os
 
-from liminal import Client, MicrosoftAuthProvider
+from liminal import Client
+from liminal.endpoints.auth import MicrosoftAuthProvider
 from liminal.errors import LiminalError
 
 _LOGGER = logging.getLogger("example")
@@ -15,7 +16,7 @@ TENANT_ID = os.environ["TENANT_ID"]
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
     # Create an auth provider to authenticate the user
     microsoft_auth_provider = MicrosoftAuthProvider(TENANT_ID, CLIENT_ID)
@@ -26,8 +27,12 @@ async def main() -> None:
     try:
         # Authenticate the user:
         await liminal.authenticate()
+
+        # Get available LLMs:
+        available_llms = await liminal.llm.get_available()
+        _LOGGER.info("Available LLMs: %s", available_llms)
     except LiminalError as err:
-        _LOGGER.error("Error while authenticating: %s", err)
+        _LOGGER.error("Error running the script: %s", err)
 
 
 asyncio.run(main())
