@@ -29,8 +29,7 @@ Fixes #[issue number] by @[issue author]
 - [ ] I tried running the project locally and verified that there are no visible
       errors.
 
-[best_practices]:
-  https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project#_commit_guidelines
+[best_practices]: https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project#_commit_guidelines
 
 ## Developer Certificate of Origin
 
