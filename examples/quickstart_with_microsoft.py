@@ -32,13 +32,17 @@ async def main() -> None:
         available_llms = await liminal.llm.get_available()
         _LOGGER.info("Available LLMs: %s", available_llms)
 
-        # Get available threads:
-        available_threads = await liminal.thread.get_available()
-        _LOGGER.info("Available threads: %s", available_threads)
-
         # Create a thread using GPT-4:
         created_thread = await liminal.thread.create("openai_4", "My thread")
         _LOGGER.info("Created thread: %s", created_thread)
+
+        # Get a thread by ID:
+        retrieved_thread = await liminal.thread.get_by_id(created_thread.id)
+        _LOGGER.info("Retrieved thread: %s", retrieved_thread)
+
+        # Get all available threads:
+        available_threads = await liminal.thread.get_available()
+        _LOGGER.info("Available threads: %s", available_threads)
     except LiminalError as err:
         _LOGGER.error("Error running the script: %s", err)
 

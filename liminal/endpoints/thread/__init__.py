@@ -40,8 +40,15 @@ class ThreadEndpoint:
         )
 
     async def get_available(self) -> list[Thread]:
-        """Get available LLMs."""
+        """Get available threads."""
         return cast(
             list[Thread],
             await self._request_and_validate("GET", "/sdk/thread", list[Thread]),
+        )
+
+    async def get_by_id(self, thread_id: int) -> Thread:
+        """Get a thread by ID."""
+        return cast(
+            Thread,
+            await self._request_and_validate("GET", f"/sdk/thread/{thread_id}", Thread),
         )
