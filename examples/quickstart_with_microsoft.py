@@ -47,6 +47,16 @@ async def main() -> None:
         # Delete a thread by ID:
         await liminal.thread.delete_by_id(retrieved_thread.id)
         _LOGGER.info("Deleted thread: %s", retrieved_thread)
+
+        # Analyze a prompt:
+        prompt = (
+            "Write a personalized marketing email for a banking customer Jane "
+            "Gansbuhler, whose email address is egansbuhler0@pinterest.com and "
+            "who lives at 14309 Lindbergh Circle Alexander City Alabama. Jane "
+            "was born on 6/5/1961 and identifies as Female"
+        )
+        findings = await liminal.prompt.analyze(prompt)
+        _LOGGER.info("Analysis findings: %s", findings)
     except LiminalError as err:
         _LOGGER.error("Error running the script: %s", err)
 

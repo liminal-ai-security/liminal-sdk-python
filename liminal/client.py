@@ -10,6 +10,7 @@ from liminal.endpoints.auth import AuthProvider
 from liminal.endpoints.auth.models import LiminalTokenResponse
 from liminal.endpoints.auth.util import decode_jwt
 from liminal.endpoints.llm import LLMEndpoint
+from liminal.endpoints.prompt import PromptEndpoint
 from liminal.endpoints.thread import ThreadEndpoint
 from liminal.errors import AuthError, RequestError
 from liminal.helpers.typing import ValidatedResponseT
@@ -48,6 +49,7 @@ class Client:
 
         # Define endpoints:
         self.llm = LLMEndpoint(self._request_and_validate)
+        self.prompt = PromptEndpoint(self._request_and_validate)
         self.thread = ThreadEndpoint(self._request, self._request_and_validate)
 
     async def _request(
