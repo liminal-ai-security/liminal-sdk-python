@@ -1,7 +1,6 @@
 """Define the client module."""
 # pylint: disable=too-many-arguments
 from datetime import datetime
-from typing import TypeVar
 
 import msgspec
 from httpx import AsyncClient, HTTPStatusError, Request, Response
@@ -12,11 +11,10 @@ from liminal.endpoints.auth.models import LiminalTokenResponse
 from liminal.endpoints.auth.util import decode_jwt
 from liminal.endpoints.llm import LLMEndpoint
 from liminal.errors import AuthError, RequestError
+from liminal.helpers.typing import ValidatedResponseT
 
 DEFAULT_REQUEST_TIMEOUT = 60
 DEFAULT_SOURCE = "SDK"
-
-T = TypeVar("T")
 
 
 class Client:
@@ -97,12 +95,12 @@ class Client:
         self,
         method: str,
         endpoint: str,
-        expected_response_type: type[T],
+        expected_response_type: type[ValidatedResponseT],
         *,
         headers: dict[str, str] | None = None,
         params: dict[str, str] | None = None,
         data: dict[str, str] | None = None,
-    ) -> T:
+    ) -> ValidatedResponseT:
         """Make a request to the Liminal API server and validate the response."""
         response = await self._request(
             method, endpoint, headers=headers, params=params, data=data
