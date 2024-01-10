@@ -71,6 +71,10 @@ class Client:
         if self._access_token:
             headers["Authorization"] = f"Bearer {self._access_token}"
 
+        if not params:
+            params = {}
+        params["source"] = self._source
+
         if running_client := self._httpx_client and not self._httpx_client.is_closed:
             client = self._httpx_client
         else:
