@@ -43,6 +43,10 @@ async def main() -> None:
         # Get all available threads:
         available_threads = await liminal.thread.get_available()
         _LOGGER.info("Available threads: %s", available_threads)
+
+        # Delete a thread by ID:
+        await liminal.thread.delete_by_id(retrieved_thread.id)
+        _LOGGER.info("Deleted thread: %s", retrieved_thread)
     except LiminalError as err:
         _LOGGER.error("Error running the script: %s", err)
 

@@ -2,6 +2,8 @@
 from collections.abc import Awaitable, Callable
 from typing import cast
 
+from httpx import Response
+
 from liminal.helpers.typing import ValidatedResponseT
 
 from .models import Thread
@@ -11,9 +13,17 @@ class ThreadEndpoint:
     """Define the threads endpoint."""
 
     def __init__(
-        self, request_and_validate: Callable[..., Awaitable[ValidatedResponseT]]
+        self,
+        request: Callable[..., Awaitable[Response]],
+        request_and_validate: Callable[..., Awaitable[ValidatedResponseT]],
     ) -> None:
-        """Initialize."""
+        """Initialize.
+
+        Args:
+            request: The request function.
+            request_and_validate: The request and validate function.
+        """
+        self._request = request
         self._request_and_validate = request_and_validate
 
     async def create(self, llm_key: str, name: str) -> Thread:
@@ -45,6 +55,10 @@ class ThreadEndpoint:
             list[Thread],
             await self._request_and_validate("GET", "/sdk/thread", list[Thread]),
         )
+
+    async def delete_by_id(self, thread_id: int) -> None:
+        """Get a thread by ID."""
+        await self._request("DELETE", f"/sdk/thread/{thread_id}")
 
     async def get_by_id(self, thread_id: int) -> Thread:
         """Get a thread by ID."""

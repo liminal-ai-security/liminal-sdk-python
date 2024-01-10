@@ -48,7 +48,7 @@ class Client:
 
         # Define endpoints:
         self.llm = LLMEndpoint(self._request_and_validate)
-        self.thread = ThreadEndpoint(self._request_and_validate)
+        self.thread = ThreadEndpoint(self._request, self._request_and_validate)
 
     async def _request(
         self,
