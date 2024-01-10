@@ -4,7 +4,7 @@ from typing import cast
 
 from liminal.helpers.typing import ValidatedResponseT
 
-from .models import AvailableLLM
+from .models import LLMService
 
 
 class LLMEndpoint:
@@ -16,9 +16,9 @@ class LLMEndpoint:
         """Initialize."""
         self._request_and_validate = request_and_validate
 
-    async def get_available(self) -> list[AvailableLLM]:
+    async def get_available(self) -> list[LLMService]:
         """Get available LLMs."""
         return cast(
-            list[AvailableLLM],
-            await self._request_and_validate("GET", "/v1/models", list[AvailableLLM]),
+            list[LLMService],
+            await self._request_and_validate("GET", "/v1/models", list[LLMService]),
         )

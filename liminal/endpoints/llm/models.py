@@ -6,8 +6,8 @@ from typing import Literal
 import msgspec
 
 
-class AvailableLLM(msgspec.Struct):
-    """Define the schema for an available LLM."""
+class LLMService(msgspec.Struct):
+    """Define the schema for an LLM service that Liminal supports."""
 
     id: int
     key: str
@@ -21,4 +21,4 @@ class AvailableLLM(msgspec.Struct):
     teams_allowed: list[str] | None = msgspec.field(name="teamsAllowed")
     created_at: str = msgspec.field(name="createdAt")
     updated_at: str = msgspec.field(name="updatedAt")
-    model_key: str | None = msgspec.field(name="modelKey")
+    model_key: str | None = msgspec.field(name="modelKey", default=None)

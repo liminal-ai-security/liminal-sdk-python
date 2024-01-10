@@ -10,6 +10,7 @@ from liminal.endpoints.auth import AuthProvider
 from liminal.endpoints.auth.models import LiminalTokenResponse
 from liminal.endpoints.auth.util import decode_jwt
 from liminal.endpoints.llm import LLMEndpoint
+from liminal.endpoints.thread import ThreadEndpoint
 from liminal.errors import AuthError, RequestError
 from liminal.helpers.typing import ValidatedResponseT
 
@@ -26,7 +27,6 @@ class Client:
         api_server_url: str,
         *,
         source: str = DEFAULT_SOURCE,
-        llm_service_model_key: str | None = None,
         httpx_client: AsyncClient | None = None,
     ) -> None:
         """Initialize.
@@ -35,13 +35,11 @@ class Client:
             auth_provider: The instantiated auth provider to use.
             api_server_url: The URL of the Liminal API server.
             source: The source of the SDK.
-            llm_service_model_key: A key denoting which LLM to use.
             httpx_client: An optional HTTPX client to use.
         """
         self._api_server_url = api_server_url
         self._auth_provider = auth_provider
         self._httpx_client = httpx_client
-        self._llm_service_model_key = llm_service_model_key
         self._source = source
 
         # Token information will be filled in by authenticate():
@@ -50,6 +48,7 @@ class Client:
 
         # Define endpoints:
         self.llm = LLMEndpoint(self._request_and_validate)
+        self.thread = ThreadEndpoint(self._request_and_validate)
 
     async def _request(
         self,
@@ -58,9 +57,20 @@ class Client:
         *,
         headers: dict[str, str] | None = None,
         params: dict[str, str] | None = None,
-        data: dict[str, str] | None = None,
+        json: dict[str, str] | None = None,
     ) -> Response:
-        """Make a request to the Liminal API server and return a Response."""
+        """Make a request to the Liminal API server and return a Response.
+
+        Args:
+            method: The HTTP method to use.
+            endpoint: The endpoint to request.
+            headers: The headers to use.
+            params: The query parameters to use.
+            json: The JSON body to use.
+
+        Returns:
+            An HTTPX Response object.
+        """
         if not endpoint.startswith("/"):
             endpoint = f"/{endpoint}"
 
@@ -80,13 +90,16 @@ class Client:
         else:
             client = AsyncClient()
 
-        request = Request(method, url, headers=headers, params=params, data=data)
+        request = Request(method, url, headers=headers, params=params, json=json)
         response = await client.send(request)
 
         try:
             response.raise_for_status()
         except HTTPStatusError as err:
-            raise RequestError(err.response.json()) from err
+            response_body = err.response.json()
+            raise RequestError(
+                f"Error while sending request to {url}: {response_body['error']}"
+            ) from err
 
         if not running_client:
             await client.aclose()
@@ -103,11 +116,22 @@ class Client:
         *,
         headers: dict[str, str] | None = None,
         params: dict[str, str] | None = None,
-        data: dict[str, str] | None = None,
+        json: dict[str, str] | None = None,
     ) -> ValidatedResponseT:
-        """Make a request to the Liminal API server and validate the response."""
+        """Make a request to the Liminal API server and validate the response.
+
+        Args:
+            method: The HTTP method to use.
+            endpoint: The endpoint to request.
+            headers: The headers to use.
+            params: The query parameters to use.
+            json: The JSON body to use.
+
+        Returns:
+            A validated response object.
+        """
         response = await self._request(
-            method, endpoint, headers=headers, params=params, data=data
+            method, endpoint, headers=headers, params=params, json=json
         )
 
         try:
