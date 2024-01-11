@@ -54,9 +54,18 @@ async def main() -> None:
         findings = await liminal.prompt.analyze(retrieved_thread.id, prompt)
         _LOGGER.info("Analysis findings: %s", findings)
 
-        # Cleanse a prompt:
-        cleansed_prompt = await liminal.prompt.cleanse(retrieved_thread.id, prompt)
+        # Cleanse a prompt (choosing to include the findings we've already retrieved):
+        cleansed_prompt = await liminal.prompt.cleanse(
+            retrieved_thread.id, prompt, findings=findings
+        )
         _LOGGER.info("Cleansed prompt: %s", cleansed_prompt)
+
+        # r = await liminal._request(
+        #     "POST",
+        #     "/sdk/get_context_history",
+        #     json={"threadId": retrieved_thread.id},
+        # )
+        # print(r.content)
     except LiminalError as err:
         _LOGGER.error("Error running the script: %s", err)
 

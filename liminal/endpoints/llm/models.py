@@ -5,8 +5,10 @@ from typing import Literal
 
 import msgspec
 
+from liminal.helpers.model import BaseModel
 
-class LLMService(msgspec.Struct):
+
+class LLMService(BaseModel):
     """Define the schema for an LLM service that Liminal supports."""
 
     id: int

@@ -1,10 +1,10 @@
 """Define models for the LLM endpoint."""
 from __future__ import annotations
 
-import msgspec
+from liminal.helpers.model import BaseModel
 
 
-class AnalysisFinding(msgspec.Struct):
+class AnalysisFinding(BaseModel):
     """Define the schema for an analysis finding.
 
     This object stores information about a piece of text from a prompt, what sensitive
@@ -21,13 +21,13 @@ class AnalysisFinding(msgspec.Struct):
     policyAction: str
 
 
-class AnalyzeResponse(msgspec.Struct):
+class AnalyzeResponse(BaseModel):
     """Define the response schema for an analysis request."""
 
     findings: list[AnalysisFinding]
 
 
-class CleansedToken(msgspec.Struct):
+class CleansedToken(BaseModel):
     """Define the schema for a cleansed token."""
 
     start: int
@@ -35,7 +35,7 @@ class CleansedToken(msgspec.Struct):
     entity_type: str
 
 
-class CleanseResponse(msgspec.Struct):
+class CleanseResponse(BaseModel):
     """Define the response schema for a cleanse request."""
 
     items: list[CleansedToken]
@@ -45,3 +45,28 @@ class CleanseResponse(msgspec.Struct):
     # Represents the prompt with the sensitive data replaced with hashed tokens (which
     # are help in mapping):
     text_hashed: str
+
+
+# def test():
+#     return [
+#         {
+#             "deidText": "PERSON_1",
+#             "hashText": "e7jQ5Yi9nRXxNyK6NBW4Q2GNgyHunDgD+mqNACWQzPY=",
+#         },
+#         {
+#             "deidText": "PERSON_0",
+#             "hashText": "/orm1sYaK1f6EOMnN2ewyXEznsyulcuUYTOwK2DKC24=",
+#         },
+#         {
+#             "deidText": "LOCATION_0",
+#             "hashText": "1MfC83PELHvWN53CfVHVFGCHxCbPzbfmO8Dmdg",
+#         },
+#         {
+#             "deidText": "EMAIL_ADDRESS_0",
+#             "hashText": "wbDUkZncjP3Q6GZNTG0DV7NmUdpO8xcGjrlHZF",
+#         },
+#         {
+#             "deidText": "DATE_TIME_0",
+#             "hashText": "t/C9jwx6cw9qGezOWCbYg5a5mZI+3reZItYf3gS5P2I=",
+#         },
+#     ]

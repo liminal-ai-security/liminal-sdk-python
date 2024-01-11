@@ -3,12 +3,11 @@ from __future__ import annotations
 
 from typing import Literal
 
-import msgspec
-
 from liminal.endpoints.llm.models import LLMService
+from liminal.helpers.model import BaseModel
 
 
-class Thread(msgspec.Struct):
+class Thread(BaseModel):
     """Define the schema for a thread."""
 
     id: int

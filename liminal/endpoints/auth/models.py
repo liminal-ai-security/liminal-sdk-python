@@ -4,7 +4,7 @@ from __future__ import annotations
 from abc import ABC
 from typing import Literal
 
-import msgspec
+from liminal.helpers.model import BaseModel
 
 
 class AuthProvider(ABC):
@@ -22,14 +22,14 @@ class AuthProvider(ABC):
         raise NotImplementedError
 
 
-class LiminalTokenResponse(msgspec.Struct):
+class LiminalTokenResponse(BaseModel):
     """Define a Liminal token response."""
 
     message: str
     token: str
 
 
-class MSALCacheTokenResponse(msgspec.Struct):
+class MSALCacheTokenResponse(BaseModel):
     """Define an MSAL token response from Entra ID."""
 
     token_type: Literal["Bearer"]
@@ -38,7 +38,7 @@ class MSALCacheTokenResponse(msgspec.Struct):
     token_source: Literal["cache"]
 
 
-class MSALIdentityProviderTokenResponse(msgspec.Struct):
+class MSALIdentityProviderTokenResponse(BaseModel):
     """Define an MSAL token response from the local in-memory cache."""
 
     token_type: Literal["Bearer"]
