@@ -56,10 +56,6 @@ class ThreadEndpoint:
             await self._request_and_validate("GET", "/sdk/thread", list[Thread]),
         )
 
-    async def delete_by_id(self, thread_id: int) -> None:
-        """Get a thread by ID."""
-        await self._request("DELETE", f"/sdk/thread/{thread_id}")
-
     async def get_by_id(self, thread_id: int) -> Thread:
         """Get a thread by ID."""
         return cast(
