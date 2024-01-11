@@ -1,6 +1,9 @@
 """Define models for the LLM endpoint."""
 from __future__ import annotations
 
+import msgspec
+
+from liminal.endpoints.thread.models import DeidentifiedToken
 from liminal.helpers.model import BaseModel
 
 
@@ -15,10 +18,10 @@ class AnalysisFinding(BaseModel):
     end: int
     origin: str
     score: float
-    scoreCategory: str
+    score_category: str = msgspec.field(name="scoreCategory")
     text: str
     type: str
-    policyAction: str
+    policy_action: str = msgspec.field(name="policyAction")
 
 
 class AnalyzeResponse(BaseModel):
@@ -45,3 +48,34 @@ class CleanseResponse(BaseModel):
     # Represents the prompt with the sensitive data replaced with hashed tokens (which
     # are help in mapping):
     text_hashed: str
+
+
+class ReidentifiedToken(BaseModel):
+    """Define the schema for a reidentified token."""
+
+    start: int
+    end: int
+    entity_type: str
+    text: str
+
+
+class ProcessResponse(BaseModel):
+    """Define the response schema for a process request."""
+
+    thread_id: int = msgspec.field(name="threadId")
+    chat_id: int = msgspec.field(name="chatId")
+    input_text: str = msgspec.field(name="inputText")
+    deidentified_input_text_data: CleanseResponse = msgspec.field(
+        name="deidentifiedInputTextData"
+    )
+    deidentified_context_history: list[DeidentifiedToken] = msgspec.field(
+        name="deidentifiedContextHistory"
+    )
+    llm_model: str = msgspec.field(name="llmModel")
+    raw_llm_response_text: str = msgspec.field(name="rawLLMResponseText")
+    reidentified_llm_response_text: str = msgspec.field(
+        name="reidentifiedLLMResponseText"
+    )
+    reidentified_llm_response_items: list[ReidentifiedToken] = msgspec.field(
+        name="reidentifiedLLMResponseItems"
+    )

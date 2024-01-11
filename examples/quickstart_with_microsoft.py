@@ -46,10 +46,10 @@ async def main() -> None:
 
         # Analyze a prompt:
         prompt = (
-            "Write a personalized marketing email for a banking customer Jane "
-            "Gansbuhler, whose email address is egansbuhler0@pinterest.com and "
-            "who lives at 14309 Lindbergh Circle Alexander City Alabama. Jane "
-            "was born on 6/5/1961 and identifies as Female"
+            "Write a short marketing email for a banking customer Jane Gansbuhler, "
+            "whose email address is egansbuhler0@pinterest.com and who lives at 14309 "
+            "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
+            "identifies as Female"
         )
         findings = await liminal.prompt.analyze(retrieved_thread.id, prompt)
         _LOGGER.info("Analysis findings: %s", findings)
@@ -67,6 +67,14 @@ async def main() -> None:
         )
         _LOGGER.info("Deidentified context history: %s", deidentified_context_history)
 
+        # Send a prompt to an LLM and get a response:
+        response = await liminal.prompt.submit(
+            retrieved_thread.id,
+            prompt,
+            findings=findings,
+            deidentified_context_history=deidentified_context_history,
+        )
+        _LOGGER.info("LLM response: %s", response)
     except LiminalError as err:
         _LOGGER.error("Error running the script: %s", err)
 
