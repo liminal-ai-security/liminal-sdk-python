@@ -100,7 +100,8 @@ class Client:
         except HTTPStatusError as err:
             response_body = err.response.json()
             raise RequestError(
-                f"Error while sending request to {url}: {response_body['error']}"
+                f"Error while sending request to {url}: "
+                f"{response_body.get('error', 'Unknown')}"
             ) from err
 
         if not running_client:

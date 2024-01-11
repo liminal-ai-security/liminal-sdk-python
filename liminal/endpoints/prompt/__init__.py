@@ -4,7 +4,7 @@ from typing import cast
 
 from liminal.helpers.typing import ValidatedResponseT
 
-from .models import AnalyzeResponse
+from .models import AnalyzeResponse, CleanseResponse
 
 
 class PromptEndpoint:
@@ -20,18 +20,42 @@ class PromptEndpoint:
         """
         self._request_and_validate = request_and_validate
 
-    async def analyze(self, prompt: str) -> AnalyzeResponse:
+    async def analyze(self, thread_id: int, prompt: str) -> AnalyzeResponse:
         """Analyze a prompt for sensitive data.
 
         Args:
+            thread_id: The ID of the thread to analyze the prompt for.
             prompt: The prompt to analyze.
 
         Returns:
-            A series of "findings" that denote identified sensitive data in the prompt.
+            An object that contains identified sensitive data.
         """
         return cast(
             AnalyzeResponse,
             await self._request_and_validate(
-                "POST", "/sdk/analyze_response", AnalyzeResponse, json={"text": prompt}
+                "POST",
+                "/sdk/analyze_response",
+                AnalyzeResponse,
+                json={"threadId": thread_id, "text": prompt},
+            ),
+        )
+
+    async def cleanse(self, thread_id: int, prompt: str) -> CleanseResponse:
+        """Cleanse a prompt of sensitive data.
+
+        Args:
+            thread_id: The ID of the thread to cleanse the prompt for.
+            prompt: The prompt to cleanse.
+
+        Returns:
+            An object that contains a cleansed version of the prompt.
+        """
+        return cast(
+            CleanseResponse,
+            await self._request_and_validate(
+                "POST",
+                "/sdk/cleanse_response",
+                CleanseResponse,
+                json={"threadId": thread_id, "text": prompt},
             ),
         )

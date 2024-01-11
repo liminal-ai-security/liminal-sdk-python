@@ -25,3 +25,23 @@ class AnalyzeResponse(msgspec.Struct):
     """Define the response schema for an analysis request."""
 
     findings: list[AnalysisFinding]
+
+
+class CleansedToken(msgspec.Struct):
+    """Define the schema for a cleansed token."""
+
+    start: int
+    end: int
+    entity_type: str
+
+
+class CleanseResponse(msgspec.Struct):
+    """Define the response schema for a cleanse request."""
+
+    items: list[CleansedToken]
+    # Represents the prompt with the sensitive data replaced with cleansed tokens:
+    text: str
+    items_hashed: list[CleansedToken]
+    # Represents the prompt with the sensitive data replaced with hashed tokens (which
+    # are help in mapping):
+    text_hashed: str

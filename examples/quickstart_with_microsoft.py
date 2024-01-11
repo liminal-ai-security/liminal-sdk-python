@@ -36,17 +36,13 @@ async def main() -> None:
         created_thread = await liminal.thread.create("openai_4", "My thread")
         _LOGGER.info("Created thread: %s", created_thread)
 
-        # Get a thread by ID:
-        retrieved_thread = await liminal.thread.get_by_id(created_thread.id)
-        _LOGGER.info("Retrieved thread: %s", retrieved_thread)
-
         # Get all available threads:
         available_threads = await liminal.thread.get_available()
         _LOGGER.info("Available threads: %s", available_threads)
 
-        # Delete a thread by ID:
-        await liminal.thread.delete_by_id(retrieved_thread.id)
-        _LOGGER.info("Deleted thread: %s", retrieved_thread)
+        # Get a thread by ID:
+        retrieved_thread = await liminal.thread.get_by_id(created_thread.id)
+        _LOGGER.info("Retrieved thread: %s", retrieved_thread)
 
         # Analyze a prompt:
         prompt = (
@@ -55,8 +51,12 @@ async def main() -> None:
             "who lives at 14309 Lindbergh Circle Alexander City Alabama. Jane "
             "was born on 6/5/1961 and identifies as Female"
         )
-        findings = await liminal.prompt.analyze(prompt)
+        findings = await liminal.prompt.analyze(retrieved_thread.id, prompt)
         _LOGGER.info("Analysis findings: %s", findings)
+
+        # Cleanse a prompt:
+        cleansed_prompt = await liminal.prompt.cleanse(retrieved_thread.id, prompt)
+        _LOGGER.info("Cleansed prompt: %s", cleansed_prompt)
     except LiminalError as err:
         _LOGGER.error("Error running the script: %s", err)
 
