@@ -45,28 +45,3 @@ class CleanseResponse(BaseModel):
     # Represents the prompt with the sensitive data replaced with hashed tokens (which
     # are help in mapping):
     text_hashed: str
-
-
-# def test():
-#     return [
-#         {
-#             "deidText": "PERSON_1",
-#             "hashText": "e7jQ5Yi9nRXxNyK6NBW4Q2GNgyHunDgD+mqNACWQzPY=",
-#         },
-#         {
-#             "deidText": "PERSON_0",
-#             "hashText": "/orm1sYaK1f6EOMnN2ewyXEznsyulcuUYTOwK2DKC24=",
-#         },
-#         {
-#             "deidText": "LOCATION_0",
-#             "hashText": "1MfC83PELHvWN53CfVHVFGCHxCbPzbfmO8Dmdg",
-#         },
-#         {
-#             "deidText": "EMAIL_ADDRESS_0",
-#             "hashText": "wbDUkZncjP3Q6GZNTG0DV7NmUdpO8xcGjrlHZF",
-#         },
-#         {
-#             "deidText": "DATE_TIME_0",
-#             "hashText": "t/C9jwx6cw9qGezOWCbYg5a5mZI+3reZItYf3gS5P2I=",
-#         },
-#     ]

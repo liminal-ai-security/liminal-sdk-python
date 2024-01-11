@@ -60,12 +60,13 @@ async def main() -> None:
         )
         _LOGGER.info("Cleansed prompt: %s", cleansed_prompt)
 
-        # r = await liminal._request(
-        #     "POST",
-        #     "/sdk/get_context_history",
-        #     json={"threadId": retrieved_thread.id},
-        # )
-        # print(r.content)
+        # Get the deidentified context history for a thread after having cleansed a
+        # prompt:
+        deidentified_context_history = (
+            await liminal.thread.get_deidentified_context_history(retrieved_thread.id)
+        )
+        _LOGGER.info("Deidentified context history: %s", deidentified_context_history)
+
     except LiminalError as err:
         _LOGGER.error("Error running the script: %s", err)
 
