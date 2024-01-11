@@ -4,6 +4,7 @@ from typing import cast
 
 import msgspec
 
+from liminal.endpoints.thread.models import DeidentifiedToken
 from liminal.helpers.typing import ValidatedResponseT
 
 from .models import AnalyzeResponse, CleanseResponse
@@ -43,7 +44,12 @@ class PromptEndpoint:
         )
 
     async def cleanse(
-        self, thread_id: int, prompt: str, *, findings: AnalyzeResponse | None = None
+        self,
+        thread_id: int,
+        prompt: str,
+        *,
+        findings: AnalyzeResponse | None = None,
+        deidentified_context_history: list[DeidentifiedToken] | None = None,
     ) -> CleanseResponse:
         """Cleanse a prompt of sensitive data.
 
@@ -52,6 +58,8 @@ class PromptEndpoint:
             prompt: The prompt to cleanse.
             findings: The findings from the analyze endpoint. If this is not provided,
                 the analyze endpoint will be called automatically.
+            deidentified_context_history: The deidentified context history for the
+                thread.
 
         Returns:
             An object that contains a cleansed version of the prompt.
@@ -59,6 +67,10 @@ class PromptEndpoint:
         payload = {"threadId": thread_id, "text": prompt}
         if findings:
             payload["findings"] = msgspec.to_builtins(findings.findings)
+        if deidentified_context_history:
+            payload["deidentifiedContextHistory"] = msgspec.to_builtins(
+                deidentified_context_history
+            )
 
         return cast(
             CleanseResponse,
