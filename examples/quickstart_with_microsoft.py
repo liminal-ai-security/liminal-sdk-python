@@ -16,7 +16,7 @@ TENANT_ID = os.environ["TENANT_ID"]
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
 
     # Create an auth provider to authenticate the user:
     microsoft_auth_provider = MicrosoftAuthProvider(TENANT_ID, CLIENT_ID)
@@ -26,7 +26,7 @@ async def main() -> None:
 
     try:
         # Authenticate the user:
-        await liminal.authenticate()
+        await liminal.authenticate_from_auth_provider()
 
         # Get available LLMs:
         available_llms = await liminal.llm.get_available()
@@ -44,7 +44,7 @@ async def main() -> None:
         retrieved_thread = await liminal.thread.get_by_id(created_thread.id)
         _LOGGER.info("Retrieved thread: %s", retrieved_thread)
 
-        # Analyze a prompt:
+        # Analyze a prompt and  get "findings" (details on detected sensitive info):
         prompt = (
             "Write a short marketing email for a banking customer Jane Gansbuhler, "
             "whose email address is egansbuhler0@pinterest.com and who lives at 14309 "
@@ -67,7 +67,8 @@ async def main() -> None:
         )
         _LOGGER.info("Deidentified context history: %s", deidentified_context_history)
 
-        # Send a prompt to an LLM and get a response:
+        # Send a prompt to an LLM and get a response (choosing to include the findings
+        # and deidentified context history we've already retrieved):
         response = await liminal.prompt.submit(
             retrieved_thread.id,
             prompt,

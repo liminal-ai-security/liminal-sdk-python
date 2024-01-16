@@ -22,13 +22,6 @@ class AuthProvider(ABC):
         raise NotImplementedError
 
 
-class LiminalTokenResponse(BaseModel):
-    """Define a Liminal token response."""
-
-    message: str
-    token: str
-
-
 class MSALCacheTokenResponse(BaseModel):
     """Define an MSAL token response from Entra ID."""
 

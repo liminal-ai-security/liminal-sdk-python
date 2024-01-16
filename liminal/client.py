@@ -3,12 +3,10 @@
 from datetime import datetime
 
 import msgspec
-from httpx import AsyncClient, HTTPStatusError, Request, Response
+from httpx import AsyncClient, Cookies, HTTPStatusError, Request, Response
 
 from liminal.const import LOGGER
 from liminal.endpoints.auth import AuthProvider
-from liminal.endpoints.auth.models import LiminalTokenResponse
-from liminal.endpoints.auth.util import decode_jwt
 from liminal.endpoints.llm import LLMEndpoint
 from liminal.endpoints.prompt import PromptEndpoint
 from liminal.endpoints.thread import ThreadEndpoint
@@ -46,6 +44,8 @@ class Client:
         # Token information will be filled in by authenticate():
         self._access_token: str | None = None
         self._access_token_expires_at: datetime | None = None
+        self._refresh_token: str | None = None
+        self._refreshing_access_token = False
 
         # Define endpoints:
         self.llm = LLMEndpoint(self._request_and_validate)
@@ -58,6 +58,7 @@ class Client:
         endpoint: str,
         *,
         headers: dict[str, str] | None = None,
+        cookies: Cookies | None = None,
         params: dict[str, str] | None = None,
         json: dict[str, str] | None = None,
     ) -> Response:
@@ -67,12 +68,22 @@ class Client:
             method: The HTTP method to use.
             endpoint: The endpoint to request.
             headers: The headers to use.
+            cookies: The cookies to use.
             params: The query parameters to use.
             json: The JSON body to use.
 
         Returns:
             An HTTPX Response object.
         """
+        if (
+            not self._refreshing_access_token
+            and self._access_token_expires_at
+            and datetime.utcnow() >= self._access_token_expires_at
+        ):
+            LOGGER.debug("Access token expired, refreshing...")
+            self._refreshing_access_token = True
+            await self.authenticate_from_refresh_token()
+
         if not endpoint.startswith("/"):
             endpoint = f"/{endpoint}"
 
@@ -92,7 +103,9 @@ class Client:
         else:
             client = AsyncClient()
 
-        request = Request(method, url, headers=headers, params=params, json=json)
+        request = Request(
+            method, url, headers=headers, cookies=cookies, params=params, json=json
+        )
         response = await client.send(request)
 
         try:
@@ -118,6 +131,7 @@ class Client:
         expected_response_type: type[ValidatedResponseT],
         *,
         headers: dict[str, str] | None = None,
+        cookies: Cookies | None = None,
         params: dict[str, str] | None = None,
         json: dict[str, str] | None = None,
     ) -> ValidatedResponseT:
@@ -127,6 +141,7 @@ class Client:
             method: The HTTP method to use.
             endpoint: The endpoint to request.
             headers: The headers to use.
+            cookies: The cookies to use.
             params: The query parameters to use.
             json: The JSON body to use.
 
@@ -134,7 +149,7 @@ class Client:
             A validated response object.
         """
         response = await self._request(
-            method, endpoint, headers=headers, params=params, json=json
+            method, endpoint, headers=headers, cookies=cookies, params=params, json=json
         )
 
         try:
@@ -142,20 +157,42 @@ class Client:
         except msgspec.ValidationError as err:
             raise RequestError(f"Could not validate response: {err}") from err
 
-    async def authenticate(self) -> None:
+    def _save_tokens_from_auth_response(self, auth_response: Response) -> None:
+        """Save tokens from an auth response."""
+        LOGGER.debug("Saving tokens from auth response")
+        self._access_token = auth_response.cookies["accessToken"]
+        # self._access_token_expires_at = datetime.fromtimestamp(
+        #     int(auth_response.cookies["accessTokenExpiresAt"]) / 1000
+        # )
+        self._access_token_expires_at = datetime.fromtimestamp(0)
+        self._refresh_token = auth_response.cookies["refreshToken"]
+
+    async def authenticate_from_auth_provider(self) -> None:
         """Authenticate with the Liminal API server (using the auth provider)."""
         provider_access_token = await self._auth_provider.get_access_token()
-        liminal_auth_response: LiminalTokenResponse = await self._request_and_validate(
+        liminal_auth_response = await self._request(
             "GET",
-            "/login/oauth/access_code",
-            LiminalTokenResponse,
+            "/v1/auth/login/oauth/access-token",
             headers={"Authorization": f"Bearer {provider_access_token}"},
         )
+        self._save_tokens_from_auth_response(liminal_auth_response)
 
-        if liminal_auth_response.message != "Authenticated":
-            raise AuthError(f"Authentication failed: {liminal_auth_response.message}")
+    async def authenticate_from_refresh_token(
+        self, *, refresh_token: str | None = None
+    ) -> None:
+        """Authenticate with the Liminal API server (using a refresh token)."""
+        if refresh_token is None and self._refresh_token is None:
+            raise AuthError("No valid refresh token provided")
 
-        token = liminal_auth_response.token
-        decoded_jwt = decode_jwt(token)
-        self._access_token = token
-        self._access_token_expires_at = datetime.fromtimestamp(decoded_jwt["exp"])
+        if refresh_token:
+            # If a refresh token is explicitly provided, use it:
+            self._refresh_token = refresh_token
+
+        assert self._refresh_token is not None
+
+        refresh_token_response = await self._request(
+            "POST",
+            "/v1/auth/refresh-token",
+            cookies=Cookies({"refreshToken": self._refresh_token}),
+        )
+        self._save_tokens_from_auth_response(refresh_token_response)
