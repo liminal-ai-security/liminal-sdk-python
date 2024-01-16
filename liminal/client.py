@@ -1,5 +1,6 @@
 """Define the client module."""
 # pylint: disable=too-many-arguments
+from collections.abc import Callable
 from datetime import datetime
 
 import msgspec
@@ -41,11 +42,12 @@ class Client:
         self._httpx_client = httpx_client
         self._source = source
 
-        # Token information will be filled in by authenticate():
+        # Token information:
         self._access_token: str | None = None
         self._access_token_expires_at: datetime | None = None
         self._refresh_token: str | None = None
         self._refreshing_access_token = False
+        self._refresh_token_callbacks: list[Callable[[str], None]] = []
 
         # Define endpoints:
         self.llm = LLMEndpoint(self._request_and_validate)
@@ -74,6 +76,9 @@ class Client:
 
         Returns:
             An HTTPX Response object.
+
+        Raises:
+            RequestError: If the response fails for any reason.
         """
         if (
             not self._refreshing_access_token
@@ -147,6 +152,9 @@ class Client:
 
         Returns:
             A validated response object.
+
+        Raises:
+            RequestError: If the response could not be validated.
         """
         response = await self._request(
             method, endpoint, headers=headers, cookies=cookies, params=params, json=json
@@ -158,7 +166,11 @@ class Client:
             raise RequestError(f"Could not validate response: {err}") from err
 
     def _save_tokens_from_auth_response(self, auth_response: Response) -> None:
-        """Save tokens from an auth response."""
+        """Save tokens from an auth response.
+
+        Args:
+            auth_response: The response from an auth request.
+        """
         LOGGER.debug("Saving tokens from auth response")
         self._access_token = auth_response.cookies["accessToken"]
         # self._access_token_expires_at = datetime.fromtimestamp(
@@ -166,6 +178,31 @@ class Client:
         # )
         self._access_token_expires_at = datetime.fromtimestamp(0)
         self._refresh_token = auth_response.cookies["refreshToken"]
+
+        for callback in self._refresh_token_callbacks:
+            callback(self._refresh_token)
+
+    def add_refresh_token_callback(
+        self, callback: Callable[[str], None]
+    ) -> Callable[[], None]:
+        """Add a callback to be called when a new refresh token is generated.
+
+        The purpose of this is to allow the user to save the refresh token to a
+        persistent store using their own callback method.
+
+        Args:
+            callback: The callback to add.
+
+        Returns:
+            A method to cancel and remove the callback.
+        """
+        self._refresh_token_callbacks.append(callback)
+
+        def cancel() -> None:
+            """Cancel and remove the callback."""
+            self._refresh_token_callbacks.remove(callback)
+
+        return cancel
 
     async def authenticate_from_auth_provider(self) -> None:
         """Authenticate with the Liminal API server (using the auth provider)."""
@@ -180,7 +217,16 @@ class Client:
     async def authenticate_from_refresh_token(
         self, *, refresh_token: str | None = None
     ) -> None:
-        """Authenticate with the Liminal API server (using a refresh token)."""
+        """Authenticate with the Liminal API server (using a refresh token).
+
+        Args:
+            refresh_token: The refresh token to use. If not provided, the refresh token
+                that was used to authenticate the user initially will be used.
+
+        Raises:
+            AuthError: If no refresh token is provided and the user has not been
+                authenticated yet.
+        """
         if refresh_token is None and self._refresh_token is None:
             raise AuthError("No valid refresh token provided")
 
