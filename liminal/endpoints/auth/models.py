@@ -42,5 +42,5 @@ class MSALIdentityProviderTokenResponse(BaseModel):
     refresh_token: str
     id_token: str
     client_info: str
-    id_token_claims: dict[str, int | str]
+    id_token_claims: dict
     token_source: Literal["identity_provider"]

@@ -26,141 +26,56 @@ TBD
 
 # Quickstart
 
+Presuming the use of Microsoft Entra ID as your auth provider, instantiating a Liminal
+API object is easy:
+
 ```python
 import asyncio
 
-from aiohttp import ClientSession
-
-from aionotion import async_get_client
+from liminal import Client
+from liminal.endpoints.auth import MicrosoftAuthProvider
 
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
-    client = await async_get_client("<EMAIL>", "<PASSWORD>", session=session)
+    logging.basicConfig(level=logging.DEBUG)
 
-    # Get all "households" associated with the account:
-    response = await client.system.async_all()
-    # >>> [System(...), System(...), ...]
+    # Create an auth provider to authenticate the user:
+    microsoft_auth_provider = MicrosoftAuthProvider("<TENANT_ID>", "<CLIENT_ID>")
 
-    # Get a system by ID:
-    response = await client.system.async_get(12345)
-    # >>> System(...)
-
-    # Create a system (with associated parameters):
-    response = await client.system.async_create({"system_id": 12345, "name": "Test"})
-    # >>> System(...)
-
-    # Update a system with new parameters:
-    response = await client.system.async_update(12345, {"name": "Test"})
-    # >>> System(...)
-
-    # Delete a system by ID:
-    await client.system.async_delete(12345)
-
-    # Get all bridges associated with the account:
-    response = await client.bridge.async_all()
-    # >>> [Bridge(...), Bridge(...), ...]
-
-    # Get a bridge by ID:
-    response = await client.bridge.async_get(12345)
-    # >>> Bridge(...)
-
-    # Create a bridge (with associated parameters):
-    response = await client.bridge.async_create({"system_id": 12345, "name": "Test"})
-    # >>> Bridge(...)
-
-    # Update a bridge with new parameters:
-    response = await client.bridge.async_update(12345, {"name": "Test"})
-    # >>> Bridge(...)
-
-    # Reset a bridge (deprovision its WiFi credentials):
-    response = await client.bridge.async_reset(12345)
-    # >>> Bridge(...)
-
-    # Delete a bridge by ID:
-    await client.bridge.async_delete(12345)
-
-    # Get all devices associated with the account:
-    response = await client.device.async_all()
-    # >>> [Device(...), Device(...), ...]
-
-    # Get a device by ID:
-    response = await client.device.async_get(12345)
-    # >>> Device(...)
-
-    # Create a device (with associated parameters):
-    response = await client.device.async_create({"id": 12345})
-    # >>> Device(...)
-
-    # Delete a device by ID:
-    await client.device.async_delete(12345)
-
-    # Get all sensors:
-    response = await client.sensor.async_all()
-    # >>> [Sensor(...), Sensor(...), ...]
-
-    # Get a sensor by ID:
-    response = await client.sensor.async_get(12345)
-    # >>> Sensor(...)
-
-    # Get "listeners" (conditions that a sensor is monitoring) for all sensors:
-    response = await client.sensor.async_listeners()
-    # >>> [Listener(...), Listener(...), ...]
-
-    # Get "listeners" (conditions that a sensor is monitoring) for a specific sensor;
-    # note that unlike other sensor endpoints, this one requires the sensor UUID, *not*
-    # the sensor ID:
-    response = await client.sensor.async_listeners_for_sensor(
-        "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-    )
-    # >>> [Listener(...), Listener(...), ...]
-
-    # Create a sensor (with associated parameters):
-    response = await client.sensor.async_create({"sensor_id": 12345, "name": "Test"})
-    # >>> Sensor(...)
-
-    # Update a sensor with new parameters:
-    response = await client.sensor.async_update(12345, {"name": "Test"})
-    # >>> Sensor(...)
-
-    # Delete a sensor by ID:
-    await client.sensor.async_delete(12345)
-
-    # Get user preferences:
-    user_preferences = await client.user.async_preferences()
-    # >>> UserPreferencesResponse(...)
+    # Create the liminal SDK instance:
+    liminal = Client(microsoft_auth_provider, "<API_SERVER_URL>")
 
 
 asyncio.run(main())
 ```
 
-By default, the library creates a new connection to Notion with each coroutine. If you
-are calling a large number of coroutines (or merely want to squeeze out every second of
-runtime savings possible), an [`aiohttp`][aiohttp] `ClientSession` can be used for
-connection pooling:
+You can see several examples of how to use this API object via the [`examples`][examples]
+folder in this repo.
 
-```python
-import asyncio
+# Authentication
 
-from aiohttp import ClientSession
+Liminal supports the concept of authenticating via various auth providers. Currently,
+the following auth providers are supported:
 
-from aionotion import async_get_client
+- Microsoft Entra ID
 
+## Microsoft Entra ID
 
-async def main() -> None:
-    """Create the aiohttp session and run the example."""
-    async with ClientSession() as session:
-        # Create a Notion API client:
-        client = await async_get_client("<EMAIL>", "<PASSWORD>", session=session)
+Liminal authenticates with Microsoft Entra ID via an
+[OAuth 2.0 Device Authorization Grant][oauth-device-auth-grant]. This flow requires you
+to start your app, retrieve a device code from the logs produced by this SDK, and
+provide that code to Microsoft via a web browser. Once you complete the login process,
+the SDK will be authenticated for use with your Liminal instance.
 
-        # Get to work...
+### Finding your Entra ID Tenant and Client IDs
 
-
-asyncio.run(main())
-```
-
-Check out the examples, the tests, and the source files themselves for method
-signatures and more examples.
+- Log into your [Azure portal][azure-portal].
+- Navigate to `Microsoft Entra ID`.
+- Click on `App registrations`.
+- Either create a new app registration or select an existing one.
+- In the `Overview` of the registration, look for the `Application (client) ID` and
+  `Directory (tenant) ID` values.
 
 # Contributing
 
@@ -177,15 +92,17 @@ Thanks to all of [our contributors][contributors] so far!
 9. Update `README.md` with any new documentation.
 10. Submit a pull request!
 
-[ci-badge]: https://github.com/engineeredinnovation/liminal-sdk-python/workflows/CI/badge.svg
-[ci]: https://github.com/engineeredinnovation/liminal-sdk-python/actions
-[contributors]: https://github.com/engineeredinnovation/liminal-sdk-python/graphs/contributors
-[fork]: https://github.com/engineeredinnovation/liminal-sdk-python/fork
-[issues]: https://github.com/engineeredinnovation/liminal-sdk-python/issues
+[azure-portal]: https://portal.azure.com
+[ci-badge]: https://github.com/liminal-ai-security/liminal-sdk-python/workflows/CI/badge.svg
+[ci]: https://github.com/liminal-ai-security/liminal-sdk-python/actions
+[contributors]: https://github.com/liminal-ai-security/liminal-sdk-python/graphs/contributors
+[fork]: https://github.com/liminal-ai-security/liminal-sdk-python/fork
+[issues]: https://github.com/liminal-ai-security/liminal-sdk-python/issues
 [license-badge]: https://img.shields.io/pypi/l/aionotion.svg
-[license]: https://github.com/engineeredinnovation/liminal-sdk-python/blob/main/LICENSE
-[new-issue]: https://github.com/engineeredinnovation/liminal-sdk-python/issues/new
+[license]: https://github.com/liminal-ai-security/liminal-sdk-python/blob/main/LICENSE
+[new-issue]: https://github.com/liminal-ai-security/liminal-sdk-python/issues/new
 [notion]: https://getnotion.com
+[oauth-device-auth-grant]: https://oauth.net/2/grant-types/device-code/
 [pypi-badge]: https://img.shields.io/pypi/v/aionotion.svg
 [pypi]: https://pypi.python.org/pypi/aionotion
 [version-badge]: https://img.shields.io/pypi/pyversions/aionotion.svg
