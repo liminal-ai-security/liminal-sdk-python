@@ -173,10 +173,9 @@ class Client:
         """
         LOGGER.debug("Saving tokens from auth response")
         self._access_token = auth_response.cookies["accessToken"]
-        # self._access_token_expires_at = datetime.fromtimestamp(
-        #     int(auth_response.cookies["accessTokenExpiresAt"]) / 1000
-        # )
-        self._access_token_expires_at = datetime.fromtimestamp(0)
+        self._access_token_expires_at = datetime.fromtimestamp(
+            int(auth_response.cookies["accessTokenExpiresAt"]) / 1000
+        )
         self._refresh_token = auth_response.cookies["refreshToken"]
 
         for callback in self._refresh_token_callbacks:
