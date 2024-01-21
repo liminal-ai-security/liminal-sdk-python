@@ -127,6 +127,9 @@ class Client:
 
         LOGGER.debug("Received data from %s: %s", url, response.content)
 
+        if self._refreshing_access_token:
+            self._refreshing_access_token = False
+
         return response
 
     async def _request_and_validate(
