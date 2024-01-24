@@ -9,7 +9,7 @@ from liminal.errors import LiminalError
 
 _LOGGER = logging.getLogger("example")
 
-API_SERVER_URL = os.environ["API_SERVER_URL"]
+LIMINAL_API_SERVER_URL = os.environ["LIMINAL_API_SERVER_URL"]
 CLIENT_ID = os.environ["CLIENT_ID"]
 TENANT_ID = os.environ["TENANT_ID"]
 
@@ -22,7 +22,7 @@ async def main() -> None:
     microsoft_auth_provider = MicrosoftAuthProvider(TENANT_ID, CLIENT_ID)
 
     # Create the liminal SDK instance:
-    liminal = Client(microsoft_auth_provider, API_SERVER_URL)
+    liminal = Client(microsoft_auth_provider, LIMINAL_API_SERVER_URL)
 
     try:
         # Authenticate the user:
