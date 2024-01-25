@@ -64,4 +64,6 @@ ingestion_server.log
 
 *.tsbuildinfo
 
-dist
+disttags
+.venv/
+tags
