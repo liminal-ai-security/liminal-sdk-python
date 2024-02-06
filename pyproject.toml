@@ -74,7 +74,7 @@ pytest = "^7.4.4"
 pytest-asyncio = "^0.23.3"
 pytest-cov = "^4.1.0"
 pyupgrade = "^3.15.0"
-ruff = "^0.1.9"
+ruff = "^0.2.1"
 safety = "^2.3.5"
 vulture = "^2.10"
 
