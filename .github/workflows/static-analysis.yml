@@ -4,12 +4,12 @@ name: Linting and Static Analysis
 "on":
   pull_request:
     branches:
-      - dev
+      - development
       - main
 
   push:
     branches:
-      - dev
+      - development
       - main
 
 jobs:
