@@ -31,20 +31,13 @@ async def main() -> None:
         _LOGGER.error("Error authenticating: %s", err)
 
     try:
+        created_thread = await liminal.thread.create("openai_35", "Demo Thread")
         while True:
             if (prompt := input("Enter a message: ")) == "quit":
                 break
 
-            created_thread = await liminal.thread.create("openai_35", "Demo Thread")
-
             findings = await liminal.prompt.analyze(created_thread.id, prompt)
             _LOGGER.info("Analysis findings: %s", findings)
-            _LOGGER.info("")
-
-            cleansed_prompt = await liminal.prompt.cleanse(
-                created_thread.id, prompt, findings=findings
-            )
-            _LOGGER.info("Cleansed prompt: %s", cleansed_prompt)
             _LOGGER.info("")
 
             response = await liminal.prompt.submit(

@@ -54,12 +54,6 @@ async def main() -> None:
         findings = await liminal.prompt.analyze(retrieved_thread.id, prompt)
         _LOGGER.info("Analysis findings: %s", findings)
 
-        # Cleanse a prompt (choosing to include the findings we've already retrieved):
-        cleansed_prompt = await liminal.prompt.cleanse(
-            retrieved_thread.id, prompt, findings=findings
-        )
-        _LOGGER.info("Cleansed prompt: %s", cleansed_prompt)
-
         # Send a prompt to an LLM and get a response (choosing to include the findings
         # and deidentified context history we've already retrieved):
         response = await liminal.prompt.submit(
