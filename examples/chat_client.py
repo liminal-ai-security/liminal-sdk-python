@@ -47,15 +47,8 @@ async def main() -> None:
             _LOGGER.info("Cleansed prompt: %s", cleansed_prompt)
             _LOGGER.info("")
 
-            deidentified_context_history = (
-                await liminal.thread.get_deidentified_context_history(created_thread.id)
-            )
-
             response = await liminal.prompt.submit(
-                created_thread.id,
-                prompt,
-                findings=findings,
-                deidentified_context_history=deidentified_context_history,
+                created_thread.id, prompt, findings=findings
             )
             _LOGGER.info("LLM response: %s", response)
     except LiminalError as err:
