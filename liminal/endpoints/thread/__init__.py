@@ -1,4 +1,5 @@
 """Define the threads endpoint."""
+
 from collections.abc import Awaitable, Callable
 from typing import cast
 
@@ -40,7 +41,7 @@ class ThreadEndpoint:
             Thread,
             await self._request_and_validate(
                 "POST",
-                "/sdk/thread",
+                "/api/v1/sdk/thread",
                 Thread,
                 json={
                     "name": name,
@@ -57,7 +58,7 @@ class ThreadEndpoint:
         """
         return cast(
             list[Thread],
-            await self._request_and_validate("GET", "/sdk/thread", list[Thread]),
+            await self._request_and_validate("GET", "/api/v1/sdk/thread", list[Thread]),
         )
 
     async def get_by_id(self, thread_id: int) -> Thread:
@@ -71,7 +72,9 @@ class ThreadEndpoint:
         """
         return cast(
             Thread,
-            await self._request_and_validate("GET", f"/sdk/thread/{thread_id}", Thread),
+            await self._request_and_validate(
+                "GET", f"/api/v1/sdk/thread/{thread_id}", Thread
+            ),
         )
 
     async def get_deidentified_context_history(
@@ -90,7 +93,7 @@ class ThreadEndpoint:
             list[DeidentifiedToken],
             await self._request_and_validate(
                 "POST",
-                "/sdk/get_context_history",
+                "/api/v1/sdk/get_context_history",
                 list[DeidentifiedToken],
                 json={"threadId": thread_id},
             ),

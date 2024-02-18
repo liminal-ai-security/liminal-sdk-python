@@ -1,4 +1,5 @@
 """Define the LLM endpoint."""
+
 from collections.abc import Awaitable, Callable
 from typing import cast
 
@@ -20,5 +21,5 @@ class LLMEndpoint:
         """Get available LLMs."""
         return cast(
             list[LLMService],
-            await self._request_and_validate("GET", "/v1/models", list[LLMService]),
+            await self._request_and_validate("GET", "/api/v1/models", list[LLMService]),
         )
