@@ -1,4 +1,5 @@
 """Define models for the LLM endpoint."""
+
 from __future__ import annotations
 
 from typing import Literal
@@ -23,7 +24,7 @@ class Thread(BaseModel):
     llmServiceModelKey: str
     createdAt: str
     updatedAt: str
-    source: Literal["SDK"]
+    source: Literal["sdk"]
     chats: list
     model: LLMService
 
