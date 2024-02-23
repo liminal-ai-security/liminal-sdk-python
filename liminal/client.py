@@ -15,7 +15,7 @@ from liminal.errors import AuthError, RequestError
 from liminal.helpers.typing import ValidatedResponseT
 
 DEFAULT_REQUEST_TIMEOUT = 60
-DEFAULT_SOURCE = "SDK"
+DEFAULT_SOURCE = "sdk"
 
 
 class Client:

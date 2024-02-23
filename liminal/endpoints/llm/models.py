@@ -24,3 +24,18 @@ class LLMService(BaseModel):
     created_at: str = msgspec.field(name="createdAt")
     updated_at: str = msgspec.field(name="updatedAt")
     model_key: str | None = msgspec.field(name="modelKey", default=None)
+
+
+class LLMInstances(BaseModel):
+    """Define the schema for an LLM model instance that Liminal supports."""
+
+    id: int
+    policyGroupId: int
+    model: str
+    name: str
+    providerKey: str
+    params: dict[str, str] | None
+    created_at: str = msgspec.field(name="createdAt")
+    updated_at: str = msgspec.field(name="updatedAt")
+    apiKey: str | None = msgspec.field(name="apiKey", default=None)
+    maskedApiKey: str | None = msgspec.field(name="maskedApiKey", default=None)

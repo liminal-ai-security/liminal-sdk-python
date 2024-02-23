@@ -12,6 +12,7 @@ _LOGGER = logging.getLogger("example")
 LIMINAL_API_SERVER_URL = os.environ["LIMINAL_API_SERVER_URL"]
 CLIENT_ID = os.environ["CLIENT_ID"]
 TENANT_ID = os.environ["TENANT_ID"]
+DEMO_MODEL = "gpt-3.5-turbo"
 
 
 async def main() -> None:
@@ -31,7 +32,17 @@ async def main() -> None:
         _LOGGER.error("Error authenticating: %s", err)
 
     try:
-        created_thread = await liminal.thread.create("openai_35", "Demo Thread")
+        # Get model instance id
+        model_instances = await liminal.llm.get_available_model_instances()
+        model_instance_id = -1
+        retrieved_elements = next(
+            (x for x in model_instances if x.model == DEMO_MODEL), None
+        )
+        if retrieved_elements:
+            model_instance_id = retrieved_elements.id
+
+        # Create Thread and begin prompts
+        created_thread = await liminal.thread.create(model_instance_id, "Demo Thread")
         while True:
             if (prompt := input("Enter a message: ")) == "quit":
                 break

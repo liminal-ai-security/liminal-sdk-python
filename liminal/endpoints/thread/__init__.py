@@ -26,11 +26,11 @@ class ThreadEndpoint:
         self._request = request
         self._request_and_validate = request_and_validate
 
-    async def create(self, llm_key: str, name: str) -> Thread:
+    async def create(self, model_instance_id: int, name: str) -> Thread:
         """Create a thread.
 
         Args:
-            llm_key: The LLM key.
+            model_instance_id: The model instance id.
             name: The name of the thread.
 
         Returns:
@@ -40,11 +40,11 @@ class ThreadEndpoint:
             Thread,
             await self._request_and_validate(
                 "POST",
-                "/sdk/thread",
+                "/api/v1/sdk/thread",
                 Thread,
                 json={
                     "name": name,
-                    "llmServiceModelKey": llm_key,
+                    "modelInstanceId": model_instance_id,
                 },
             ),
         )
@@ -57,7 +57,7 @@ class ThreadEndpoint:
         """
         return cast(
             list[Thread],
-            await self._request_and_validate("GET", "/sdk/thread", list[Thread]),
+            await self._request_and_validate("GET", "/api/v1/sdk/thread", list[Thread]),
         )
 
     async def get_by_id(self, thread_id: int) -> Thread:
@@ -71,7 +71,9 @@ class ThreadEndpoint:
         """
         return cast(
             Thread,
-            await self._request_and_validate("GET", f"/sdk/thread/{thread_id}", Thread),
+            await self._request_and_validate(
+                "GET", f"/api/v1/sdk/thread/{thread_id}", Thread
+            ),
         )
 
     async def get_deidentified_context_history(
@@ -90,7 +92,7 @@ class ThreadEndpoint:
             list[DeidentifiedToken],
             await self._request_and_validate(
                 "POST",
-                "/sdk/get_context_history",
+                "/api/v1/sdk/get_context_history",
                 list[DeidentifiedToken],
                 json={"threadId": thread_id},
             ),

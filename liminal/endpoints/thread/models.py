@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from typing import Literal
 
-from liminal.endpoints.llm.models import LLMService
 from liminal.helpers.model import BaseModel
 
 
@@ -19,13 +18,11 @@ class Thread(BaseModel):
 
     id: int
     name: str
-    userId: str
-    llmServiceModelKey: str
+    userId: int
+    modelInstanceId: int
     createdAt: str
     updatedAt: str
-    source: Literal["SDK"]
-    chats: list
-    model: LLMService
+    source: Literal["sdk"]
 
 
 # def test():
