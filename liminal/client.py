@@ -211,7 +211,7 @@ class Client:
         provider_access_token = await self._auth_provider.get_access_token()
         liminal_auth_response = await self._request(
             "GET",
-            "/v1/auth/login/oauth/access-token",
+            "/api/v1/auth/login/oauth/access-token",
             headers={"Authorization": f"Bearer {provider_access_token}"},
         )
         self._save_tokens_from_auth_response(liminal_auth_response)
@@ -240,7 +240,7 @@ class Client:
 
         refresh_token_response = await self._request(
             "POST",
-            "/v1/auth/refresh-token",
+            "/api/v1/auth/refresh-token",
             cookies=Cookies({"refreshToken": self._refresh_token}),
         )
         self._save_tokens_from_auth_response(refresh_token_response)
