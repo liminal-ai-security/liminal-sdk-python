@@ -4,7 +4,7 @@ from typing import cast
 
 from liminal.helpers.typing import ValidatedResponseT
 
-from .models import LLMInstances, LLMService
+from .models import ModelInstances
 
 
 class LLMEndpoint:
@@ -16,18 +16,11 @@ class LLMEndpoint:
         """Initialize."""
         self._request_and_validate = request_and_validate
 
-    async def get_available(self) -> list[LLMService]:
+    async def get_available_model_instances(self) -> list[ModelInstances]:
         """Get available LLMs."""
         return cast(
-            list[LLMService],
-            await self._request_and_validate("GET", "/api/v1/models", list[LLMService]),
-        )
-
-    async def get_available_model_instances(self) -> list[LLMInstances]:
-        """Get available LLMs."""
-        return cast(
-            list[LLMInstances],
+            list[ModelInstances],
             await self._request_and_validate(
-                "GET", "/api/v1/model-instances", list[LLMInstances]
+                "GET", "/api/v1/model-instances", list[ModelInstances]
             ),
         )
