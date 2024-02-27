@@ -56,7 +56,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 httpx = "^0.27.0"
-msal = "^1.26.0"
+msal = "^1.27.0"
 msgspec = "^0.18.6"
 python = "^3.11"
 
