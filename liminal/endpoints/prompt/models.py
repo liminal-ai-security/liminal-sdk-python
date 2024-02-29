@@ -38,6 +38,15 @@ class CleansedToken(BaseModel):
     entity_type: str
 
 
+class HydratedToken(BaseModel):
+    """Define the schema for a hydrated token."""
+
+    end: int
+    entity_type: str
+    start: int
+    # score: int
+
+
 class CleanseResponse(BaseModel):
     """Define the response schema for a cleanse request."""
 
@@ -48,6 +57,18 @@ class CleanseResponse(BaseModel):
     # Represents the prompt with the sensitive data replaced with hashed tokens (which
     # are help in mapping):
     text_hashed: str
+
+
+class HydrateResponse(BaseModel):
+    """Define the response schema for a hydrate request."""
+
+    items: list[HydratedToken]
+    # Represents the prompt with the sensitive data replaced with cleansed tokens:
+    text: str
+    # items_hashed: list[CleansedToken]
+    # Represents the prompt with the sensitive data replaced with hashed tokens (which
+    # are help in mapping):
+    # text_hashed: str
 
 
 class ReidentifiedToken(BaseModel):

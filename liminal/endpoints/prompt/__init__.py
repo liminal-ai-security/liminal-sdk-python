@@ -7,7 +7,7 @@ import msgspec
 from liminal.endpoints.thread.models import DeidentifiedToken
 from liminal.helpers.typing import ValidatedResponseT
 
-from .models import AnalyzeResponse, CleanseResponse, ProcessResponse
+from .models import AnalyzeResponse, CleanseResponse, HydrateResponse, ProcessResponse
 
 
 class PromptEndpoint:
@@ -112,5 +112,40 @@ class PromptEndpoint:
             ProcessResponse,
             await self._request_and_validate(
                 "POST", "/api/v1/sdk/process", ProcessResponse, json=payload
+            ),
+        )
+
+    async def hydrate(
+        self,
+        thread_id: int,
+        prompt: str,
+        *,
+        deidentified_context_history: list[DeidentifiedToken] | None = None,
+    ) -> HydrateResponse:
+        """Cleanse a prompt of sensitive data.
+
+        Args:
+            thread_id: The ID of the thread to cleanse the prompt for.
+            prompt: The prompt to cleanse.
+            findings: The findings from the analyze endpoint. If this is not provided,
+                the analyze endpoint will be called automatically.
+            deidentified_context_history: The deidentified context history for the
+                thread.
+
+        Returns:
+            An object that contains a cleansed version of the prompt.
+        """
+        payload = {"threadId": thread_id, "text": prompt}
+        # if findings:
+        #     payload["findings"] = msgspec.to_builtins(findings.findings)
+        if deidentified_context_history:
+            payload["deidentifiedContextHistory"] = msgspec.to_builtins(
+                deidentified_context_history
+            )
+
+        return cast(
+            HydrateResponse,
+            await self._request_and_validate(
+                "POST", "/api/v1/sdk/hydrate_response", HydrateResponse, json=payload
             ),
         )
