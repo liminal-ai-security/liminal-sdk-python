@@ -40,6 +40,11 @@ async def main() -> None:
         )
         if retrieved_elements:
             model_instance_id = retrieved_elements.id
+        else:
+            raise LiminalError(
+                "Please make sure to connect the following model before attempting "
+                "to run this example script: {DEMO_MODEL}"
+            )
 
         # Create a thread using GPT-4:
         created_thread = await liminal.thread.create(model_instance_id, "My thread")
