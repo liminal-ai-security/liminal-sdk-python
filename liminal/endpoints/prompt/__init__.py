@@ -37,7 +37,7 @@ class PromptEndpoint:
             AnalyzeResponse,
             await self._request_and_validate(
                 "POST",
-                "/sdk/analyze_response",
+                "/api/v1/sdk/analyze_response",
                 AnalyzeResponse,
                 json={"threadId": thread_id, "text": prompt},
             ),
@@ -75,7 +75,7 @@ class PromptEndpoint:
         return cast(
             CleanseResponse,
             await self._request_and_validate(
-                "POST", "/sdk/cleanse_response", CleanseResponse, json=payload
+                "POST", "/api/v1/sdk/cleanse_response", CleanseResponse, json=payload
             ),
         )
 
@@ -111,6 +111,6 @@ class PromptEndpoint:
         return cast(
             ProcessResponse,
             await self._request_and_validate(
-                "POST", "/sdk/process", ProcessResponse, json=payload
+                "POST", "/api/v1/sdk/process", ProcessResponse, json=payload
             ),
         )

@@ -12,6 +12,7 @@ _LOGGER = logging.getLogger("example")
 LIMINAL_API_SERVER_URL = os.environ["LIMINAL_API_SERVER_URL"]
 CLIENT_ID = os.environ["CLIENT_ID"]
 TENANT_ID = os.environ["TENANT_ID"]
+DEMO_MODEL = "gpt-4-1106-preview"
 
 
 async def main() -> None:
@@ -29,11 +30,19 @@ async def main() -> None:
         await liminal.authenticate_from_auth_provider()
 
         # Get available LLMs:
-        available_llms = await liminal.llm.get_available()
+        available_llms = await liminal.llm.get_available_model_instances()
         _LOGGER.info("Available LLMs: %s", available_llms)
 
+        # Get model instance id
+        model_instance_id = -1
+        retrieved_elements = next(
+            (x for x in available_llms if x.model == DEMO_MODEL), None
+        )
+        if retrieved_elements:
+            model_instance_id = retrieved_elements.id
+
         # Create a thread using GPT-4:
-        created_thread = await liminal.thread.create("openai_4", "My thread")
+        created_thread = await liminal.thread.create(model_instance_id, "My thread")
         _LOGGER.info("Created thread: %s", created_thread)
 
         # Get all available threads:
@@ -57,7 +66,9 @@ async def main() -> None:
         # Send a prompt to an LLM and get a response (choosing to include the findings
         # and deidentified context history we've already retrieved):
         response = await liminal.prompt.submit(
-            retrieved_thread.id, prompt, findings=findings
+            created_thread.id,
+            prompt,
+            findings=findings,
         )
         _LOGGER.info("LLM response: %s", response)
     except LiminalError as err:
