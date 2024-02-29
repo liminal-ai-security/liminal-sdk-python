@@ -1,10 +1,10 @@
 """Define the prompts endpoint."""
+
 from collections.abc import Awaitable, Callable
 from typing import cast
 
 import msgspec
 
-from liminal.endpoints.thread.models import DeidentifiedToken
 from liminal.helpers.typing import ValidatedResponseT
 
 from .models import AnalyzeResponse, CleanseResponse, ProcessResponse
