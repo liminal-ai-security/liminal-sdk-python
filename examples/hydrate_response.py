@@ -12,7 +12,7 @@ _LOGGER = logging.getLogger("example")
 LIMINAL_API_SERVER_URL = os.environ["LIMINAL_API_SERVER_URL"]
 CLIENT_ID = os.environ["CLIENT_ID"]
 TENANT_ID = os.environ["TENANT_ID"]
-DEMO_MODEL_NAME = "My Model Instance"
+DEMO_MODEL_INSTANCE_NAME = "My Model Instance"
 
 
 async def main() -> None:
@@ -36,14 +36,15 @@ async def main() -> None:
         # Get model instance id
         model_instance_id = -1
         retrieved_elements = next(
-            (x for x in available_llms if x.name == DEMO_MODEL_NAME), None
+            (x for x in available_llms if x.name == DEMO_MODEL_INSTANCE_NAME), None
         )
         if retrieved_elements:
             model_instance_id = retrieved_elements.id
         else:
             raise LiminalError(
                 "Please make sure the following model instance name exists before "
-                "attempting to run this example script: " + str(DEMO_MODEL_NAME)
+                "attempting to run this example script: "
+                + str(DEMO_MODEL_INSTANCE_NAME)
             )
 
         # Create a thread with your designated model instance:
