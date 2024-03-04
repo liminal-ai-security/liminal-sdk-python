@@ -29,9 +29,9 @@ async def main() -> None:
         # Authenticate the user:
         await liminal.authenticate_from_auth_provider()
 
-        # Get available LLMs:
+        # Get available model instances:
         available_llms = await liminal.llm.get_available_model_instances()
-        _LOGGER.info("Available LLMs: %s", available_llms)
+        _LOGGER.info("Available Model Instances: %s", available_llms)
 
         # Get model instance id
         model_instance_id = -1
