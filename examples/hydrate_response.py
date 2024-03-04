@@ -12,7 +12,7 @@ _LOGGER = logging.getLogger("example")
 LIMINAL_API_SERVER_URL = os.environ["LIMINAL_API_SERVER_URL"]
 CLIENT_ID = os.environ["CLIENT_ID"]
 TENANT_ID = os.environ["TENANT_ID"]
-DEMO_MODEL = "gpt-4-1106-preview"
+DEMO_MODEL_NAME = "My Model Instance"
 
 
 async def main() -> None:
@@ -36,21 +36,23 @@ async def main() -> None:
         # Get model instance id
         model_instance_id = -1
         retrieved_elements = next(
-            (x for x in available_llms if x.model == DEMO_MODEL), None
+            (x for x in available_llms if x.name == DEMO_MODEL_NAME), None
         )
         if retrieved_elements:
             model_instance_id = retrieved_elements.id
+        else:
+            raise LiminalError(
+                "Please make sure the following model instance name exists before "
+                "attempting to run this example script: " + str(DEMO_MODEL_NAME)
+            )
 
-        # Create a thread using GPT-4:
+        # Create a thread with your designated model instance:
         created_thread = await liminal.thread.create(model_instance_id, "My thread")
         _LOGGER.info("Created thread: %s", created_thread)
 
         # Analyze a prompt and  get "findings" (details on detected sensitive info):
-        prompt = (
-            "Write a short marketing email for a banking customer Jane Gansbuhler, "
-            "whose email address is egansbuhler0@pinterest.com and who lives at 14309 "
-            "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
-            "identifies as Female"
+        prompt = input(
+            "Enter a prompt you would like to be cleansed of sensitive info: "
         )
 
         findings = await liminal.prompt.analyze(created_thread.id, prompt)
@@ -62,23 +64,17 @@ async def main() -> None:
         )
         _LOGGER.info("Cleansed response: %s", cleansed_prompt)
 
-        # TODO: new prompt here that contains the analysis findings cleansed keywords
+        prompt_to_hydrate = input(
+            "Enter a prompt (using the masked terms from the cleansed prompt above) "
+            "that you would like to have rehydrated with the sensitive "
+            "info that was previously cleansed: "
+        )
 
         # Rehydrate my cleansed prompt after I have done something with the text
         hydrated_response = await liminal.prompt.hydrate(
-            created_thread.id,
-            cleansed_prompt.text,
+            created_thread.id, prompt_to_hydrate
         )
         _LOGGER.info("Hydrated response: %s", hydrated_response)
-
-        # Send a prompt to an LLM and get a response (choosing to include the findings
-        # and deidentified context history we've already retrieved):
-        # response = await liminal.prompt.submit(
-        #     created_thread.id,
-        #     prompt,
-        #     findings=findings,
-        # )
-        # _LOGGER.info("LLM response: %s", response)
     except LiminalError as err:
         _LOGGER.error("Error running the script: %s", err)
 

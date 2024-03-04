@@ -12,7 +12,7 @@ _LOGGER = logging.getLogger("example")
 LIMINAL_API_SERVER_URL = os.environ["LIMINAL_API_SERVER_URL"]
 CLIENT_ID = os.environ["CLIENT_ID"]
 TENANT_ID = os.environ["TENANT_ID"]
-DEMO_MODEL = "gpt-4-1106-preview"
+DEMO_MODEL_NAME = "Codie-GPT4.0"
 
 
 async def main() -> None:
@@ -29,19 +29,31 @@ async def main() -> None:
         # Authenticate the user:
         await liminal.authenticate_from_auth_provider()
 
-        # Get available LLMs:
-        available_llms = await liminal.llm.get_available_model_instances()
-        _LOGGER.info("Available LLMs: %s", available_llms)
+        # Get available model instances:
+        model_instances = await liminal.llm.get_available_model_instances()
+        _LOGGER.info("Available Model Instances: %s", model_instances)
 
         # Get model instance id
         model_instance_id = -1
-        retrieved_elements = next(
-            (x for x in available_llms if x.model == DEMO_MODEL), None
+        retrieved_instances = next(
+            (x for x in model_instances if x.name == DEMO_MODEL_NAME), None
         )
-        if retrieved_elements:
-            model_instance_id = retrieved_elements.id
 
-        # Create a thread using GPT-4:
+        if retrieved_instances:
+            if retrieved_instances.model_connection is None:
+                raise LiminalError(
+                    "Please make sure to connect the following model "
+                    "instance before attempting to run this "
+                    "example script: " + str(DEMO_MODEL_NAME)
+                )
+            model_instance_id = retrieved_instances.id
+        else:
+            raise LiminalError(
+                "Please make sure the following model instance name exists before "
+                "attempting to run this example script: " + str(DEMO_MODEL_NAME)
+            )
+
+        # Create a thread using the designated model instance
         created_thread = await liminal.thread.create(model_instance_id, "My thread")
         _LOGGER.info("Created thread: %s", created_thread)
 
