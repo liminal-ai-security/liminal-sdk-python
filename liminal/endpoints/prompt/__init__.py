@@ -106,7 +106,7 @@ class PromptEndpoint:
         thread_id: int,
         prompt: str,
     ) -> HydrateResponse:
-        """Cleanse a prompt of sensitive data.
+        """Rehydrate prompt with sensitive data.
 
         Args:
             thread_id: The ID of the thread to cleanse the prompt for.
