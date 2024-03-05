@@ -109,11 +109,11 @@ class PromptEndpoint:
         """Rehydrate prompt with sensitive data.
 
         Args:
-            thread_id: The ID of the thread to cleanse the prompt for.
-            prompt: The prompt to cleanse.
+            thread_id: The ID of the thread to hydrate the prompt for.
+            prompt: The prompt to hydrate.
 
         Returns:
-            An object that contains a cleansed version of the prompt.
+            An object that contains a rehydrated version of the prompt.
         """
         payload = {"threadId": thread_id, "text": prompt}
 
