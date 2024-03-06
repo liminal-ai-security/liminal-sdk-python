@@ -15,6 +15,7 @@ class ModelInstances(BaseModel):
     name: str
     created_at: str = msgspec.field(name="createdAt")
     updated_at: str = msgspec.field(name="updatedAt")
+    deleted_at: str | None = msgspec.field(name="deletedAt", default=None)
 
 
 class ModelConnection(BaseModel):
