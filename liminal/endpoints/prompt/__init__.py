@@ -7,7 +7,7 @@ import msgspec
 
 from liminal.helpers.typing import ValidatedResponseT
 
-from .models import AnalyzeResponse, CleanseResponse, ProcessResponse
+from .models import AnalyzeResponse, CleanseResponse, HydrateResponse, ProcessResponse
 
 
 class PromptEndpoint:
@@ -98,5 +98,28 @@ class PromptEndpoint:
             ProcessResponse,
             await self._request_and_validate(
                 "POST", "/api/v1/sdk/process", ProcessResponse, json=payload
+            ),
+        )
+
+    async def hydrate(
+        self,
+        thread_id: int,
+        prompt: str,
+    ) -> HydrateResponse:
+        """Rehydrate prompt with sensitive data.
+
+        Args:
+            thread_id: The ID of the thread to hydrate the prompt for.
+            prompt: The prompt to hydrate.
+
+        Returns:
+            An object that contains a rehydrated version of the prompt.
+        """
+        payload = {"threadId": thread_id, "text": prompt}
+
+        return cast(
+            HydrateResponse,
+            await self._request_and_validate(
+                "POST", "/api/v1/sdk/hydrate_response", HydrateResponse, json=payload
             ),
         )
