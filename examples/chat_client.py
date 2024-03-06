@@ -12,7 +12,7 @@ _LOGGER = logging.getLogger("example")
 LIMINAL_API_SERVER_URL = os.environ["LIMINAL_API_SERVER_URL"]
 CLIENT_ID = os.environ["CLIENT_ID"]
 TENANT_ID = os.environ["TENANT_ID"]
-DEMO_MODEL = "gpt-3.5-turbo"
+DEMO_MODEL_INSTANCE_NAME = "My Model Instance"
 
 
 async def main() -> None:
@@ -34,12 +34,25 @@ async def main() -> None:
     try:
         # Get model instance id
         model_instances = await liminal.llm.get_available_model_instances()
+        _LOGGER.info("model instances = %s", model_instances)
         model_instance_id = -1
-        retrieved_elements = next(
-            (x for x in model_instances if x.model == DEMO_MODEL), None
+        retrieved_instances = next(
+            (x for x in model_instances if x.name == DEMO_MODEL_INSTANCE_NAME), None
         )
-        if retrieved_elements:
-            model_instance_id = retrieved_elements.id
+        if retrieved_instances:
+            if retrieved_instances.model_connection is None:
+                raise LiminalError(
+                    "Please make sure to connect the following model instance before "
+                    "attempting to run this example script: "
+                    + str(DEMO_MODEL_INSTANCE_NAME)
+                )
+            model_instance_id = retrieved_instances.id
+        else:
+            raise LiminalError(
+                "Please make sure the following model instance name exists before "
+                "attempting to run this example script: "
+                + str(DEMO_MODEL_INSTANCE_NAME)
+            )
 
         # Create Thread and begin prompts
         created_thread = await liminal.thread.create(model_instance_id, "Demo Thread")

@@ -173,7 +173,7 @@ asyncio.run(main())
 
 The Liminal client object provides several methods:
 
-- `liminal.llm.get_available()`: get all available LLMs that can be queried
+- `liminal.llm.get_available_model_instances()`: get all available model instances that can be queried
 - `liminal.thread.create()`: create a new thread for a specific LLM
 - `liminal.thread.get_available()`: get all available threads
 - `liminal.thread.get_by_id()`: get a thread by its ID

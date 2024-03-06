@@ -17,7 +17,7 @@ class LLMEndpoint:
         self._request_and_validate = request_and_validate
 
     async def get_available_model_instances(self) -> list[ModelInstances]:
-        """Get available LLMs."""
+        """Get available model instances."""
         return cast(
             list[ModelInstances],
             await self._request_and_validate(
