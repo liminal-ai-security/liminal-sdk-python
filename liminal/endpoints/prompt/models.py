@@ -1,4 +1,5 @@
 """Define models for the LLM endpoint."""
+
 from __future__ import annotations
 
 import msgspec

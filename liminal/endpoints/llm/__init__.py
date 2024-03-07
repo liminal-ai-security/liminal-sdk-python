@@ -1,4 +1,5 @@
 """Define the LLM endpoint."""
+
 from collections.abc import Awaitable, Callable
 from typing import cast
 

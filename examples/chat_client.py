@@ -1,4 +1,5 @@
 """Define a chat client example."""
+
 import asyncio
 import logging
 import os

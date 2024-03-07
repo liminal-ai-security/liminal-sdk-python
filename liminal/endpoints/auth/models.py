@@ -1,4 +1,5 @@
 """Define models for the auth endpoint."""
+
 from __future__ import annotations
 
 from abc import ABC

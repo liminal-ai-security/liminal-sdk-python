@@ -1,4 +1,5 @@
 """Define a simple example."""
+
 import asyncio
 import logging
 import os

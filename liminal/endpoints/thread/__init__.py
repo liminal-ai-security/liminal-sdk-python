@@ -1,4 +1,5 @@
 """Define the threads endpoint."""
+
 from collections.abc import Awaitable, Callable
 from typing import cast
 
