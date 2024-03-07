@@ -1,4 +1,5 @@
 """Define the auth endpoint."""
+
 import asyncio
 import json
 

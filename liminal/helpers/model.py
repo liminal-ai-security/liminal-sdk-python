@@ -1,4 +1,5 @@
 """Define model helpers."""
+
 import msgspec
 
 

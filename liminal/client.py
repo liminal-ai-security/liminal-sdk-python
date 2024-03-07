@@ -1,4 +1,5 @@
 """Define the client module."""
+
 # pylint: disable=too-many-arguments
 from collections.abc import Callable
 from datetime import datetime
