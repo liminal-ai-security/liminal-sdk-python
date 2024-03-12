@@ -41,7 +41,7 @@ class ThreadEndpoint:
             Thread,
             await self._request_and_validate(
                 "POST",
-                "/api/v1/sdk/thread",
+                "/api/v1/threads",
                 Thread,
                 json={
                     "name": name,
@@ -58,7 +58,7 @@ class ThreadEndpoint:
         """
         return cast(
             list[Thread],
-            await self._request_and_validate("GET", "/api/v1/sdk/thread", list[Thread]),
+            await self._request_and_validate("GET", "/api/v1/threads", list[Thread]),
         )
 
     async def get_by_id(self, thread_id: int) -> Thread:
@@ -73,7 +73,7 @@ class ThreadEndpoint:
         return cast(
             Thread,
             await self._request_and_validate(
-                "GET", f"/api/v1/sdk/thread/{thread_id}", Thread
+                "GET", f"/api/v1/threads/{thread_id}", Thread
             ),
         )
 
