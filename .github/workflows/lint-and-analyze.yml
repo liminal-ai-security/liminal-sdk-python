@@ -36,7 +36,7 @@ jobs:
 
       - name: 🏗 Install workflow dependencies
         run: |
-          pip install -r .github/workflows/requirements.txt
+          pip install -r requirements-dev.txt
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project true
 
