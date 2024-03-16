@@ -1,20 +1,12 @@
 ---
-name: Linting and Static Analysis
+name: Lint and Analyze
 
 "on":
   pull_request:
-    branches:
-      - development
-      - main
-
-  push:
-    branches:
-      - development
-      - main
 
 jobs:
   lint:
-    name: "Linting & Static Analysis"
+    name: "Lint and Analyze"
 
     runs-on: ubuntu-latest
 
@@ -38,13 +30,13 @@ jobs:
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
           key: "${{ runner.os }}-pip-\
-            ${{ hashFiles('.github/workflows/requirements.txt') }}"
+            ${{ hashFiles('requirements-dev.txt') }}"
           restore-keys: |
             ${{ runner.os }}-pip-
 
       - name: 🏗 Install workflow dependencies
         run: |
-          pip install -r .github/workflows/requirements.txt
+          pip install -r requirements-dev.txt
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project true
 
@@ -61,7 +53,15 @@ jobs:
         run: |
           poetry install --no-interaction
 
-      - name: 🚀 Run pre-commit hooks
+      - name: Get all changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v42.1.0
+        with:
+          fetch-depth: 0
+
+      - name: Run pre-commit hooks
         uses: pre-commit/action@v3.0.1
         env:
           SKIP: no-commit-to-branch
+        with:
+          extra_args: --files ${{ steps.changed-files.outputs.all_changed_files }}
