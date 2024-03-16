@@ -21,13 +21,9 @@ DEFAULT_AUTH_CHALLENGE_TIMEOUT = 60
 class AuthServiceError(LiminalError):
     """Define an error related to the auth client service."""
 
-    pass
-
 
 class AuthFailedError(AuthServiceError):
     """Define an error related to authentication failure."""
-
-    pass
 
 
 class MicrosoftAuthProvider(AuthProvider):
@@ -85,7 +81,7 @@ class MicrosoftAuthProvider(AuthProvider):
                     None, self._msal_app.acquire_token_by_device_flow, flow
                 )
                 result = await fut
-        except asyncio.TimeoutError as err:
+        except TimeoutError as err:
             # Setting the flow to expire immediately will effectively kill the future
             # that we're awaiting:
             flow["expires_at"] = 0
