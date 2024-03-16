@@ -71,14 +71,14 @@ jobs:
           git config --local user.name "GitHub Action"
           git add pyproject.toml
           git commit -m "Update version to ${{ steps.calver.outputs.version }}"
-          # git push
+          git push
 
       - name: 🏷️ Tag the version bump
         run: git tag -a ${{ steps.calver.outputs.version }} -m "Release ${{ steps.calver.outputs.version }}"
 
-      # Push the tags to the repository
-      # - name: ⬆️ Push tags
-      #   run: git push origin --tags
+      Push the tags to the repository
+      - name: ⬆️ Push tags
+        run: git push origin --tags
 
       - name: ⤵️ Check out development branch
         uses: actions/checkout@v4
@@ -89,5 +89,5 @@ jobs:
         run: |
           git merge origin/main --no-ff -m "Merge main into development to sync version bump"
 
-      # - name: ⬆️ Push changes to development branch
-      #   run: git push origin HEAD:development
+      - name: ⬆️ Push changes to development branch
+        run: git push origin HEAD:development
