@@ -45,7 +45,7 @@ jobs:
 
       - name: 🔢 Update pyproject.toml version
         run: |
-          sed -i "" "s/^version = \".*\"/version = \"${{ steps.calver.outputs.version }}\"/g" "pyproject.toml"
+          sed "s/^version = \".*\"/version = \"${{ steps.calver.outputs.version }}\"/g" "pyproject.toml"
 
       - name: ☑️ Commit and push version update
         run: |
