@@ -10,8 +10,11 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  create_release:
+    name: 🚀 Create Release
+
     runs-on: ubuntu-latest
+
     steps:
       - name: ⤵️ Check out code from GitHub
         uses: actions/checkout@v4
