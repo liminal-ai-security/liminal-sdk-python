@@ -1,0 +1,72 @@
+---
+name: Create Release
+
+"on":
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🏗 Set up Python 3.12
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: 🗓️ Calculate new version
+        id: calver
+        run: |
+          latest_tag="$(git tag --sort=committerdate | tail -1)"
+          month="$(date +'%Y.%m')"
+
+          if [[ "$latest_tag" =~ "$month".* ]]; then
+              patch="$(echo "$latest_tag" | cut -d . -f 3)"
+              ((patch=patch+1))
+              version="$month.$patch"
+          else
+              version="$month.0"
+          fi
+
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: 🔢 Update pyproject.toml version
+        run: |
+          sed -i "" "s/^version = \".*\"/version = \"${{ steps.calver.outputs.version }}\"/g" "pyproject.toml"
+
+      - name: ☑️ Commit and push version update
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add pyproject.toml
+          git commit -m "Update version to ${{ steps.calver.outputs.version }}"
+          # git push
+
+      - name: 🏷️ Tag the version bump
+        run: git tag -a ${{ steps.calver.outputs.version }} -m "Release ${{ steps.calver.outputs.version }}"
+
+      # Push the tags to the repository
+      # - name: ⬆️ Push tags
+      #   run: git push origin --tags
+
+      - name: ⤵️ Check out development branch
+        uses: actions/checkout@v4
+        with:
+          ref: development
+
+      - name: 🔀 Merge main into development
+        run: |
+          git merge origin/main --no-ff -m "Merge main into development to sync version bump"
+
+      # - name: ⬆️ Push changes to development branch
+      #   run: git push origin HEAD:development
