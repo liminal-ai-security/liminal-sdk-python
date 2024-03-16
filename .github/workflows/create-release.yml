@@ -11,6 +11,8 @@ permissions:
 
 jobs:
   create_release:
+    name: 🚀 Create Release
+
     runs-on: ubuntu-latest
 
     steps:
@@ -74,7 +76,6 @@ jobs:
       - name: 🏷️ Tag the version bump
         run: git tag -a ${{ steps.calver.outputs.version }} -m "Release ${{ steps.calver.outputs.version }}"
 
-      Push the tags to the repository
       - name: ⬆️ Push tags
         run: git push origin --tags
 
