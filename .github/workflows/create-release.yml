@@ -11,8 +11,6 @@ permissions:
 
 jobs:
   create_release:
-    name: 🚀 Create Release
-
     runs-on: ubuntu-latest
 
     steps:
