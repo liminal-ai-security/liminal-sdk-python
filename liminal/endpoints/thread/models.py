@@ -5,11 +5,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Literal
 
-from mashumaro import DataClassDictMixin, field_options
+from mashumaro import field_options
+
+from liminal.helpers.model import BaseModel
 
 
 @dataclass(frozen=True, kw_only=True)
-class DeidentifiedToken(DataClassDictMixin):
+class DeidentifiedToken(BaseModel):
     """Define the schema for a deidentified token."""
 
     deid_text: str = field(metadata=field_options(alias="deidText"))
@@ -17,7 +19,7 @@ class DeidentifiedToken(DataClassDictMixin):
 
 
 @dataclass(frozen=True, kw_only=True)
-class Thread(DataClassDictMixin):
+class Thread(BaseModel):
     """Define the schema for a thread."""
 
     id: int

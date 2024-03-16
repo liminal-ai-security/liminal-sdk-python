@@ -68,7 +68,9 @@ class PromptEndpoint:
         """
         payload = {"threadId": thread_id, "text": prompt}
         if findings:
-            payload["findings"] = [finding.to_dict() for finding in findings.findings]
+            payload["findings"] = [
+                finding.to_dict(by_alias=True) for finding in findings.findings
+            ]
 
         return cast(
             CleanseResponse,
@@ -98,7 +100,9 @@ class PromptEndpoint:
         """
         payload = {"threadId": thread_id, "text": prompt}
         if findings:
-            payload["findings"] = [finding.to_dict() for finding in findings.findings]
+            payload["findings"] = [
+                finding.to_dict(by_alias=True) for finding in findings.findings
+            ]
 
         return cast(
             ProcessResponse,

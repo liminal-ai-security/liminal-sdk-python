@@ -4,13 +4,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from mashumaro import DataClassDictMixin, field_options
+from mashumaro import field_options
 
 from liminal.endpoints.thread.models import DeidentifiedToken
+from liminal.helpers.model import BaseModel
 
 
 @dataclass(frozen=True, kw_only=True)
-class AnalysisFinding(DataClassDictMixin):
+class AnalysisFinding(BaseModel):
     """Define the schema for an analysis finding.
 
     This object stores information about a piece of text from a prompt, what sensitive
@@ -28,14 +29,14 @@ class AnalysisFinding(DataClassDictMixin):
 
 
 @dataclass(frozen=True, kw_only=True)
-class AnalyzeResponse(DataClassDictMixin):
+class AnalyzeResponse(BaseModel):
     """Define the response schema for an analysis request."""
 
     findings: list[AnalysisFinding]
 
 
 @dataclass(frozen=True, kw_only=True)
-class CleansedToken(DataClassDictMixin):
+class CleansedToken(BaseModel):
     """Define the schema for a cleansed token."""
 
     start: int
@@ -44,7 +45,7 @@ class CleansedToken(DataClassDictMixin):
 
 
 @dataclass(frozen=True, kw_only=True)
-class HydratedToken(DataClassDictMixin):
+class HydratedToken(BaseModel):
     """Define the schema for a hydrated token."""
 
     end: int
@@ -53,7 +54,7 @@ class HydratedToken(DataClassDictMixin):
 
 
 @dataclass(frozen=True, kw_only=True)
-class CleanseResponse(DataClassDictMixin):
+class CleanseResponse(BaseModel):
     """Define the response schema for a cleanse request."""
 
     items: list[CleansedToken]
@@ -66,7 +67,7 @@ class CleanseResponse(DataClassDictMixin):
 
 
 @dataclass(frozen=True, kw_only=True)
-class HydrateResponse(DataClassDictMixin):
+class HydrateResponse(BaseModel):
     """Define the response schema for a hydrate request."""
 
     items: list[HydratedToken]
@@ -74,7 +75,7 @@ class HydrateResponse(DataClassDictMixin):
 
 
 @dataclass(frozen=True, kw_only=True)
-class ReidentifiedToken(DataClassDictMixin):
+class ReidentifiedToken(BaseModel):
     """Define the schema for a reidentified token."""
 
     start: int
@@ -84,7 +85,7 @@ class ReidentifiedToken(DataClassDictMixin):
 
 
 @dataclass(frozen=True, kw_only=True)
-class ProcessResponse(DataClassDictMixin):
+class ProcessResponse(BaseModel):
     """Define the response schema for a process request."""
 
     thread_id: int = field(metadata=field_options(alias="threadId"))

@@ -4,11 +4,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from mashumaro import DataClassDictMixin, field_options
+from mashumaro import field_options
+
+from liminal.helpers.model import BaseModel
 
 
 @dataclass(frozen=True, kw_only=True)
-class ModelInstances(DataClassDictMixin):
+class ModelInstances(BaseModel):
     """Define the schema for an LLM model instance that Liminal supports."""
 
     id: int
@@ -25,7 +27,7 @@ class ModelInstances(DataClassDictMixin):
 
 
 @dataclass(frozen=True, kw_only=True)
-class ModelConnection(DataClassDictMixin):
+class ModelConnection(BaseModel):
     """Define the schema for an LLM model connection."""
 
     id: int

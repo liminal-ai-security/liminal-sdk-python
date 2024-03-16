@@ -123,10 +123,8 @@ class Client:
         try:
             response.raise_for_status()
         except HTTPStatusError as err:
-            response_body = err.response.json()
             raise RequestError(
-                f"Error while sending request to {url}: "
-                f"{response_body.get('error', 'Unknown')}"
+                f"Error while sending request to {url}: {err.response.content.decode()}"
             ) from err
 
         if not running_client:
@@ -191,7 +189,7 @@ class Client:
         LOGGER.debug("Saving tokens from auth response")
         self._access_token = auth_response.cookies["accessToken"]
         self._access_token_expires_at = datetime.fromtimestamp(
-            int(auth_response.cookies["accessTokenExpiresAt"]) / 1000
+            int(auth_response.cookies["accessTokenExpiresAt"]) / 1000, tz=UTC
         )
         self._refresh_token = auth_response.cookies["refreshToken"]
 

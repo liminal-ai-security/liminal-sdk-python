@@ -6,7 +6,7 @@ from abc import ABC
 from dataclasses import dataclass
 from typing import Literal
 
-from mashumaro import DataClassDictMixin
+from liminal.helpers.model import BaseModel
 
 
 class AuthProvider(ABC):
@@ -26,7 +26,7 @@ class AuthProvider(ABC):
 
 
 @dataclass(frozen=True, kw_only=True)
-class MSALCacheTokenResponse(DataClassDictMixin):
+class MSALCacheTokenResponse(BaseModel):
     """Define an MSAL token response from Entra ID."""
 
     token_type: Literal["Bearer"]
@@ -36,7 +36,7 @@ class MSALCacheTokenResponse(DataClassDictMixin):
 
 
 @dataclass(frozen=True, kw_only=True)
-class MSALIdentityProviderTokenResponse(DataClassDictMixin):
+class MSALIdentityProviderTokenResponse(BaseModel):
     """Define an MSAL token response from the local in-memory cache."""
 
     token_type: Literal["Bearer"]
