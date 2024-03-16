@@ -2,33 +2,43 @@
 
 from __future__ import annotations
 
-import msgspec
+from dataclasses import dataclass, field
 
-from liminal.helpers.model import BaseModel
+from mashumaro import DataClassDictMixin, field_options
 
 
-class ModelInstances(BaseModel):
+@dataclass(frozen=True, kw_only=True)
+class ModelInstances(DataClassDictMixin):
     """Define the schema for an LLM model instance that Liminal supports."""
 
     id: int
-    policyGroupId: int
-    model_connection: ModelConnection | None = msgspec.field(name="modelConnection")
+    policy_group_id: int = field(metadata=field_options(alias="policyGroupId"))
+    model_connection: ModelConnection | None = field(
+        metadata=field_options(alias="modelConnection")
+    )
     name: str
-    created_at: str = msgspec.field(name="createdAt")
-    updated_at: str = msgspec.field(name="updatedAt")
-    deleted_at: str | None = msgspec.field(name="deletedAt", default=None)
+    created_at: str = field(metadata=field_options(alias="createdAt"))
+    updated_at: str = field(metadata=field_options(alias="updatedAt"))
+    deleted_at: str | None = field(
+        default=None, metadata=field_options(alias="deletedAt")
+    )
 
 
-class ModelConnection(BaseModel):
-    """Define the schema for an LLM model connection"""
+@dataclass(frozen=True, kw_only=True)
+class ModelConnection(DataClassDictMixin):
+    """Define the schema for an LLM model connection."""
 
     id: int
-    modelInstanceId: int
+    model_instance_id: int = field(metadata=field_options(alias="modelInstanceId"))
     model: str
-    providerKey: str
+    provider_key: str = field(metadata=field_options(alias="providerKey"))
     params: dict[str, str] | None
-    created_at: str = msgspec.field(name="createdAt")
-    updated_at: str = msgspec.field(name="updatedAt")
-    apiKey: str | None = msgspec.field(name="apiKey", default=None)
-    maskedApiKey: str | None = msgspec.field(name="maskedApiKey", default=None)
-    deleted_at: str | None = msgspec.field(name="deletedAt", default=None)
+    created_at: str = field(metadata=field_options(alias="createdAt"))
+    updated_at: str = field(metadata=field_options(alias="updatedAt"))
+    api_key: str | None = field(default=None, metadata=field_options(alias="apiKey"))
+    masked_api_key: str | None = field(
+        default=None, metadata=field_options(alias="maskedApiKey")
+    )
+    deleted_at: str | None = field(
+        default=None, metadata=field_options(alias="deletedAt")
+    )

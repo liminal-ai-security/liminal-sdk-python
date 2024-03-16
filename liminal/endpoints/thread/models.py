@@ -2,50 +2,28 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from typing import Literal
 
-from liminal.helpers.model import BaseModel
+from mashumaro import DataClassDictMixin, field_options
 
 
-class DeidentifiedToken(BaseModel):
+@dataclass(frozen=True, kw_only=True)
+class DeidentifiedToken(DataClassDictMixin):
     """Define the schema for a deidentified token."""
 
-    deidText: str
-    hashText: str
+    deid_text: str = field(metadata=field_options(alias="deidText"))
+    hash_text: str = field(metadata=field_options(alias="hashText"))
 
 
-class Thread(BaseModel):
+@dataclass(frozen=True, kw_only=True)
+class Thread(DataClassDictMixin):
     """Define the schema for a thread."""
 
     id: int
     name: str
-    userId: int
-    modelInstanceId: int
-    createdAt: str
-    updatedAt: str
+    user_id: int = field(metadata=field_options(alias="userId"))
+    model_instance_id: int = field(metadata=field_options(alias="modelInstanceId"))
+    created_at: str = field(metadata=field_options(alias="createdAt"))
+    updated_at: str = field(metadata=field_options(alias="updatedAt"))
     source: Literal["sdk"]
-
-
-# def test():
-#     return [
-#         {
-#             "deidText": "PERSON_1",
-#             "hashText": "e7jQ5Yi9nRXxNyK6NBW4Q2GNgyHunDgD+mqNACWQzPY=",
-#         },
-#         {
-#             "deidText": "PERSON_0",
-#             "hashText": "/orm1sYaK1f6EOMnN2ewyXEznsyulcuUYTOwK2DKC24=",
-#         },
-#         {
-#             "deidText": "LOCATION_0",
-#             "hashText": "1MfC83PELHvWN53CfVHVFGCHxCbPzbfmO8Dmdg",
-#         },
-#         {
-#             "deidText": "EMAIL_ADDRESS_0",
-#             "hashText": "wbDUkZncjP3Q6GZNTG0DV7NmUdpO8xcGjrlHZF",
-#         },
-#         {
-#             "deidText": "DATE_TIME_0",
-#             "hashText": "t/C9jwx6cw9qGezOWCbYg5a5mZI+3reZItYf3gS5P2I=",
-#         },
-#     ]

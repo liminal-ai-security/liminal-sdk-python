@@ -1,4 +1,4 @@
-"""Define typing helpers"""
+"""Define typing helpers."""
 
 from typing import TypeVar
 

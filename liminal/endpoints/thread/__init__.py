@@ -5,9 +5,8 @@ from typing import cast
 
 from httpx import Response
 
+from liminal.endpoints.thread.models import DeidentifiedToken, Thread
 from liminal.helpers.typing import ValidatedResponseT
-
-from .models import DeidentifiedToken, Thread
 
 
 class ThreadEndpoint:
@@ -23,6 +22,7 @@ class ThreadEndpoint:
         Args:
             request: The request function.
             request_and_validate: The request and validate function.
+
         """
         self._request = request
         self._request_and_validate = request_and_validate
@@ -36,6 +36,7 @@ class ThreadEndpoint:
 
         Returns:
             A Thread object representing the creatd thread.
+
         """
         return cast(
             Thread,
@@ -55,6 +56,7 @@ class ThreadEndpoint:
 
         Returns:
             A list of Thread objects.
+
         """
         return cast(
             list[Thread],
@@ -69,6 +71,7 @@ class ThreadEndpoint:
 
         Returns:
             A Thread object representing the thread.
+
         """
         return cast(
             Thread,
@@ -88,6 +91,7 @@ class ThreadEndpoint:
         Returns:
             A list of DeidentifiedToken objects representing the deidentified context
                 history.
+
         """
         return cast(
             list[DeidentifiedToken],

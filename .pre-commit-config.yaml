@@ -115,7 +115,7 @@ repos:
         name: "👔 Enforcing style guide with ruff"
         language: system
         types: [python]
-        entry: poetry run ruff --fix
+        entry: poetry run ruff check --fix
         require_serial: true
       - id: trailing-whitespace
         name: "✄  Trimming trailing whitespace"

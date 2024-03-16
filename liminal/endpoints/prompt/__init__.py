@@ -3,11 +3,13 @@
 from collections.abc import Awaitable, Callable
 from typing import cast
 
-import msgspec
-
+from liminal.endpoints.prompt.models import (
+    AnalyzeResponse,
+    CleanseResponse,
+    HydrateResponse,
+    ProcessResponse,
+)
 from liminal.helpers.typing import ValidatedResponseT
-
-from .models import AnalyzeResponse, CleanseResponse, HydrateResponse, ProcessResponse
 
 
 class PromptEndpoint:
@@ -20,6 +22,7 @@ class PromptEndpoint:
 
         Args:
             request_and_validate: The request and validate function.
+
         """
         self._request_and_validate = request_and_validate
 
@@ -32,6 +35,7 @@ class PromptEndpoint:
 
         Returns:
             An object that contains identified sensitive data ("findings").
+
         """
         return cast(
             AnalyzeResponse,
@@ -60,10 +64,11 @@ class PromptEndpoint:
 
         Returns:
             An object that contains a cleansed version of the prompt.
+
         """
         payload = {"threadId": thread_id, "text": prompt}
         if findings:
-            payload["findings"] = msgspec.to_builtins(findings.findings)
+            payload["findings"] = [finding.to_dict() for finding in findings.findings]
 
         return cast(
             CleanseResponse,
@@ -89,10 +94,11 @@ class PromptEndpoint:
 
         Returns:
             An object that contains a response from the LLM.
+
         """
         payload = {"threadId": thread_id, "text": prompt}
         if findings:
-            payload["findings"] = msgspec.to_builtins(findings.findings)
+            payload["findings"] = [finding.to_dict() for finding in findings.findings]
 
         return cast(
             ProcessResponse,
@@ -114,6 +120,7 @@ class PromptEndpoint:
 
         Returns:
             An object that contains a rehydrated version of the prompt.
+
         """
         payload = {"threadId": thread_id, "text": prompt}
 

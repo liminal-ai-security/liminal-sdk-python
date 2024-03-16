@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
-import msgspec
+from dataclasses import dataclass, field
+
+from mashumaro import DataClassDictMixin, field_options
 
 from liminal.endpoints.thread.models import DeidentifiedToken
-from liminal.helpers.model import BaseModel
 
 
-class AnalysisFinding(BaseModel):
+@dataclass(frozen=True, kw_only=True)
+class AnalysisFinding(DataClassDictMixin):
     """Define the schema for an analysis finding.
 
     This object stores information about a piece of text from a prompt, what sensitive
@@ -19,19 +21,21 @@ class AnalysisFinding(BaseModel):
     end: int
     origin: str
     score: float
-    score_category: str = msgspec.field(name="scoreCategory")
+    score_category: str = field(metadata=field_options(alias="scoreCategory"))
     text: str
     type: str
-    policy_action: str = msgspec.field(name="policyAction")
+    policy_action: str = field(metadata=field_options(alias="policyAction"))
 
 
-class AnalyzeResponse(BaseModel):
+@dataclass(frozen=True, kw_only=True)
+class AnalyzeResponse(DataClassDictMixin):
     """Define the response schema for an analysis request."""
 
     findings: list[AnalysisFinding]
 
 
-class CleansedToken(BaseModel):
+@dataclass(frozen=True, kw_only=True)
+class CleansedToken(DataClassDictMixin):
     """Define the schema for a cleansed token."""
 
     start: int
@@ -39,7 +43,8 @@ class CleansedToken(BaseModel):
     entity_type: str
 
 
-class HydratedToken(BaseModel):
+@dataclass(frozen=True, kw_only=True)
+class HydratedToken(DataClassDictMixin):
     """Define the schema for a hydrated token."""
 
     end: int
@@ -47,7 +52,8 @@ class HydratedToken(BaseModel):
     start: int
 
 
-class CleanseResponse(BaseModel):
+@dataclass(frozen=True, kw_only=True)
+class CleanseResponse(DataClassDictMixin):
     """Define the response schema for a cleanse request."""
 
     items: list[CleansedToken]
@@ -59,14 +65,16 @@ class CleanseResponse(BaseModel):
     text_hashed: str
 
 
-class HydrateResponse(BaseModel):
+@dataclass(frozen=True, kw_only=True)
+class HydrateResponse(DataClassDictMixin):
     """Define the response schema for a hydrate request."""
 
     items: list[HydratedToken]
     text: str
 
 
-class ReidentifiedToken(BaseModel):
+@dataclass(frozen=True, kw_only=True)
+class ReidentifiedToken(DataClassDictMixin):
     """Define the schema for a reidentified token."""
 
     start: int
@@ -75,23 +83,26 @@ class ReidentifiedToken(BaseModel):
     text: str
 
 
-class ProcessResponse(BaseModel):
+@dataclass(frozen=True, kw_only=True)
+class ProcessResponse(DataClassDictMixin):
     """Define the response schema for a process request."""
 
-    thread_id: int = msgspec.field(name="threadId")
-    chat_id: int = msgspec.field(name="chatId")
-    input_text: str = msgspec.field(name="inputText")
-    deidentified_input_text_data: CleanseResponse = msgspec.field(
-        name="deidentifiedInputTextData"
+    thread_id: int = field(metadata=field_options(alias="threadId"))
+    chat_id: int = field(metadata=field_options(alias="chatId"))
+    input_text: str = field(metadata=field_options(alias="inputText"))
+    deidentified_input_text_data: CleanseResponse = field(
+        metadata=field_options(alias="deidentifiedInputTextData")
     )
-    deidentified_context_history: list[DeidentifiedToken] = msgspec.field(
-        name="deidentifiedContextHistory"
+    deidentified_context_history: list[DeidentifiedToken] = field(
+        metadata=field_options(alias="deidentifiedContextHistory")
     )
-    llm_model: str = msgspec.field(name="llmModel")
-    raw_llm_response_text: str = msgspec.field(name="rawLLMResponseText")
-    reidentified_llm_response_text: str = msgspec.field(
-        name="reidentifiedLLMResponseText"
+    llm_model: str = field(metadata=field_options(alias="llmModel"))
+    raw_llm_response_text: str = field(
+        metadata=field_options(alias="rawLLMResponseText")
     )
-    reidentified_llm_response_items: list[ReidentifiedToken] = msgspec.field(
-        name="reidentifiedLLMResponseItems"
+    reidentified_llm_response_text: str = field(
+        metadata=field_options(alias="reidentifiedLLMResponseText")
+    )
+    reidentified_llm_response_items: list[ReidentifiedToken] = field(
+        metadata=field_options(alias="reidentifiedLLMResponseItems")
     )
