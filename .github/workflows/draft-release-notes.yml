@@ -1,5 +1,5 @@
 ---
-name: Release Drafter
+name: Draft Release Notes
 
 "on":
   push:
