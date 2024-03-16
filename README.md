@@ -1,6 +1,5 @@
 # Liminal Python SDK
 
-[![CI][ci-badge]][ci]
 [![PyPI][pypi-badge]][pypi]
 [![Version][version-badge]][version]
 [![License][license-badge]][license]
@@ -21,7 +20,6 @@ TBD
 
 `liminal` is currently supported on:
 
-- Python 3.11
 - Python 3.12
 
 # Quickstart
@@ -203,9 +201,9 @@ Thanks to all of [our contributors][contributors] so far!
 10. Submit a pull request!
 
 [azure-portal]: https://portal.azure.com
-[ci-badge]: https://github.com/liminal-ai-security/liminal-sdk-python/workflows/CI/badge.svg
 [ci]: https://github.com/liminal-ai-security/liminal-sdk-python/actions
 [contributors]: https://github.com/liminal-ai-security/liminal-sdk-python/graphs/contributors
+[examples]: https://github.com/liminal-ai-security/liminal-sdk-python/tree/development/examples
 [fork]: https://github.com/liminal-ai-security/liminal-sdk-python/fork
 [issues]: https://github.com/liminal-ai-security/liminal-sdk-python/issues
 [license-badge]: https://img.shields.io/pypi/l/aionotion.svg

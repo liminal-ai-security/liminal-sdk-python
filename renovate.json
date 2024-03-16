@@ -4,6 +4,7 @@
 
   "dependencyDashboard": true,
   "internalChecksFilter": "strict",
+  "labels": ["dependencies"],
   "minimumReleaseAge": "3 days",
   "prConcurrentLimit": 3,
   "prCreation": "immediate",

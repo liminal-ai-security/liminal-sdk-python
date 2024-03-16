@@ -20,7 +20,6 @@ categories:
     labels:
       - "dependencies"
       - "maintenance"
-      - "tooling"
 
 change-template: "- $TITLE (#$NUMBER)"
 name-template: "$NEXT_PATCH_VERSION"
