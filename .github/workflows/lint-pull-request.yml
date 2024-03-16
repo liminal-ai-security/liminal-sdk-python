@@ -13,6 +13,8 @@ permissions:
 
 jobs:
   lint-title:
+    name: "Lint Pull Request"
+
     runs-on: ubuntu-latest
 
     steps:
