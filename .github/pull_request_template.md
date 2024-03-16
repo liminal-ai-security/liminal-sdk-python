@@ -3,7 +3,9 @@
 <!-- Concisely describe what the pull request does. -->
 <!-- Add screenshots, videos, or other media to show the problem and the solution when appropriate. -->
 
--
+[SSIA][ssia]
+
+[ssia]: https://en.wiktionary.org/wiki/SSIA
 
 ## Testing Instructions
 
