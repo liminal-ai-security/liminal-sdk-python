@@ -1,0 +1,22 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+
+  "dependencyDashboard": true,
+  "internalChecksFilter": "strict",
+  "minimumReleaseAge": "3 days",
+  "prConcurrentLimit": 3,
+  "prCreation": "immediate",
+  "prHourlyLimit": 3,
+  "rangeStrategy": "pin",
+  "rebaseWhen": "behind-base-branch",
+  "semanticCommits": "enabled",
+
+  "packageRules": [
+    {
+      "description": "Require dependency dashboard approval for major updates",
+      "dependencyDashboardApproval": true,
+      "matchUpdateTypes": ["major"]
+    }
+  ]
+}
