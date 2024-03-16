@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   lint-title:
-    name: "Lint Pull Request"
+    name: 🧹 Lint Pull Request
 
     runs-on: ubuntu-latest
 

@@ -10,8 +10,10 @@ name: Draft Release Notes
 
 jobs:
   update_release_draft:
-    name: ✏️ Draft Release
+    name: ✏️ Draft Release Notes
+
     runs-on: ubuntu-latest
+
     steps:
       - name: 🚀 Run Release Drafter
         uses: release-drafter/release-drafter@v6.0.0
