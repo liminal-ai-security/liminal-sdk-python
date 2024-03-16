@@ -9,7 +9,7 @@ name: Lock Closed Issues and PRs
 
 jobs:
   lock:
-    name: 🔒 Lock!
+    name: 🔒 Lock
     runs-on: ubuntu-latest
     steps:
       - uses: dessant/lock-threads@v5.0.1

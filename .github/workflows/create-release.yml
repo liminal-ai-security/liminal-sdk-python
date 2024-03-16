@@ -1,0 +1,92 @@
+---
+name: Create Release
+
+"on":
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  create_release:
+    name: 🚀 Create Release
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🏗 Set up Python 3.12
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: ⤵️ Get pip cache directory
+        id: pip-cache
+        run: |
+          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
+
+      - name: ⤵️ Establish pip cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: "${{ runner.os }}-pip-\
+            ${{ hashFiles('.github/workflows/requirements-create-release.txt') }}"
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: 🏗 Install workflow dependencies
+        run: |
+          pip install -r .github/workflows/requirements-create-release.txt
+
+      - name: 🗓️ Calculate new version
+        id: calver
+        run: |
+          latest_tag="$(git tag --sort=committerdate | tail -1)"
+          month="$(date +'%Y.%m')"
+
+          if [[ "$latest_tag" =~ "$month".* ]]; then
+              patch="$(echo "$latest_tag" | cut -d . -f 3)"
+              ((patch=patch+1))
+              version="$month.$patch"
+          else
+              version="$month.0"
+          fi
+
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: 🔢 Update pyproject.toml version
+        run: |
+          python -c "import toml; d = toml.load('pyproject.toml'); d['tool']['poetry']['version'] = '${{ steps.calver.outputs.version }}'; toml.dump(d, open('pyproject.toml', 'w'))"
+
+      - name: ☑️ Commit and push version update
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add pyproject.toml
+          git commit -m "Update version to ${{ steps.calver.outputs.version }}"
+          git push
+
+      - name: 🏷️ Tag the version bump
+        run: git tag -a ${{ steps.calver.outputs.version }} -m "Release ${{ steps.calver.outputs.version }}"
+
+      - name: ⬆️ Push tags
+        run: git push origin --tags
+
+      - name: ⤵️ Check out development branch
+        uses: actions/checkout@v4
+        with:
+          ref: development
+
+      - name: 🔀 Merge main into development
+        run: |
+          git merge origin/main --no-ff -m "Merge main into development to sync version bump"
+
+      - name: ⬆️ Push changes to development branch
+        run: git push origin HEAD:development
