@@ -11,3 +11,7 @@ class RequestError(LiminalError):
 
 class AuthError(RequestError):
     """Define an exception related to invalid auth."""
+
+
+class ModelInstanceUnknownError(RequestError):
+    """Define an exception related to an unknown model instance."""
