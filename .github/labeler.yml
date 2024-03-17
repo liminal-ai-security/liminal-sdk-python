@@ -19,6 +19,3 @@
           - "pyproject.toml"
           - "renovate.json"
           - "scripts/**/*"
-
-"release":
-  - base-branch: "main"
