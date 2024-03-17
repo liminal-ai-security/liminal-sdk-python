@@ -2,7 +2,7 @@
 name: Lint and Analyze
 
 "on":
-  pull_request:
+  pull_request_target:
 
 jobs:
   lint:
