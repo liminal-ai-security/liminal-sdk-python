@@ -39,9 +39,6 @@ jobs:
       - name: 🔢 Update pyproject.toml version
         run: |
           python -c "import toml; d = toml.load('pyproject.toml'); d['tool']['poetry']['version'] = '${{ steps.calver.outputs.version }}'; toml.dump(d, open('pyproject.toml', 'w'))"
-
-      - name: Create the PR
-        run: |
           git checkout -b release/${{ steps.calver.outputs.version }}
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -49,6 +46,8 @@ jobs:
           git commit -m "Update version to ${{ steps.calver.outputs.version }}"
           git push origin release/${{ steps.calver.outputs.version }}
 
+      - name: Create the PR
+        run: |
           gh pr create \
             --head release/${{ steps.calver.outputs.version }} \
             --base main \
