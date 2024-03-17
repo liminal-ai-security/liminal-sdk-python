@@ -1,0 +1,24 @@
+"dependencies":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "poetry.lock"
+          - "requirements-*.txt"
+
+"documentation":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - "CODE_OF_CONDUCT"
+          - "examples/*"
+
+"maintenance":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".*.*"
+          - ".github/**/*"
+          - "pyproject.toml"
+          - "renovate.json"
+          - "scripts/**/*"
+
+"release":
+  - base-branch: "main"
