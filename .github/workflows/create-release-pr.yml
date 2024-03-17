@@ -4,7 +4,7 @@ name: Create Release PR
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
@@ -69,8 +69,6 @@ jobs:
           git add pyproject.toml
           git commit -m "Update version to ${{ steps.calver.outputs.version }}"
           git push origin release/${{ steps.calver.outputs.version }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create the PR
         run: |
