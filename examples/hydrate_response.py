@@ -8,7 +8,7 @@ from liminal import Client
 from liminal.endpoints.auth import MicrosoftAuthProvider
 from liminal.errors import LiminalError
 
-_LOGGER = logging.getLogger("example")
+_LOGGER = logging.getLogger("hydrate_response")
 
 
 async def main() -> None:
