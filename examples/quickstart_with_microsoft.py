@@ -3,12 +3,13 @@
 import asyncio
 import logging
 import os
+from typing import Final
 
 from liminal import Client
 from liminal.endpoints.auth import MicrosoftAuthProvider
 from liminal.errors import LiminalError
 
-_LOGGER = logging.getLogger("quickstart_with_microsoft")
+_LOGGER: Final[logging.Logger] = logging.getLogger("quickstart_with_microsoft")
 
 
 async def main() -> None:
