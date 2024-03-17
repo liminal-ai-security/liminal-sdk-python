@@ -70,6 +70,11 @@ jobs:
       - name: ⬆️ Push tags
         run: git push origin --tags
 
+      - name: 🚀 Publish to PyPi
+        run: |
+          pip install poetry
+          poetry publish --build -u __token__ -p  ${{ secrets.PYPI_API_KEY }}
+
       - name: ✏️ Run Release Drafter
         uses: release-drafter/release-drafter@v6.0.0
         with:
