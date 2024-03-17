@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-from abc import ABC
 from dataclasses import dataclass
 from typing import Literal
 
 from liminal.helpers.model import BaseModel
 
 
-class AuthProvider(ABC):
+class AuthProvider:
     """Define an auth provider abstract base class."""
 
     async def get_access_token(self) -> str:

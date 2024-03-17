@@ -10,4 +10,4 @@ class BaseModel(DataClassDictMixin):
     class Config(BaseConfig):
         """Define the configuration."""
 
-        code_generation_options = ["TO_DICT_ADD_BY_ALIAS_FLAG"]
+        code_generation_options = ["TO_DICT_ADD_BY_ALIAS_FLAG"]  # noqa: RUF012
