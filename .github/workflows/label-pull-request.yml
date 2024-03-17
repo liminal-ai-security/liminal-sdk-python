@@ -5,6 +5,7 @@ name: Label Pull Request
     branches:
       - development
       - main
+      - release/**
 
 permissions:
   contents: read
