@@ -3,12 +3,13 @@
 import asyncio
 import logging
 import os
+from typing import Final
 
 from liminal import Client
 from liminal.endpoints.auth import MicrosoftAuthProvider
 from liminal.errors import LiminalError
 
-_LOGGER = logging.getLogger("chat_client")
+_LOGGER: Final[logging.Logger] = logging.getLogger("chat_client")
 
 
 async def main() -> None:

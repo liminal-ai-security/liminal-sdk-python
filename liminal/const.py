@@ -1,5 +1,7 @@
 """Define package constants."""
 
 import logging
+from typing import Final
 
-LOGGER = logging.getLogger(__package__)
+
+LOGGER: Final[logging.Logger] = logging.getLogger(__package__)
