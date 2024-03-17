@@ -77,6 +77,7 @@ jobs:
             --base main \
             --title "chore(release): ${{ steps.calver.outputs.version }}" \
             --body-file ".github/PULL_REQUEST_TEMPLATE/release.md" \
-            --draft
+            --draft \
+            --label release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
