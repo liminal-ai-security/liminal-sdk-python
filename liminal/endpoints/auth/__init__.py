@@ -10,17 +10,9 @@ from liminal.endpoints.auth.models import (
     MSALCacheTokenResponse,
     MSALIdentityProviderTokenResponse,
 )
-from liminal.errors import LiminalError
+from liminal.errors import AuthError
 
 DEFAULT_AUTH_CHALLENGE_TIMEOUT = 60
-
-
-class AuthServiceError(LiminalError):
-    """Define an error related to the auth client service."""
-
-
-class AuthFailedError(AuthServiceError):
-    """Define an error related to authentication failure."""
 
 
 class MicrosoftAuthProvider(AuthProvider):
@@ -58,7 +50,7 @@ class MicrosoftAuthProvider(AuthProvider):
             The access token.
 
         Raises:
-            AuthFailedError: If authentication fails.
+            AuthError: If authentication fails.
 
         """
         if accounts := self._msal_app.get_accounts():
@@ -84,9 +76,7 @@ class MicrosoftAuthProvider(AuthProvider):
             # Setting the flow to expire immediately will effectively kill the future
             # that we're awaiting:
             flow["expires_at"] = 0
-            raise AuthFailedError(
-                "Timed out waiting for authentication challenge"
-            ) from err
+            raise AuthError("Timed out waiting for authentication challenge") from err
 
         identity_provider_response = MSALIdentityProviderTokenResponse.from_dict(result)
         return identity_provider_response.access_token
