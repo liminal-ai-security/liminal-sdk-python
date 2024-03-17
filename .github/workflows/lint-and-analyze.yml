@@ -3,10 +3,6 @@ name: Lint and Analyze
 
 "on":
   pull_request_target:
-    branches:
-      - development
-      - main
-      - release/**
 
 jobs:
   lint:
