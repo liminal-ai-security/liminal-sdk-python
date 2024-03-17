@@ -1,0 +1,136 @@
+{
+  "threadId": 161,
+  "chatId": 196,
+  "inputText": "Write a short marketing email for a banking customer Jane Gansbuhler, whose email address is egansbuhler0@pinterest.com and who lives at 14309 Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and identifies as Female",
+  "deidentifiedInputTextData": {
+    "items": [
+      {
+        "end": 61,
+        "entity_type": "PERSON_0",
+        "start": 53
+      },
+      {
+        "end": 101,
+        "entity_type": "EMAIL_ADDRESS_0",
+        "start": 86
+      },
+      {
+        "end": 129,
+        "entity_type": "LOCATION_0",
+        "start": 119
+      },
+      {
+        "end": 139,
+        "entity_type": "PERSON_1",
+        "start": 131
+      },
+      {
+        "end": 158,
+        "entity_type": "DATE_TIME_0",
+        "start": 152
+      }
+    ],
+    "text": "Write a short marketing email for a banking customer PERSON_0, whose email address is EMAIL_ADDRESS_0 and who lives at LOCATION_0. PERSON_1 was born on DATE_0 and identifies as Female",
+    "items_hashed": [
+      {
+        "end": 97,
+        "entity_type": "PERSON_0",
+        "start": 53
+      },
+      {
+        "end": 186,
+        "entity_type": "EMAIL_ADDRESS_0",
+        "start": 122
+      },
+      {
+        "end": 292,
+        "entity_type": "LOCATION_0",
+        "start": 204
+      },
+      {
+        "end": 338,
+        "entity_type": "PERSON_1",
+        "start": 294
+      },
+      {
+        "end": 395,
+        "entity_type": "DATE_TIME_0",
+        "start": 351
+      }
+    ],
+    "text_hashed": "Write a short marketing email for a banking customer pro/pC01cRAiEIilEBZCxFNNCfsdkWuI9DhEg6h+Rxc=, whose email address is wmhHmmqWm1FsQZnrXVrNBHBYBFg7OsUgLtmv/0Xy1D6VZPhoez2fHu2b+RT+PAgr and who lives at RBU1KUnDdVIC8+PVNHS1RPzXVypWebzpEfukSfkgpDVbCtJGgxQalbpA1qvpQevgad4B97zODEG9n+oqEwRXmQ==. IH6k5+uNBKALZUuPxQRVxNnjlWQ7G4kdPsW00BQVXvc= was born on LCa2Rey6Lc7swir1lAKJett/a0DKGZk4zheb2recq5Q= and identifies as Female"
+  },
+  "deidentifiedContextHistory": [
+    {
+      "deidText": "PERSON_1",
+      "hashText": "IH6k5+uNBKALZUuPxQRVxNnjlWQ7G4kdPsW00BQVXvc="
+    },
+    {
+      "deidText": "PERSON_1",
+      "hashText": "IH6k5+uNBKALZUuPxQRVxNnjlWQ7G4kdPsW00BQVXvc="
+    },
+    {
+      "deidText": "PERSON_0",
+      "hashText": "pro/pC01cRAiEIilEBZCxFNNCfsdkWuI9DhEg6h+Rxc="
+    },
+    {
+      "deidText": "PERSON_0",
+      "hashText": "pro/pC01cRAiEIilEBZCxFNNCfsdkWuI9DhEg6h+Rxc="
+    },
+    {
+      "deidText": "LOCATION_0",
+      "hashText": "RBU1KUnDdVIC8+PVNHS1RPzXVypWebzpEfukSfkgpDVbCtJGgxQalbpA1qvpQevgad4B97zODEG9n+oqEwRXmQ=="
+    },
+    {
+      "deidText": "LOCATION_0",
+      "hashText": "RBU1KUnDdVIC8+PVNHS1RPzXVypWebzpEfukSfkgpDVbCtJGgxQalbpA1qvpQevgad4B97zODEG9n+oqEwRXmQ=="
+    },
+    {
+      "deidText": "EMAIL_ADDRESS_0",
+      "hashText": "wmhHmmqWm1FsQZnrXVrNBHBYBFg7OsUgLtmv/0Xy1D6VZPhoez2fHu2b+RT+PAgr"
+    },
+    {
+      "deidText": "EMAIL_ADDRESS_0",
+      "hashText": "wmhHmmqWm1FsQZnrXVrNBHBYBFg7OsUgLtmv/0Xy1D6VZPhoez2fHu2b+RT+PAgr"
+    },
+    {
+      "deidText": "DATE_TIME_0",
+      "hashText": "LCa2Rey6Lc7swir1lAKJett/a0DKGZk4zheb2recq5Q="
+    }
+  ],
+  "llmModel": "gpt-3.5",
+  "rawLLMResponseText": "Here is a draft marketing email for the banking customer:\n\nSubject: Exclusive Offers for Our Valued LOCATION_0 Customer\n\nDear PERSON_0,\n\nAs one of our most appreciated banking customers in LOCATION_0, we want to celebrate your upcoming birthday on DATE_0 with some special offers tailored just for you.\n\nPERSON_0, you've trusted us to manage your finances, and we're grateful for that. To show our appreciation, we're excited to provide you with the following exclusive birthday rewards:\n\n• $25 Statement Credit: Simply make 5 purchases with your debit or credit card in the month of your birthday, and we'll apply a $25 statement credit to your account.\n\n• Bonus Interest Rate: Open a new high-yield savings account in the month of your birthday, and you'll earn an additional 0.25% APY for the first year.\n\n• Waived Fees: We're waiving all banking fees for new accounts, money transfers, and more during your birthday month.\n\nThese special offers are our way of thanking you for your continued loyalty. As a valued female customer, your partnership means everything to us.\n\nTo redeem these birthday rewards or explore our latest personal banking services, simply reply to this email or give us a call. Our team is always happy to assist you.\n\nHappy early birthday, PERSON_0! We look forward to many more years of our banking relationship.\n\nSincerely,\n[Your Bank Name]",
+  "reidentifiedLLMResponseText": "Here is a draft marketing email for the banking customer:\n\nSubject: Exclusive Offers for Our Valued 14309 Lindbergh Circle Alexander City Alabama Customer\n\nDear Jane Gansbuhler,\n\nAs one of our most appreciated banking customers in 14309 Lindbergh Circle Alexander City Alabama, we want to celebrate your upcoming birthday on DATE_0 with some special offers tailored just for you.\n\nJane Gansbuhler, you've trusted us to manage your finances, and we're grateful for that. To show our appreciation, we're excited to provide you with the following exclusive birthday rewards:\n\n• $25 Statement Credit: Simply make 5 purchases with your debit or credit card in the month of your birthday, and we'll apply a $25 statement credit to your account.\n\n• Bonus Interest Rate: Open a new high-yield savings account in the month of your birthday, and you'll earn an additional 0.25% APY for the first year.\n\n• Waived Fees: We're waiving all banking fees for new accounts, money transfers, and more during your birthday month.\n\nThese special offers are our way of thanking you for your continued loyalty. As a valued female customer, your partnership means everything to us.\n\nTo redeem these birthday rewards or explore our latest personal banking services, simply reply to this email or give us a call. Our team is always happy to assist you.\n\nHappy early birthday, Jane Gansbuhler! We look forward to many more years of our banking relationship.\n\nSincerely,\n[Your Bank Name]",
+  "reidentifiedLLMResponseItems": [
+    {
+      "end": 1366,
+      "entity_type": "PERSON_0",
+      "start": 1351,
+      "text": "Jane Gansbuhler"
+    },
+    {
+      "end": 396,
+      "entity_type": "PERSON_0",
+      "start": 381,
+      "text": "Jane Gansbuhler"
+    },
+    {
+      "end": 276,
+      "entity_type": "LOCATION_0",
+      "start": 231,
+      "text": "14309 Lindbergh Circle Alexander City Alabama"
+    },
+    {
+      "end": 176,
+      "entity_type": "PERSON_0",
+      "start": 161,
+      "text": "Jane Gansbuhler"
+    },
+    {
+      "end": 145,
+      "entity_type": "LOCATION_0",
+      "start": 100,
+      "text": "14309 Lindbergh Circle Alexander City Alabama"
+    }
+  ]
+}
