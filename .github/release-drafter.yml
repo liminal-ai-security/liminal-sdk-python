@@ -21,8 +21,5 @@ categories:
       - "dependencies"
       - "maintenance"
 
-change-template: "- $TITLE (#$NUMBER)"
-name-template: "$NEXT_PATCH_VERSION"
-tag-template: "$NEXT_PATCH_VERSION"
 template: |
   $CHANGES
