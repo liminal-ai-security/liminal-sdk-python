@@ -18,12 +18,12 @@ async def main() -> None:
     try:
         CLIENT_ID = os.environ["CLIENT_ID"]
         LIMINAL_API_SERVER_URL = os.environ["LIMINAL_API_SERVER_URL"]
-        MODEL_INSTANCE = os.environ["MODEL_INSTANCE"]
+        MODEL_INSTANCE_NAME = os.environ["MODEL_INSTANCE_NAME"]
         TENANT_ID = os.environ["TENANT_ID"]
     except KeyError as err:
         raise LiminalError(
             "Please set the LIMINAL_API_SERVER_URL, CLIENT_ID, TENANT_ID, and "
-            "MODEL_INSTANCE environment variables"
+            "MODEL_INSTANCE_NAME environment variables"
         ) from err
 
     # Create an auth provider to authenticate the user:
@@ -40,22 +40,10 @@ async def main() -> None:
         model_instances = await liminal.llm.get_available_model_instances()
         _LOGGER.info("Available Model Instances: %s", model_instances)
 
-        # Get model instance:
-        try:
-            model_instance = next(
-                instance
-                for instance in model_instances
-                if instance.name == MODEL_INSTANCE
-            )
-        except StopIteration as err:
-            raise LiminalError(
-                f"Unknown model instance name: {MODEL_INSTANCE}"
-            ) from err
+        # Get the model instance:
+        model_instance = await liminal.llm.get_model_instance(MODEL_INSTANCE_NAME)
 
-        if model_instance.model_connection is None:
-            raise LiminalError(f"Unknown model instance name: {MODEL_INSTANCE}")
-
-        # Create a thread using the designated model instance:
+        # Create a thread using the designated model instance
         created_thread = await liminal.thread.create(model_instance.id, "My thread")
         _LOGGER.info("Created thread: %s", created_thread)
 
