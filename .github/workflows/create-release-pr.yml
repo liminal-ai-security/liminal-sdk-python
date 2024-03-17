@@ -4,7 +4,7 @@ name: Create Release PR
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
@@ -19,6 +19,30 @@ jobs:
         with:
           fetch-depth: 0
           ref: development
+
+      - name: 🏗 Set up Python 3.11
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11.8
+
+      - name: ⤵️ Get pip cache directory
+        id: pip-cache
+        run: |
+          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
+
+      - name: ⤵️ Establish pip cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: "${{ runner.os }}-pip-\
+            ${{ hashFiles('.github/workflows/requirements-create-release.txt') }}"
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: 🏗 Install workflow dependencies
+        run: |
+          pip install -r .github/workflows/requirements-create-release.txt
 
       - name: 🗓️ Calculate new version
         id: calver
