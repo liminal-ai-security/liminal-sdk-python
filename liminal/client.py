@@ -1,5 +1,6 @@
 """Define the client module."""
 
+import asyncio
 from collections.abc import Callable
 from datetime import UTC, datetime
 
@@ -51,9 +52,11 @@ class Client:
         # Token information:
         self._access_token: str | None = None
         self._access_token_expires_at: datetime | None = None
+        self._refresh_event = asyncio.Event()
+        self._refresh_lock = asyncio.Lock()
         self._refresh_token: str | None = None
-        self._refreshing_access_token = False
         self._refresh_token_callbacks: list[Callable[[str], None]] = []
+        self._refreshing = False
 
         # Define endpoints:
         self.llm = LLMEndpoint(self._request_and_validate)
@@ -69,6 +72,7 @@ class Client:
         cookies: Cookies | None = None,
         params: dict[str, str] | None = None,
         json: dict[str, str] | None = None,
+        refresh_request: bool = False,
     ) -> Response:
         """Make a request to the Liminal API server and return a Response.
 
@@ -79,6 +83,7 @@ class Client:
             cookies: The cookies to use.
             params: The query parameters to use.
             json: The JSON body to use.
+            refresh_request: Whether or not this request is a refresh request.
 
         Returns:
             An HTTPX Response object.
@@ -87,14 +92,17 @@ class Client:
             RequestError: If the response fails for any reason.
 
         """
-        if (
-            not self._refreshing_access_token
-            and self._access_token_expires_at
-            and datetime.now(tz=UTC) >= self._access_token_expires_at
-        ):
+        utcnow = datetime.now(tz=UTC)
+        if self._access_token_expires_at and utcnow >= self._access_token_expires_at:
             LOGGER.debug("Access token expired, refreshing...")
-            self._refreshing_access_token = True
+            self._access_token = None
+            self._access_token_expires_at = None
             await self.authenticate_from_refresh_token()
+
+        # If an authenticated request arrives while we're refreshing, hold until the
+        # refresh process is done:
+        if not refresh_request and self._refreshing:
+            await self._refresh_event.wait()
 
         if not endpoint.startswith("/"):
             endpoint = f"/{endpoint}"
@@ -131,9 +139,6 @@ class Client:
             await client.aclose()
 
         LOGGER.debug("Received data from %s: %s", url, response.content)
-
-        if self._refreshing_access_token:
-            self._refreshing_access_token = False
 
         return response
 
@@ -246,15 +251,24 @@ class Client:
         if refresh_token is None and self._refresh_token is None:
             raise AuthError("No valid refresh token provided")
 
-        if refresh_token:
+        self._refreshing = True
+
+        async with self._refresh_lock:
             # If a refresh token is explicitly provided, use it:
-            self._refresh_token = refresh_token
+            if refresh_token:
+                self._refresh_token = refresh_token
 
-        assert self._refresh_token is not None
+            assert self._refresh_token is not None
 
-        refresh_token_response = await self._request(
-            "POST",
-            "/api/v1/auth/refresh-token",
-            cookies=Cookies({"refreshToken": self._refresh_token}),
-        )
-        self._save_tokens_from_auth_response(refresh_token_response)
+            self._refresh_event.clear()
+
+            try:
+                refresh_token_response = await self._request(
+                    "POST",
+                    "/api/v1/auth/refresh-token",
+                    cookies=Cookies({"refreshToken": self._refresh_token}),
+                )
+                self._save_tokens_from_auth_response(refresh_token_response)
+            finally:
+                self._refreshing = False
+                self._refresh_event.set()
