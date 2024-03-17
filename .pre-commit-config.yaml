@@ -110,7 +110,7 @@ repos:
         language: system
         types: [python]
         entry: poetry run pyupgrade
-        args: [--py312-plus, --keep-runtime-typing]
+        args: [--py311-plus, --keep-runtime-typing]
       - id: ruff
         name: "👔 Enforcing style guide with ruff"
         language: system

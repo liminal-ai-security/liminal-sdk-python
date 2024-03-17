@@ -1,6 +1,6 @@
 [tools]
 act = { version="0.2.60" }
-python = { version="3.12.2" }
+python = { version="3.11.8" }
 
 [env]
 _.python.venv = { path = ".venv", create = true }
