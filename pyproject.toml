@@ -31,6 +31,7 @@ authors = [ "Aaron Bach <ab@liminal.ai>",]
 license = "Apache-2.0"
 repository = "https://github.com/liminal-ai-security/liminal-sdk-python"
 classifiers = [ "License :: OSI Approved :: MIT License", "Programming Language :: Python", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3.11", "Programming Language :: Python :: 3.12", "Programming Language :: Python :: Implementation :: CPython", "Programming Language :: Python :: Implementation :: PyPy",]
+
 [[tool.poetry.packages]]
 include = "liminal"
 from = "."
