@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: development
 
       - name: 🗓️ Calculate new version
         id: calver
@@ -35,10 +36,21 @@ jobs:
 
           echo "version=$version" >> $GITHUB_OUTPUT
 
+      - name: 🔢 Update pyproject.toml version
+        run: |
+          python -c "import toml; d = toml.load('pyproject.toml'); d['tool']['poetry']['version'] = '${{ steps.calver.outputs.version }}'; toml.dump(d, open('pyproject.toml', 'w'))"
+
       - name: Create the PR
         run: |
+          git checkout -b release/${{ steps.calver.outputs.version }}
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add pyproject.toml
+          git commit -m "Update version to ${{ steps.calver.outputs.version }}"
+          git push origin release/${{ steps.calver.outputs.version }}
+
           gh pr create \
-            --head development \
+            --head release/${{ steps.calver.outputs.version }} \
             --base main \
             --title "chore(release): ${{ steps.calver.outputs.version }}" \
             --body-file ".github/PULL_REQUEST_TEMPLATE/release.md" \

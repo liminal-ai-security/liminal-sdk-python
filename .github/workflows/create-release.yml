@@ -61,32 +61,20 @@ jobs:
 
           echo "version=$version" >> $GITHUB_OUTPUT
 
-      - name: 🔢 Update pyproject.toml version
-        run: |
-          python -c "import toml; d = toml.load('pyproject.toml'); d['tool']['poetry']['version'] = '${{ steps.calver.outputs.version }}'; toml.dump(d, open('pyproject.toml', 'w'))"
-
-      - name: ☑️ Commit and push version update
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add pyproject.toml
-          git commit -m "Update version to ${{ steps.calver.outputs.version }}"
-          git push
-
       - name: 🏷️ Tag the version bump
-        run: git tag -a ${{ steps.calver.outputs.version }} -m "Release ${{ steps.calver.outputs.version }}"
+        run: |
+          git tag \
+            -a ${{ steps.calver.outputs.version }} \
+            -m "Release ${{ steps.calver.outputs.version }}"
 
       - name: ⬆️ Push tags
         run: git push origin --tags
 
-      - name: ⤵️ Check out development branch
-        uses: actions/checkout@v4
+      - name: ✏️ Run Release Drafter
+        uses: release-drafter/release-drafter@v6.0.0
         with:
-          ref: development
-
-      - name: 🔀 Merge main into development
-        run: |
-          git merge origin/main --no-ff -m "Merge main into development to sync version bump"
-
-      - name: ⬆️ Push changes to development branch
-        run: git push origin HEAD:development
+          tag: ${{ steps.calver.outputs.version }}
+          name: ${{ steps.calver.outputs.version }}
+          version: ${{ steps.calver.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
