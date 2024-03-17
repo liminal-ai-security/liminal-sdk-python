@@ -5,7 +5,7 @@ name: Lint Pull Request
     branches:
       - development
       - main
-      - release/*
+      - "release/**"
     types:
       - edited
       - opened
