@@ -14,7 +14,9 @@ for interacting with the Liminal API.
 
 # Installation
 
-TBD
+```sh
+pip install liminal-sdk-python
+```
 
 # Python Versions
 
