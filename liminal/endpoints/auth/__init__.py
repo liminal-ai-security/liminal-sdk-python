@@ -1,6 +1,9 @@
 """Define the auth endpoint."""
 
+from __future__ import annotations
+
 import asyncio
+from typing import Final
 
 from msal import PublicClientApplication
 
@@ -18,8 +21,8 @@ DEFAULT_AUTH_CHALLENGE_TIMEOUT = 60
 class MicrosoftAuthProvider(AuthProvider):
     """Define a Microsoft auth provider."""
 
-    AUTHORITY_URL = "https://login.microsoftonline.com"
-    DEFAULT_SCOPES = ["User.Read"]
+    AUTHORITY_URL: Final[str] = "https://login.microsoftonline.com"
+    DEFAULT_SCOPES: Final[list[str]] = ["User.Read"]
 
     def __init__(
         self,
@@ -76,7 +79,8 @@ class MicrosoftAuthProvider(AuthProvider):
             # Setting the flow to expire immediately will effectively kill the future
             # that we're awaiting:
             flow["expires_at"] = 0
-            raise AuthError("Timed out waiting for authentication challenge") from err
+            msg = "Timed out waiting for authentication challenge"
+            raise AuthError(msg) from err
 
         identity_provider_response = MSALIdentityProviderTokenResponse.from_dict(result)
         return identity_provider_response.access_token

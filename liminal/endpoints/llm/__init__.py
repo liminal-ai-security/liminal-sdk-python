@@ -1,5 +1,7 @@
 """Define the LLM endpoint."""
 
+from __future__ import annotations
+
 from collections.abc import Awaitable, Callable
 from typing import cast
 
@@ -58,13 +60,11 @@ class LLMEndpoint:
                 if instance.name == model_instance_name
             )
         except StopIteration as err:
-            raise ModelInstanceUnknownError(
-                f"Unknown model instance name: {model_instance_name}"
-            ) from err
+            msg = f"Unknown model instance name: {model_instance_name}"
+            raise ModelInstanceUnknownError(msg) from err
 
         if model_instance.model_connection is None:
-            raise ModelInstanceUnknownError(
-                f"Unknown model instance name: {model_instance_name}"
-            )
+            msg = f"Unknown model instance name: {model_instance_name}"
+            raise ModelInstanceUnknownError(msg)
 
         return model_instance
