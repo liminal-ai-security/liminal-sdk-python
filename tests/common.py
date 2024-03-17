@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import os
+from pathlib import Path
 
 
 def load_fixture(filename: str) -> str:
@@ -15,6 +15,6 @@ def load_fixture(filename: str) -> str:
         A string containing the contents of the file.
 
     """
-    path = os.path.join(os.path.dirname(__file__), "fixtures", filename)
-    with open(path, encoding="utf-8") as fptr:
+    path = Path(f"{Path(__file__).parent}/fixtures/{filename}")
+    with Path.open(path, encoding="utf-8") as fptr:
         return fptr.read()
