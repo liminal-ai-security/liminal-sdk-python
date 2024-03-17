@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Callable
 from datetime import UTC, datetime
+from typing import Final
 
 from httpx import AsyncClient, Cookies, HTTPStatusError, Request, Response
 from mashumaro.codecs.json import json_decode
@@ -22,8 +23,8 @@ from liminal.endpoints.thread import ThreadEndpoint
 from liminal.errors import AuthError, RequestError
 from liminal.helpers.typing import ValidatedResponseT
 
-DEFAULT_REQUEST_TIMEOUT = 60
-DEFAULT_SOURCE = "sdk"
+DEFAULT_REQUEST_TIMEOUT: Final[int] = 60
+DEFAULT_SOURCE: Final[str] = "sdk"
 
 
 class Client:

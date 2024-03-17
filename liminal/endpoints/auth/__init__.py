@@ -15,7 +15,7 @@ from liminal.endpoints.auth.models import (
 )
 from liminal.errors import AuthError
 
-DEFAULT_AUTH_CHALLENGE_TIMEOUT = 60
+DEFAULT_AUTH_CHALLENGE_TIMEOUT: Final[int] = 60
 
 
 class MicrosoftAuthProvider(AuthProvider):
