@@ -34,7 +34,7 @@ warn_unused_configs = true
 warn_unused_ignores = true
 
 [tool.poetry]
-name = "liminal"
+name = "liminal-sdk-python"
 version = "0.0.1"
 description = "The Liminal SDK for Python"
 readme = "README.md"
@@ -49,6 +49,9 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
+]
+packages = [
+    { include="*", from="liminal" }
 ]
 
 [tool.poetry.dependencies]
