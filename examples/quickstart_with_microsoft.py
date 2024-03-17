@@ -1,4 +1,4 @@
-"""Define a simple example."""
+"""Define a quickstart example."""
 
 import asyncio
 import logging
@@ -8,17 +8,23 @@ from liminal import Client
 from liminal.endpoints.auth import MicrosoftAuthProvider
 from liminal.errors import LiminalError
 
-_LOGGER = logging.getLogger("example")
-
-LIMINAL_API_SERVER_URL = os.environ["LIMINAL_API_SERVER_URL"]
-CLIENT_ID = os.environ["CLIENT_ID"]
-TENANT_ID = os.environ["TENANT_ID"]
-DEMO_MODEL_INSTANCE_NAME = "My Model Instance"
+_LOGGER = logging.getLogger("quickstart_with_microsoft")
 
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
     logging.basicConfig(level=logging.INFO)
+
+    try:
+        CLIENT_ID = os.environ["CLIENT_ID"]
+        LIMINAL_API_SERVER_URL = os.environ["LIMINAL_API_SERVER_URL"]
+        MODEL_INSTANCE = os.environ["MODEL_INSTANCE"]
+        TENANT_ID = os.environ["TENANT_ID"]
+    except KeyError as err:
+        raise LiminalError(
+            "Please set the LIMINAL_API_SERVER_URL, CLIENT_ID, TENANT_ID, and "
+            "MODEL_INSTANCE environment variables"
+        ) from err
 
     # Create an auth provider to authenticate the user:
     microsoft_auth_provider = MicrosoftAuthProvider(TENANT_ID, CLIENT_ID)
@@ -34,29 +40,23 @@ async def main() -> None:
         model_instances = await liminal.llm.get_available_model_instances()
         _LOGGER.info("Available Model Instances: %s", model_instances)
 
-        # Get model instance id
-        model_instance_id = -1
-        retrieved_instances = next(
-            (x for x in model_instances if x.name == DEMO_MODEL_INSTANCE_NAME), None
-        )
-
-        if retrieved_instances:
-            if retrieved_instances.model_connection is None:
-                raise LiminalError(
-                    "Please make sure to connect the following model "
-                    "instance before attempting to run this "
-                    "example script: " + str(DEMO_MODEL_INSTANCE_NAME)
-                )
-            model_instance_id = retrieved_instances.id
-        else:
-            raise LiminalError(
-                "Please make sure the following model instance name exists before "
-                "attempting to run this example script: "
-                + str(DEMO_MODEL_INSTANCE_NAME)
+        # Get model instance:
+        try:
+            model_instance = next(
+                instance
+                for instance in model_instances
+                if instance.name == MODEL_INSTANCE
             )
+        except StopIteration as err:
+            raise LiminalError(
+                f"Unknown model instance name: {MODEL_INSTANCE}"
+            ) from err
 
-        # Create a thread using the designated model instance
-        created_thread = await liminal.thread.create(model_instance_id, "My thread")
+        if model_instance.model_connection is None:
+            raise LiminalError(f"Unknown model instance name: {MODEL_INSTANCE}")
+
+        # Create a thread using the designated model instance:
+        created_thread = await liminal.thread.create(model_instance.id, "My thread")
         _LOGGER.info("Created thread: %s", created_thread)
 
         # Get all available threads:
