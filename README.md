@@ -314,12 +314,12 @@ Thanks to all of [our contributors][contributors] so far!
 [examples]: https://github.com/liminal-ai-security/liminal-sdk-python/tree/development/examples
 [fork]: https://github.com/liminal-ai-security/liminal-sdk-python/fork
 [issues]: https://github.com/liminal-ai-security/liminal-sdk-python/issues
-[license-badge]: https://img.shields.io/pypi/l/aionotion.svg
+[license-badge]: https://img.shields.io/pypi/l/liminal-sdk-python.svg
 [license]: https://github.com/liminal-ai-security/liminal-sdk-python/blob/main/LICENSE
 [new-issue]: https://github.com/liminal-ai-security/liminal-sdk-python/issues/new
 [notion]: https://getnotion.com
 [oauth-device-auth-grant]: https://oauth.net/2/grant-types/device-code/
-[pypi-badge]: https://img.shields.io/pypi/v/aionotion.svg
-[pypi]: https://pypi.python.org/pypi/aionotion
-[version-badge]: https://img.shields.io/pypi/pyversions/aionotion.svg
-[version]: https://pypi.python.org/pypi/aionotion
+[pypi-badge]: https://img.shields.io/pypi/v/liminal-sdk-python.svg
+[pypi]: https://pypi.python.org/pypi/liminal-sdk-python
+[version-badge]: https://img.shields.io/pypi/pyversions/liminal-sdk-python.svg
+[version]: https://pypi.python.org/pypi/liminal-sdk-python
