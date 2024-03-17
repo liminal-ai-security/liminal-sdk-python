@@ -17,6 +17,9 @@
 - name: "dependencies"
   color: 1d76db
   description: "Upgrade or downgrade of project dependencies"
+- name: "release"
+  color: d93f0b
+  description: "A release of the library"
 
 - name: "in-progress"
   color: fbca04
