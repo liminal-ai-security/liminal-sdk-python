@@ -63,12 +63,12 @@ jobs:
 
       - name: 🏷️ Tag the version bump
         run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git tag \
             -a ${{ steps.calver.outputs.version }} \
             -m "Release ${{ steps.calver.outputs.version }}"
-
-      - name: ⬆️ Push tags
-        run: git push origin --tags
+          git push origin --tags
 
       - name: 🚀 Publish to PyPi
         run: |
