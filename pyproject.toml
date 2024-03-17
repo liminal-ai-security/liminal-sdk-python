@@ -24,7 +24,7 @@ follow_imports = "silent"
 ignore_missing_imports = true
 no_implicit_optional = true
 platform = "linux"
-python_version = "3.12"
+python_version = "3.11"
 show_error_codes = true
 strict_equality = true
 warn_incomplete_stub = true
@@ -45,6 +45,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
@@ -53,7 +54,7 @@ classifiers = [
 [tool.poetry.dependencies]
 httpx = "0.27.0"
 msal = "1.27.0"
-python = "3.12.2"
+python = "3.11.7"
 mashumaro = "3.12"
 
 [tool.poetry.group.dev.dependencies]

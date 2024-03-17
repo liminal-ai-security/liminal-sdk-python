@@ -20,6 +20,7 @@ TBD
 
 `liminal` is currently supported on:
 
+- Python 3.11
 - Python 3.12
 
 # Quickstart
