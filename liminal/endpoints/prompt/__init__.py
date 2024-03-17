@@ -79,6 +79,31 @@ class PromptEndpoint:
             ),
         )
 
+    async def hydrate(
+        self,
+        thread_id: int,
+        prompt: str,
+    ) -> HydrateResponse:
+        """Rehydrate prompt with sensitive data.
+
+        Args:
+            thread_id: The ID of the thread to hydrate the prompt for.
+            prompt: The prompt to hydrate.
+
+        Returns:
+            An object that contains a rehydrated version of the prompt.
+
+        """
+        return cast(
+            HydrateResponse,
+            await self._request_and_validate(
+                "POST",
+                "/api/v1/sdk/hydrate_response",
+                HydrateResponse,
+                json={"threadId": thread_id, "text": prompt},
+            ),
+        )
+
     async def submit(
         self,
         thread_id: int,
@@ -108,29 +133,5 @@ class PromptEndpoint:
             ProcessResponse,
             await self._request_and_validate(
                 "POST", "/api/v1/sdk/process", ProcessResponse, json=payload
-            ),
-        )
-
-    async def hydrate(
-        self,
-        thread_id: int,
-        prompt: str,
-    ) -> HydrateResponse:
-        """Rehydrate prompt with sensitive data.
-
-        Args:
-            thread_id: The ID of the thread to hydrate the prompt for.
-            prompt: The prompt to hydrate.
-
-        Returns:
-            An object that contains a rehydrated version of the prompt.
-
-        """
-        payload = {"threadId": thread_id, "text": prompt}
-
-        return cast(
-            HydrateResponse,
-            await self._request_and_validate(
-                "POST", "/api/v1/sdk/hydrate_response", HydrateResponse, json=payload
             ),
         )
