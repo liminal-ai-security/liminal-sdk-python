@@ -2,6 +2,10 @@ name: Lint Pull Request
 
 "on":
   pull_request_target:
+    branches:
+      - development
+      - main
+      - release/**
     types:
       - edited
       - opened

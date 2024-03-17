@@ -1,7 +1,11 @@
 name: Label Pull Request
 
-on:
+"on":
   pull_request_target:
+    branches:
+      - development
+      - main
+      - release/**
 
 permissions:
   contents: read
