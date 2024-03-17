@@ -51,7 +51,7 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 packages = [
-    { include="*", from="liminal" }
+    { include="liminal", from="." }
 ]
 
 [tool.poetry.dependencies]
