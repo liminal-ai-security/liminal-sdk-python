@@ -1,0 +1,85 @@
+---
+name: Create Release
+
+"on":
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  create_release:
+    name: 🚀 Create Release
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🏗 Set up Python 3.11
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11.8
+
+      - name: ⤵️ Get pip cache directory
+        id: pip-cache
+        run: |
+          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
+
+      - name: ⤵️ Establish pip cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: "${{ runner.os }}-pip-\
+            ${{ hashFiles('.github/workflows/requirements-create-release.txt') }}"
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: 🏗 Install workflow dependencies
+        run: |
+          pip install -r .github/workflows/requirements-create-release.txt
+
+      - name: 🗓️ Calculate new version
+        id: calver
+        run: |
+          latest_tag="$(git tag --sort=committerdate | tail -1)"
+          month="$(date +'%Y.%m')"
+
+          if [[ "$latest_tag" =~ "$month".* ]]; then
+              patch="$(echo "$latest_tag" | cut -d . -f 3)"
+              ((patch=patch+1))
+              version="$month.$patch"
+          else
+              version="$month.0"
+          fi
+
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: 🏷️ Tag the version bump
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag \
+            -a ${{ steps.calver.outputs.version }} \
+            -m "Release ${{ steps.calver.outputs.version }}"
+          git push origin --tags
+
+      - name: 🚀 Publish to PyPi
+        run: |
+          pip install poetry
+          poetry publish --build -u __token__ -p  ${{ secrets.PYPI_API_KEY }}
+
+      - name: ✏️ Run Release Drafter
+        uses: release-drafter/release-drafter@v6.0.0
+        with:
+          tag: ${{ steps.calver.outputs.version }}
+          name: ${{ steps.calver.outputs.version }}
+          version: ${{ steps.calver.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

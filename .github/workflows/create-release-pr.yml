@@ -1,0 +1,83 @@
+name: Create Release PR
+
+"on":
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-release-pull-request:
+    name: 🚀 Create Release PR
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: development
+
+      - name: 🏗 Set up Python 3.11
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11.8
+
+      - name: ⤵️ Get pip cache directory
+        id: pip-cache
+        run: |
+          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
+
+      - name: ⤵️ Establish pip cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: "${{ runner.os }}-pip-\
+            ${{ hashFiles('.github/workflows/requirements-create-release.txt') }}"
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: 🏗 Install workflow dependencies
+        run: |
+          pip install -r .github/workflows/requirements-create-release.txt
+
+      - name: 🗓️ Calculate new version
+        id: calver
+        run: |
+          latest_tag="$(git tag --sort=committerdate | tail -1)"
+          month="$(date +'%Y.%m')"
+
+          if [[ "$latest_tag" =~ "$month".* ]]; then
+              patch="$(echo "$latest_tag" | cut -d . -f 3)"
+              ((patch=patch+1))
+              version="$month.$patch"
+          else
+              version="$month.0"
+          fi
+
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: 🔢 Update pyproject.toml version
+        run: |
+          python -c "import toml; d = toml.load('pyproject.toml'); d['tool']['poetry']['version'] = '${{ steps.calver.outputs.version }}'; toml.dump(d, open('pyproject.toml', 'w'))"
+          git checkout -b release/${{ steps.calver.outputs.version }}
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add pyproject.toml
+          git commit -m "Update version to ${{ steps.calver.outputs.version }}"
+          git push origin release/${{ steps.calver.outputs.version }}
+
+      - name: Create the PR
+        run: |
+          gh pr create \
+            --head release/${{ steps.calver.outputs.version }} \
+            --base main \
+            --title "chore(release): ${{ steps.calver.outputs.version }}" \
+            --body-file ".github/PULL_REQUEST_TEMPLATE/release.md" \
+            --draft \
+            --label release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
