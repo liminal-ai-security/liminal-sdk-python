@@ -2,7 +2,7 @@
 name: Lint and Analyze
 
 "on":
-  pull_request_target:
+  pull_request:
     branches:
       - development
       - main
