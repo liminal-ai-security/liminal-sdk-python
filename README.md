@@ -182,8 +182,19 @@ The Liminal client object provides several methods:
 - `liminal.prompt.cleanse()`: cleanse a prompt
 - `liminal.prompt.submit()`: submit a cleansed prompt to an LLM and receive a response
 
-You can see examples of how to use these methods via the [`examples`][examples] folder in
-this repo.
+# Running Examples
+
+You can see examples of how to use this SDK via the [`examples`][examples] folder in
+this repo. Each example follows a similar "call" format by asking for inputs via
+environment variables; for example:
+
+```sh
+MODEL_INSTANCE=model-instance name \
+LIMINAL_API_SERVER_URL=https://api.DOMAIN.liminal.ai \
+CLIENT_ID=xxxxxxxxxxxxxxxx \
+TENANT_ID=xxxxxxxxxxxxxxxx \
+python3 examples/quickstart_with_microsoft.py
+```
 
 # Contributing
 
