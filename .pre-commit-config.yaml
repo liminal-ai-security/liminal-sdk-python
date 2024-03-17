@@ -136,8 +136,12 @@ repos:
       - id: prettier
         name: "💄 Ensuring files are prettier"
 
-  - repo: https://github.com/koalaman/shellcheck-precommit
-    rev: "v0.9.0"
+  - repo: https://github.com/codespell-project/codespell
+    rev: "v2.2.6"
     hooks:
-      - id: shellcheck
-        name: "💻 Running static analysis on shell scripts"
+      - id: codespell
+        name: "🛑 Checking for mispellings"
+        exclude: |
+          (?x)^($^
+          |poetry.lock
+          )$
