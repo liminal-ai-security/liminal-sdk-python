@@ -92,7 +92,7 @@ repos:
         pass_filenames: false
         always_run: true
         args:
-          - --branch=dev
+          - --branch=development
           - --branch=main
       - id: poetry
         name: "📜 Checking pyproject with Poetry"
@@ -105,12 +105,6 @@ repos:
         language: system
         types: [python]
         entry: poetry run pylint
-      - id: pyupgrade
-        name: "🆙 Checking for upgradable syntax with pyupgrade"
-        language: system
-        types: [python]
-        entry: poetry run pyupgrade
-        args: [--py311-plus, --keep-runtime-typing]
       - id: ruff
         name: "👔 Enforcing style guide with ruff"
         language: system
@@ -135,13 +129,3 @@ repos:
     hooks:
       - id: prettier
         name: "💄 Ensuring files are prettier"
-
-  - repo: https://github.com/codespell-project/codespell
-    rev: "v2.2.6"
-    hooks:
-      - id: codespell
-        name: "🛑 Checking for mispellings"
-        exclude: |
-          (?x)^($^
-          |poetry.lock
-          )$
