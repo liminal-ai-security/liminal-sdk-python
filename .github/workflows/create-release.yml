@@ -21,11 +21,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 🏗 Set up Python 3.12
+      - name: 🏗 Set up Python 3.11
         id: setup-python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.12
+          python-version: 3.11
 
       - name: ⤵️ Get pip cache directory
         id: pip-cache
