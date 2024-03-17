@@ -10,23 +10,6 @@ from liminal.helpers.model import BaseModel
 
 
 @dataclass(frozen=True, kw_only=True)
-class ModelInstances(BaseModel):
-    """Define the schema for an LLM model instance that Liminal supports."""
-
-    id: int
-    policy_group_id: int = field(metadata=field_options(alias="policyGroupId"))
-    model_connection: ModelConnection | None = field(
-        metadata=field_options(alias="modelConnection")
-    )
-    name: str
-    created_at: str = field(metadata=field_options(alias="createdAt"))
-    updated_at: str = field(metadata=field_options(alias="updatedAt"))
-    deleted_at: str | None = field(
-        default=None, metadata=field_options(alias="deletedAt")
-    )
-
-
-@dataclass(frozen=True, kw_only=True)
 class ModelConnection(BaseModel):
     """Define the schema for an LLM model connection."""
 
@@ -41,6 +24,23 @@ class ModelConnection(BaseModel):
     masked_api_key: str | None = field(
         default=None, metadata=field_options(alias="maskedApiKey")
     )
+    deleted_at: str | None = field(
+        default=None, metadata=field_options(alias="deletedAt")
+    )
+
+
+@dataclass(frozen=True, kw_only=True)
+class ModelInstance(BaseModel):
+    """Define the schema for an LLM model instance that Liminal supports."""
+
+    id: int
+    policy_group_id: int = field(metadata=field_options(alias="policyGroupId"))
+    model_connection: ModelConnection | None = field(
+        metadata=field_options(alias="modelConnection")
+    )
+    name: str
+    created_at: str = field(metadata=field_options(alias="createdAt"))
+    updated_at: str = field(metadata=field_options(alias="updatedAt"))
     deleted_at: str | None = field(
         default=None, metadata=field_options(alias="deletedAt")
     )

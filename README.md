@@ -167,20 +167,116 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-# Available Methods
+# Getting Model Instances
 
-The Liminal client object provides several methods:
+Every LLM instance connected in the Liminal admin dashboard is referred to as a "model
+instance." The SDK provides several methods to interact with model instances:
 
-- `liminal.llm.get_available_model_instances()`: get all available model instances that can be queried
-- `liminal.thread.create()`: create a new thread for a specific LLM
-- `liminal.thread.get_available()`: get all available threads
-- `liminal.thread.get_by_id()`: get a thread by its ID
-- `liminal.thread.get_deidentified_context_history()`: get de-sensitized context history
-  about a thread
-- `liminal.prompt.analyze()`: get findings about what sensitive information is detected in
-  a prompt
-- `liminal.prompt.cleanse()`: cleanse a prompt
-- `liminal.prompt.submit()`: submit a cleansed prompt to an LLM and receive a response
+```python
+import asyncio
+
+from liminal import Client
+from liminal.endpoints.auth import MicrosoftAuthProvider
+
+
+async def main() -> None:
+    # Assuming you have an authenticated `liminal` object:
+
+    # Get all available model instances:
+    model_instances = await liminal.llm.get_available_model_instances()
+    # >>> [ModelInstance(...), ModelInstance(...)]
+
+    # Get a specific model instance (if it exists):
+    model_instance = await liminal.llm.get_model_instance("My Model")
+    # >>> ModelInstance(...)
+
+
+asyncio.run(main())
+```
+
+# Managing Threads
+
+Threads are conversations with an LLM instance:
+
+```python
+import asyncio
+
+from liminal import Client
+from liminal.endpoints.auth import MicrosoftAuthProvider
+
+
+async def main() -> None:
+    # Assuming you have an authenticated `liminal` object:
+
+    # Get all available threads:
+    threads = await liminal.thread.get_available()
+    # >>> [Thread(...), Thread(...)]
+
+    # Get a specific thread by ID:
+    thread = await liminal.thread.get_by_id(123)
+    # >>> Thread(...)
+
+    # Some operations require a model instance:
+    model_instance = await liminal.llm.get_model_instance("My Model")
+
+    # Create a new thread:
+    thread = await liminal.thread.create(model_instance.id, "New Thread")
+    # >>> Thread(...)
+
+    # Get the "de-identified" (containing sensitive data) context history for a thread:
+    thread = await liminal.thread.get_deidentified_context_history(model_instance.id)
+    # >>> [DeidentifiedToken(...), DeidentifiedToken(...), DeidentifiedToken(...)]
+
+
+asyncio.run(main())
+```
+
+# Submitting Prompts
+
+Submitting prompts is easy:
+
+```python
+import asyncio
+
+from liminal import Client
+from liminal.endpoints.auth import MicrosoftAuthProvider
+
+
+async def main() -> None:
+    # Assuming you have an authenticated `liminal` object:
+
+    # Prompt operations require a thread:
+    thread = await liminal.thread.get_by_id(123)
+    # >>> Thread(...)
+
+    # Analayze a prompt for sensitive info:
+    findings = await liminal.prompt.analyze(thread.id)
+    # >>> AnalyzeResponse(...)
+
+    # Cleanse input text by applying the policies defined in the Liminal admin
+    # dashboard. You can optionally provide existing analysis finidings; if not
+    # provided, analyze is # called automatically):
+    cleansed = await liminal.prompt.cleanse(
+        thread.id, "Here is a sensitive prompt", findings=findings
+    )
+    # >>> CleanseResponse(...)
+
+    # Submit a prompt to an LLM, cleansing it in the process (once again, providing optional
+    # findings):
+    response = await liminal.prompt.submit(
+        thread.id, "Here is a sensitive prompt", findings=findings
+    )
+    # >>> ProcessResponse(...)
+
+    # Rehydrate a response with sensitive data:
+    hydrated = await liminal.prompt.hydrate(
+        thread.id, "Here is a response to rehdyrate"
+    )
+    # >>> HydrateResponse(...)
+
+
+asyncio.run(main())
+```
 
 # Running Examples
 
@@ -189,10 +285,10 @@ this repo. Each example follows a similar "call" format by asking for inputs via
 environment variables; for example:
 
 ```sh
-MODEL_INSTANCE=model-instance name \
 LIMINAL_API_SERVER_URL=https://api.DOMAIN.liminal.ai \
 CLIENT_ID=xxxxxxxxxxxxxxxx \
 TENANT_ID=xxxxxxxxxxxxxxxx \
+MODEL_INSTANCE_NAME=model-instance-name \
 python3 examples/quickstart_with_microsoft.py
 ```
 
