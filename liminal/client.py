@@ -1,10 +1,15 @@
 """Define the client module."""
 
 from collections.abc import Callable
-from datetime import datetime
+from datetime import UTC, datetime
 
-import msgspec
 from httpx import AsyncClient, Cookies, HTTPStatusError, Request, Response
+from mashumaro.codecs.json import json_decode
+from mashumaro.exceptions import (
+    MissingField,
+    SuitableVariantNotFoundError,
+    UnserializableDataError,
+)
 
 from liminal.const import LOGGER
 from liminal.endpoints.auth import AuthProvider
@@ -36,6 +41,7 @@ class Client:
             api_server_url: The URL of the Liminal API server.
             source: The source of the SDK.
             httpx_client: An optional HTTPX client to use.
+
         """
         self._api_server_url = api_server_url
         self._auth_provider = auth_provider
@@ -79,11 +85,12 @@ class Client:
 
         Raises:
             RequestError: If the response fails for any reason.
+
         """
         if (
             not self._refreshing_access_token
             and self._access_token_expires_at
-            and datetime.utcnow() >= self._access_token_expires_at
+            and datetime.now(tz=UTC) >= self._access_token_expires_at
         ):
             LOGGER.debug("Access token expired, refreshing...")
             self._refreshing_access_token = True
@@ -116,10 +123,8 @@ class Client:
         try:
             response.raise_for_status()
         except HTTPStatusError as err:
-            response_body = err.response.json()
             raise RequestError(
-                f"Error while sending request to {url}: "
-                f"{response_body.get('error', 'Unknown')}"
+                f"Error while sending request to {url}: {err.response.content.decode()}"
             ) from err
 
         if not running_client:
@@ -148,6 +153,7 @@ class Client:
         Args:
             method: The HTTP method to use.
             endpoint: The endpoint to request.
+            expected_response_type: The expected type of the response.
             headers: The headers to use.
             cookies: The cookies to use.
             params: The query parameters to use.
@@ -158,14 +164,19 @@ class Client:
 
         Raises:
             RequestError: If the response could not be validated.
+
         """
         response = await self._request(
             method, endpoint, headers=headers, cookies=cookies, params=params, json=json
         )
 
         try:
-            return msgspec.json.decode(response.content, type=expected_response_type)
-        except msgspec.ValidationError as err:
+            return json_decode(response.content, expected_response_type)
+        except (
+            MissingField,
+            SuitableVariantNotFoundError,
+            UnserializableDataError,
+        ) as err:
             raise RequestError(f"Could not validate response: {err}") from err
 
     def _save_tokens_from_auth_response(self, auth_response: Response) -> None:
@@ -173,11 +184,12 @@ class Client:
 
         Args:
             auth_response: The response from an auth request.
+
         """
         LOGGER.debug("Saving tokens from auth response")
         self._access_token = auth_response.cookies["accessToken"]
         self._access_token_expires_at = datetime.fromtimestamp(
-            int(auth_response.cookies["accessTokenExpiresAt"]) / 1000
+            int(auth_response.cookies["accessTokenExpiresAt"]) / 1000, tz=UTC
         )
         self._refresh_token = auth_response.cookies["refreshToken"]
 
@@ -197,6 +209,7 @@ class Client:
 
         Returns:
             A method to cancel and remove the callback.
+
         """
         self._refresh_token_callbacks.append(callback)
 
@@ -228,6 +241,7 @@ class Client:
         Raises:
             AuthError: If no refresh token is provided and the user has not been
                 authenticated yet.
+
         """
         if refresh_token is None and self._refresh_token is None:
             raise AuthError("No valid refresh token provided")

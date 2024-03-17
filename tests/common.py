@@ -13,6 +13,7 @@ def load_fixture(filename: str) -> str:
 
     Returns:
         A string containing the contents of the file.
+
     """
     path = os.path.join(os.path.dirname(__file__), "fixtures", filename)
     with open(path, encoding="utf-8") as fptr:

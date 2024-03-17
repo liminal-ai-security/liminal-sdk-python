@@ -1,19 +1,16 @@
 """Define the auth endpoint."""
 
 import asyncio
-import json
 
-import msgspec
 from msal import PublicClientApplication
 
 from liminal.const import LOGGER
-from liminal.errors import LiminalError
-
-from .models import (
+from liminal.endpoints.auth.models import (
     AuthProvider,
     MSALCacheTokenResponse,
     MSALIdentityProviderTokenResponse,
 )
+from liminal.errors import LiminalError
 
 DEFAULT_AUTH_CHALLENGE_TIMEOUT = 60
 
@@ -42,8 +39,11 @@ class MicrosoftAuthProvider(AuthProvider):
         """Initialize.
 
         Args:
+            tenant_id: The Entra ID tenant ID.
+            client_id: The Entra ID client ID.
             auth_challenge_timeout: How long (in seconds) before aborting an auth
                 challenge.
+
         """
         self._auth_challenge_timeout = auth_challenge_timeout
         self._loop = asyncio.get_event_loop()
@@ -59,15 +59,14 @@ class MicrosoftAuthProvider(AuthProvider):
 
         Raises:
             AuthFailedError: If authentication fails.
+
         """
         if accounts := self._msal_app.get_accounts():
             if result := self._msal_app.acquire_token_silent_with_error(
                 self.DEFAULT_SCOPES, account=accounts[0]
             ):
                 LOGGER.debug("Retrieved access token from existing cache")
-                cached_response = msgspec.json.decode(
-                    json.dumps(result), type=MSALCacheTokenResponse
-                )
+                cached_response = MSALCacheTokenResponse.from_dict(result)
                 return cached_response.access_token
 
         LOGGER.debug("No cached access token found; generating a new one")
@@ -89,7 +88,5 @@ class MicrosoftAuthProvider(AuthProvider):
                 "Timed out waiting for authentication challenge"
             ) from err
 
-        identity_provider_response = msgspec.json.decode(
-            json.dumps(result), type=MSALIdentityProviderTokenResponse
-        )
+        identity_provider_response = MSALIdentityProviderTokenResponse.from_dict(result)
         return identity_provider_response.access_token

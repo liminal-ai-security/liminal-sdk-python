@@ -3,9 +3,8 @@
 from collections.abc import Awaitable, Callable
 from typing import cast
 
+from liminal.endpoints.llm.models import ModelInstances
 from liminal.helpers.typing import ValidatedResponseT
-
-from .models import ModelInstances
 
 
 class LLMEndpoint:

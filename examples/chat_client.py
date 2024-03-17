@@ -63,7 +63,6 @@ async def main() -> None:
 
             findings = await liminal.prompt.analyze(created_thread.id, prompt)
             _LOGGER.info("Analysis findings: %s", findings)
-            _LOGGER.info("")
 
             response = await liminal.prompt.submit(
                 created_thread.id, prompt, findings=findings

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from abc import ABC
+from dataclasses import dataclass
 from typing import Literal
 
 from liminal.helpers.model import BaseModel
@@ -19,10 +20,12 @@ class AuthProvider(ABC):
 
         Returns:
             The access token.
+
         """
         raise NotImplementedError
 
 
+@dataclass(frozen=True, kw_only=True)
 class MSALCacheTokenResponse(BaseModel):
     """Define an MSAL token response from Entra ID."""
 
@@ -32,6 +35,7 @@ class MSALCacheTokenResponse(BaseModel):
     token_source: Literal["cache"]
 
 
+@dataclass(frozen=True, kw_only=True)
 class MSALIdentityProviderTokenResponse(BaseModel):
     """Define an MSAL token response from the local in-memory cache."""
 
