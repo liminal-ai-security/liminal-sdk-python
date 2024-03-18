@@ -297,7 +297,7 @@ Thanks to all of [our contributors][contributors] so far!
 2. [Fork the repository][fork].
 3. (_optional, but highly recommended_) Create a virtual environment: `python3 -m venv .venv`
 4. (_optional, but highly recommended_) Enter the virtual environment: `source ./.venv/bin/activate`
-5. Install the dev environment: `script/setup`
+5. Install the dev environment: `./scripts/setup.sh`
 6. Code your new feature or bug fix on a new branch.
 7. Write tests that cover your new functionality.
 8. Run tests and ensure 100% code coverage: `poetry run pytest --cov liminal tests`
