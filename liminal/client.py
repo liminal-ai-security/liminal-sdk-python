@@ -1,8 +1,11 @@
 """Define the client module."""
 
+from __future__ import annotations
+
 import asyncio
 from collections.abc import Callable
 from datetime import UTC, datetime
+from typing import Final
 
 from httpx import AsyncClient, Cookies, HTTPStatusError, Request, Response
 from mashumaro.codecs.json import json_decode
@@ -20,8 +23,8 @@ from liminal.endpoints.thread import ThreadEndpoint
 from liminal.errors import AuthError, RequestError
 from liminal.helpers.typing import ValidatedResponseT
 
-DEFAULT_REQUEST_TIMEOUT = 60
-DEFAULT_SOURCE = "sdk"
+DEFAULT_REQUEST_TIMEOUT: Final[int] = 60
+DEFAULT_SOURCE: Final[str] = "sdk"
 
 
 class Client:
@@ -131,9 +134,10 @@ class Client:
         try:
             response.raise_for_status()
         except HTTPStatusError as err:
-            raise RequestError(
+            msg = (
                 f"Error while sending request to {url}: {err.response.content.decode()}"
-            ) from err
+            )
+            raise RequestError(msg) from err
 
         if not running_client:
             await client.aclose()
@@ -182,7 +186,8 @@ class Client:
             SuitableVariantNotFoundError,
             UnserializableDataError,
         ) as err:
-            raise RequestError(f"Could not validate response: {err}") from err
+            msg = f"Could not validate response: {err}"
+            raise RequestError(msg) from err
 
     def _save_tokens_from_auth_response(self, auth_response: Response) -> None:
         """Save tokens from an auth response.
@@ -248,25 +253,24 @@ class Client:
                 authenticated yet.
 
         """
-        if refresh_token is None and self._refresh_token is None:
-            raise AuthError("No valid refresh token provided")
+        if not refresh_token:
+            refresh_token = self._refresh_token
+
+        if not refresh_token:
+            msg = "No valid refresh token provided"
+            raise AuthError(msg)
 
         self._refreshing = True
 
         async with self._refresh_lock:
-            # If a refresh token is explicitly provided, use it:
-            if refresh_token:
-                self._refresh_token = refresh_token
-
-            assert self._refresh_token is not None
-
             self._refresh_event.clear()
 
             try:
                 refresh_token_response = await self._request(
                     "POST",
                     "/api/v1/auth/refresh-token",
-                    cookies=Cookies({"refreshToken": self._refresh_token}),
+                    refresh_request=True,
+                    cookies=Cookies({"refreshToken": refresh_token}),
                 )
                 self._save_tokens_from_auth_response(refresh_token_response)
             finally:

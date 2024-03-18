@@ -3,12 +3,13 @@
 import asyncio
 import logging
 import os
+from typing import Final
 
 from liminal import Client
 from liminal.endpoints.auth import MicrosoftAuthProvider
 from liminal.errors import LiminalError
 
-_LOGGER = logging.getLogger("chat_client")
+_LOGGER: Final[logging.Logger] = logging.getLogger("chat_client")
 
 
 async def main() -> None:
@@ -16,31 +17,29 @@ async def main() -> None:
     logging.basicConfig(level=logging.INFO)
 
     try:
-        CLIENT_ID = os.environ["CLIENT_ID"]
-        LIMINAL_API_SERVER_URL = os.environ["LIMINAL_API_SERVER_URL"]
-        MODEL_INSTANCE_NAME = os.environ["MODEL_INSTANCE_NAME"]
-        TENANT_ID = os.environ["TENANT_ID"]
+        client_id = os.environ["CLIENT_ID"]
+        liminal_api_server_url = os.environ["LIMINAL_API_SERVER_URL"]
+        model_instance_name = os.environ["MODEL_INSTANCE_NAME"]
+        tenant_id = os.environ["TENANT_ID"]
     except KeyError as err:
-        raise LiminalError(
-            "Please set the LIMINAL_API_SERVER_URL, CLIENT_ID, TENANT_ID, and "
-            "MODEL_INSTANCE_NAME environment variables"
-        ) from err
+        msg = "Please set the LIMINAL_API_SERVER_URL, CLIENT_ID, TENANT_ID, and MODEL_INSTANCE_NAME environment variables"
+        raise LiminalError(msg) from err
 
     # Create an auth provider to authenticate the user:
-    microsoft_auth_provider = MicrosoftAuthProvider(TENANT_ID, CLIENT_ID)
+    microsoft_auth_provider = MicrosoftAuthProvider(tenant_id, client_id)
 
     # Create the liminal SDK instance:
-    liminal = Client(microsoft_auth_provider, LIMINAL_API_SERVER_URL)
+    liminal = Client(microsoft_auth_provider, liminal_api_server_url)
 
     try:
         # Authenticate the user:
         await liminal.authenticate_from_auth_provider()
-    except LiminalError as err:
-        _LOGGER.error("Error authenticating: %s", err)
+    except LiminalError:
+        _LOGGER.exception("Error during authentication")
 
     try:
         # Get the model instance:
-        model_instance = await liminal.llm.get_model_instance(MODEL_INSTANCE_NAME)
+        model_instance = await liminal.llm.get_model_instance(model_instance_name)
 
         # Create Thread and begin prompts
         created_thread = await liminal.thread.create(model_instance.id, "Demo Thread")
@@ -55,8 +54,8 @@ async def main() -> None:
                 created_thread.id, prompt, findings=findings
             )
             _LOGGER.info("LLM response: %s", response)
-    except LiminalError as err:
-        _LOGGER.error("Error while running example: %s", err)
+    except LiminalError:
+        _LOGGER.exception("Error while running example")
 
 
 asyncio.run(main())

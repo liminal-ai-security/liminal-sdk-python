@@ -39,8 +39,6 @@ from liminal.endpoints.auth import MicrosoftAuthProvider
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
-    logging.basicConfig(level=logging.DEBUG)
-
     # Create an auth provider to authenticate the user:
     microsoft_auth_provider = MicrosoftAuthProvider("<TENANT_ID>", "<CLIENT_ID>")
 
@@ -92,8 +90,6 @@ from liminal.endpoints.auth import MicrosoftAuthProvider
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
-    logging.basicConfig(level=logging.DEBUG)
-
     # Create an auth provider to authenticate the user:
     microsoft_auth_provider = MicrosoftAuthProvider("<TENANT_ID>", "<CLIENT_ID>")
 
@@ -145,8 +141,6 @@ from liminal.endpoints.auth import MicrosoftAuthProvider
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
-    logging.basicConfig(level=logging.DEBUG)
-
     # Create an auth provider to authenticate the user:
     microsoft_auth_provider = MicrosoftAuthProvider("<TENANT_ID>", "<CLIENT_ID>")
 
