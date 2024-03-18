@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-TEST_API_SERVER_URL = "https://api.domain.liminal.ai/foobar"
+TEST_API_SERVER_URL = "https://api.domain.liminal.ai"
 TEST_CLIENT_ID = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 TEST_TENANT_ID = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 

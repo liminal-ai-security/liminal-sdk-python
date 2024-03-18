@@ -1,0 +1,29 @@
+{
+  "token_type": "Bearer",
+  "scope": "openid profile User.Read email",
+  "expires_in": 5111,
+  "ext_expires_in": 5111,
+  "access_token": "REDACTED",
+  "refresh_token": "REDACTED",
+  "id_token": "REDACTED",
+  "client_info": "REDACTED",
+  "id_token_claims": {
+    "aud": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "iss": "https://login.microsoftonline.com/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/v2.0",
+    "iat": 1710782301,
+    "nbf": 1710782301,
+    "exp": 1710786201,
+    "aio": "REDACTED",
+    "groups": ["xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"],
+    "name": "Aaron Bach",
+    "oid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "preferred_username": "user@email.com",
+    "rh": "REDCATED",
+    "roles": ["Admin"],
+    "sub": "REDCATED",
+    "tid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "uti": "REDCATED",
+    "ver": "2.0"
+  },
+  "token_source": "identity_provider"
+}
