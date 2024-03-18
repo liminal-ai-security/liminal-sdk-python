@@ -2,16 +2,25 @@
 
 from __future__ import annotations
 
-from collections.abc import Generator
+from collections.abc import AsyncGenerator, Generator
 import json
 from time import time
 from typing import Any, cast
 from unittest.mock import Mock, patch
 
+import httpx
 import pytest
+import pytest_asyncio
 from pytest_httpx import HTTPXMock
 
-from tests.common import TEST_API_SERVER_URL, load_fixture
+from liminal import Client
+from liminal.endpoints.auth import MicrosoftAuthProvider
+from tests.common import (
+    TEST_API_SERVER_URL,
+    TEST_CLIENT_ID,
+    TEST_TENANT_ID,
+    load_fixture,
+)
 
 
 @pytest.fixture(name="patch_liminal_api_server")
@@ -67,6 +76,23 @@ def _patch_msal_fixture(
         yield
 
 
+@pytest.fixture()
+def assert_all_responses_were_requested() -> bool:
+    """Set whether pytest-httpx checks that all responses were requested."""
+    return False
+
+
+@pytest.fixture(name="access_token_expires_at")
+def access_token_expires_at_fixture() -> int:
+    """Return a fixture for an access token expiration time.
+
+    Returns:
+        A fixture for an access token expiration time.
+
+    """
+    return (int(time()) + 3600) * 1000
+
+
 @pytest.fixture(name="analyze_response", scope="session")
 def analyze_response_fixture() -> dict[str, Any]:
     """Return a fixture for an analyze response.
@@ -76,6 +102,57 @@ def analyze_response_fixture() -> dict[str, Any]:
 
     """
     return cast(dict[str, Any], json.loads(load_fixture("analyze-response.json")))
+
+
+@pytest_asyncio.fixture(name="mock_client")
+async def mock_client_fixture(
+    access_token_expires_at: int,
+    analyze_response: dict[str, Any],
+    httpx_mock: HTTPXMock,
+    model_instances_response: dict[str, Any],
+    patch_msal: None,
+) -> AsyncGenerator[Client, None]:
+    """Return a fixture for a Liminal client.
+
+    Args:
+        access_token_expires_at: The expiration time of the access token.
+        analyze_response: The analyze response.
+        httpx_mock: The HTTPX mock fixture.
+        model_instances_response: The model instances response.
+        patch_msal: Ensure the MSAL library is patched.
+
+    Returns:
+        A fixture for a Liminal client.
+
+    """
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{TEST_API_SERVER_URL}/api/v1/auth/login/oauth/access-token?source=sdk",
+        headers=[
+            ("Set-Cookie", "accessToken=REDACTED"),
+            ("Set-Cookie", f"accessTokenExpiresAt={access_token_expires_at}"),
+            ("Set-Cookie", "refreshToken=REDACTED"),
+        ],
+    )
+
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{TEST_API_SERVER_URL}/api/v1/model-instances?source=sdk",
+        json=model_instances_response,
+    )
+    httpx_mock.add_response(
+        method="POST",
+        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response?source=sdk",
+        json=analyze_response,
+    )
+
+    microsoft_auth_provider = MicrosoftAuthProvider(TEST_TENANT_ID, TEST_CLIENT_ID)
+    async with httpx.AsyncClient() as httpx_client:
+        client = Client(
+            microsoft_auth_provider, TEST_API_SERVER_URL, httpx_client=httpx_client
+        )
+        await client.authenticate_from_auth_provider()
+        yield client
 
 
 @pytest.fixture(name="msal_cache_token_response", scope="session")

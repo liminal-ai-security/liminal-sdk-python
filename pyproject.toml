@@ -440,4 +440,5 @@ split-on-trailing-comma = false
     "ARG001", # Tests ofen have unused arguments
     "FBT001", # Test fixtures may be boolean values
     "S101", # Assertions are fine in tests
+    "SLF001", # We want to test some private attributes
 ]
