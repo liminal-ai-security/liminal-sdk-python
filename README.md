@@ -164,6 +164,29 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
+## Creating a Liminal Client from a Stored Refresh Token
+
+Assuming you have a stored refresh token (collected from the callback process shown
+above), it is simple to create a new Limina client using that token:
+
+```python
+import asyncio
+
+from liminal import Client
+
+
+async def main() -> None:
+    """Create the aiohttp session and run the example."""
+    # Retrieve your stored refresh_token:
+    refresh_token = "12345"
+
+    # Create the client:
+    liminal = await client.authenticate_from_refresh_token(refresh_token=refresh_token)
+
+
+asyncio.run(main())
+```
+
 # Getting Model Instances
 
 Every LLM instance connected in the Liminal admin dashboard is referred to as a "model
