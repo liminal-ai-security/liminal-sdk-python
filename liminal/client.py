@@ -269,7 +269,7 @@ class Client:
                 refresh_token_response = await self._request(
                     "POST",
                     "/api/v1/auth/refresh-token",
-                    referesh_request=True,
+                    refresh_request=True,
                     cookies=Cookies({"refreshToken": refresh_token}),
                 )
                 self._save_tokens_from_auth_response(refresh_token_response)
