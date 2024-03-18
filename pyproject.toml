@@ -185,6 +185,7 @@ disable = [
     "nonlocal-without-binding", # PLE0117
     "not-in-loop", # F701, F702
     "notimplemented-raised", # F901
+    "protected-access", # SLF001
     "return-in-init", # PLE0101
     "return-outside-function", # F706
     "syntax-error", # E999
