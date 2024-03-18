@@ -44,12 +44,16 @@ def _patch_liminal_api_server_fixture(httpx_mock: HTTPXMock) -> None:
 
 @pytest.fixture(name="patch_msal")
 def _patch_msal_fixture(
+    mock_msal_acquire_token_by_device_flow: Mock,
+    msal_accounts: list[Mock],
     msal_cache_token_response: dict[str, Any],
     msal_token_by_device_flow_response: dict[str, Any],
 ) -> Generator[None, None, None]:
     """Patch the MSAL library.
 
     Args:
+        mock_msal_acquire_token_by_device_flow: The MSAL acquire token by device flow method.
+        msal_accounts: The MSAL accounts.
         msal_cache_token_response: The MSAL cache token response.
         msal_token_by_device_flow_response: The MSAL token by device flow response.
 
@@ -58,7 +62,7 @@ def _patch_msal_fixture(
 
     """
     with patch("liminal.endpoints.auth.PublicClientApplication") as msal_app:
-        msal_app.return_value.get_accounts = Mock(return_value=[Mock()])
+        msal_app.return_value.get_accounts = Mock(return_value=msal_accounts)
         msal_app.return_value.initiate_device_flow = Mock(
             return_value={
                 "message": (
@@ -70,16 +74,10 @@ def _patch_msal_fixture(
         msal_app.return_value.acquire_token_silent_with_error = Mock(
             return_value=msal_cache_token_response
         )
-        msal_app.return_value.acquire_token_by_device_flow = Mock(
-            return_value=msal_token_by_device_flow_response
+        msal_app.return_value.acquire_token_by_device_flow = (
+            mock_msal_acquire_token_by_device_flow
         )
         yield
-
-
-@pytest.fixture()
-def assert_all_responses_were_requested() -> bool:
-    """Set whether pytest-httpx checks that all responses were requested."""
-    return False
 
 
 @pytest.fixture(name="access_token_expires_at")
@@ -93,21 +91,9 @@ def access_token_expires_at_fixture() -> int:
     return (int(time()) + 3600) * 1000
 
 
-@pytest.fixture(name="analyze_response", scope="session")
-def analyze_response_fixture() -> dict[str, Any]:
-    """Return a fixture for an analyze response.
-
-    Returns:
-        A fixture for an analyze response.
-
-    """
-    return cast(dict[str, Any], json.loads(load_fixture("analyze-response.json")))
-
-
 @pytest_asyncio.fixture(name="mock_client")
 async def mock_client_fixture(
     access_token_expires_at: int,
-    analyze_response: dict[str, Any],
     httpx_mock: HTTPXMock,
     model_instances_response: dict[str, Any],
     patch_msal: None,
@@ -116,7 +102,6 @@ async def mock_client_fixture(
 
     Args:
         access_token_expires_at: The expiration time of the access token.
-        analyze_response: The analyze response.
         httpx_mock: The HTTPX mock fixture.
         model_instances_response: The model instances response.
         patch_msal: Ensure the MSAL library is patched.
@@ -135,17 +120,6 @@ async def mock_client_fixture(
         ],
     )
 
-    httpx_mock.add_response(
-        method="GET",
-        url=f"{TEST_API_SERVER_URL}/api/v1/model-instances?source=sdk",
-        json=model_instances_response,
-    )
-    httpx_mock.add_response(
-        method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response?source=sdk",
-        json=analyze_response,
-    )
-
     microsoft_auth_provider = MicrosoftAuthProvider(TEST_TENANT_ID, TEST_CLIENT_ID)
     async with httpx.AsyncClient() as httpx_client:
         client = Client(
@@ -153,6 +127,33 @@ async def mock_client_fixture(
         )
         await client.authenticate_from_auth_provider()
         yield client
+
+
+@pytest.fixture(name="msal_accounts")
+def msal_accounts_fixture() -> list[Mock]:
+    """Return a fixture for MSAL accounts.
+
+    Returns:
+        A fixture for MSAL accounts.
+
+    """
+    return []
+
+
+@pytest.fixture(name="mock_msal_acquire_token_by_device_flow")
+def mock_msal_acquire_token_by_device_flow_fixture(
+    msal_token_by_device_flow_response: dict[str, Any],
+) -> Mock:
+    """Return a mocked version of the MSAL acquire_token_by_device_flow method.
+
+    Args:
+        msal_token_by_device_flow_response: The MSAL acquire_token_by_device_flow method.
+
+    Returns:
+        A mocked version of the MSAL acquire_token_by_device_flow method.
+
+    """
+    return Mock(return_value=msal_token_by_device_flow_response)
 
 
 @pytest.fixture(name="msal_cache_token_response", scope="session")
@@ -165,7 +166,7 @@ def msal_cache_token_response_fixture() -> dict[str, Any]:
     """
     return cast(
         dict[str, Any],
-        json.loads(load_fixture("msal_cache_token_response.json")),
+        json.loads(load_fixture("msal-cache-token-response.json")),
     )
 
 
@@ -179,7 +180,7 @@ def msal_token_by_device_flow_response_fixture() -> dict[str, Any]:
     """
     return cast(
         dict[str, Any],
-        json.loads(load_fixture("msal_token_by_device_flow_response.json")),
+        json.loads(load_fixture("msal-token-by-device-flow-response.json")),
     )
 
 
@@ -196,15 +197,54 @@ def model_instances_response_fixture() -> dict[str, Any]:
     )
 
 
-@pytest.fixture(name="prompt_response", scope="session")
-def prompt_response_fixture() -> dict[str, Any]:
-    """Return a fixture for a prompt response.
+@pytest.fixture(name="prompt_analyze_response", scope="session")
+def prompt_analyze_response_fixture() -> dict[str, Any]:
+    """Return a fixture for an analyze response.
+
+    Returns:
+        A fixture for an analyze response.
+
+    """
+    return cast(
+        dict[str, Any], json.loads(load_fixture("prompt-analyze-response.json"))
+    )
+
+
+@pytest.fixture(name="prompt_cleanse_response", scope="session")
+def prompt_cleanse_response_fixture() -> dict[str, Any]:
+    """Return a fixture for an cleanse response.
+
+    Returns:
+        A fixture for an cleanse response.
+
+    """
+    return cast(
+        dict[str, Any], json.loads(load_fixture("prompt-cleanse-response.json"))
+    )
+
+
+@pytest.fixture(name="prompt_hydrate_response", scope="session")
+def prompt_hydrate_response_fixture() -> dict[str, Any]:
+    """Return a fixture for an hydrate response.
+
+    Returns:
+        A fixture for an hydrate response.
+
+    """
+    return cast(
+        dict[str, Any], json.loads(load_fixture("prompt-hydrate-response.json"))
+    )
+
+
+@pytest.fixture(name="prompt_submit_response", scope="session")
+def prompt_submit_response_fixture() -> dict[str, Any]:
+    """Return a fixture for a prompt submit response.
 
     Returns:
         A fixture for a prompt response.
 
     """
-    return cast(dict[str, Any], json.loads(load_fixture("prompt-response.json")))
+    return cast(dict[str, Any], json.loads(load_fixture("prompt-submit-response.json")))
 
 
 @pytest.fixture(name="thread_by_id_response", scope="session")

@@ -35,12 +35,13 @@ class ModelInstance(BaseModel):
 
     id: int
     policy_group_id: int = field(metadata=field_options(alias="policyGroupId"))
-    model_connection: ModelConnection | None = field(
-        metadata=field_options(alias="modelConnection")
-    )
     name: str
     created_at: str = field(metadata=field_options(alias="createdAt"))
     updated_at: str = field(metadata=field_options(alias="updatedAt"))
     deleted_at: str | None = field(
         default=None, metadata=field_options(alias="deletedAt")
+    )
+    teams: list[str]
+    model_connection: ModelConnection | None = field(
+        metadata=field_options(alias="modelConnection")
     )

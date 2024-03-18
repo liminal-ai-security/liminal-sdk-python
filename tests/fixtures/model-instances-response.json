@@ -19,5 +19,15 @@
       "apiKey": "",
       "maskedApiKey": ""
     }
+  },
+  {
+    "id": 2,
+    "policyGroupId": 2,
+    "name": "GPT4",
+    "createdAt": "2024-02-29T11:27:03.792Z",
+    "deletedAt": null,
+    "updatedAt": "2024-02-29T11:27:03.792Z",
+    "teams": [],
+    "modelConnection": null
   }
 ]

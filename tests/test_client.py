@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 import pytest
 from pytest_httpx import HTTPXMock
 
@@ -65,3 +67,28 @@ async def test_bad_endpoint_explicit_client(
     await client.authenticate_from_auth_provider()
     with pytest.raises(RequestError, match="Not Found"):
         await mock_client._request("GET", "/foobar")
+
+
+@pytest.mark.asyncio()
+@pytest.mark.parametrize(
+    "content", [b"This is unexpected", json.dumps({"foo": "bar"}).encode()]
+)
+async def test_unexpected_response(
+    content: bytes, httpx_mock: HTTPXMock, mock_client: Client
+) -> None:
+    """Test for a bad endpoint.
+
+    Args:
+        content: The content to return in the response.
+        httpx_mock: The HTTPX mock fixture.
+        mock_client: A mock Liminal client.
+
+    """
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{TEST_API_SERVER_URL}/api/v1/model-instances?source=sdk",
+        content=b"This is unexpected",
+    )
+
+    with pytest.raises(RequestError, match="Could not validate response"):
+        _ = await mock_client.llm.get_available_model_instances()

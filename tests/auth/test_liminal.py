@@ -6,6 +6,7 @@ import asyncio
 from datetime import UTC, datetime
 import logging
 from time import time
+from typing import Any
 from unittest.mock import Mock
 
 import httpx
@@ -14,6 +15,7 @@ from pytest_httpx import HTTPXMock
 
 from liminal import Client
 from liminal.endpoints.auth import MicrosoftAuthProvider
+from liminal.errors import AuthError
 from tests.common import TEST_API_SERVER_URL, TEST_CLIENT_ID, TEST_TENANT_ID
 
 TEST_REFRESH_TOKEN = "REDACTED"  # noqa: S105
@@ -83,7 +85,10 @@ async def test_auth_via_refresh_token_new_client(
 
 @pytest.mark.asyncio()
 async def test_expired_access_token(
-    caplog: Mock, httpx_mock: HTTPXMock, mock_client: Client
+    caplog: Mock,
+    httpx_mock: HTTPXMock,
+    mock_client: Client,
+    prompt_analyze_response: dict[str, Any],
 ) -> None:
     """Test handling an expired access token.
 
@@ -91,6 +96,7 @@ async def test_expired_access_token(
         caplog: A mocked logging utility.
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
+        prompt_analyze_response: The analyze response.
 
     """
     caplog.set_level(logging.DEBUG)
@@ -103,6 +109,12 @@ async def test_expired_access_token(
             ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
             ("Set-Cookie", "refreshToken=NEW_TOKEN"),
         ],
+    )
+
+    httpx_mock.add_response(
+        method="POST",
+        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response?source=sdk",
+        json=prompt_analyze_response,
     )
 
     old_access_token = mock_client._access_token
@@ -126,7 +138,11 @@ async def test_expired_access_token(
 
 @pytest.mark.asyncio()
 async def test_expired_access_token_concurrent_calls(
-    caplog: Mock, httpx_mock: HTTPXMock, mock_client: Client
+    caplog: Mock,
+    httpx_mock: HTTPXMock,
+    mock_client: Client,
+    model_instances_response: dict[str, Any],
+    prompt_analyze_response: dict[str, Any],
 ) -> None:
     """Test handling an expired access token with concurrent incoming calls.
 
@@ -134,6 +150,8 @@ async def test_expired_access_token_concurrent_calls(
         caplog: A mocked logging utility.
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
+        model_instances_response: The model instances response.
+        prompt_analyze_response: The analyze response.
 
     """
     caplog.set_level(logging.DEBUG)
@@ -146,6 +164,17 @@ async def test_expired_access_token_concurrent_calls(
             ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
             ("Set-Cookie", "refreshToken=NEW_TOKEN"),
         ],
+    )
+
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{TEST_API_SERVER_URL}/api/v1/model-instances?source=sdk",
+        json=model_instances_response,
+    )
+    httpx_mock.add_response(
+        method="POST",
+        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response?source=sdk",
+        json=prompt_analyze_response,
     )
 
     old_access_token = mock_client._access_token
@@ -169,3 +198,56 @@ async def test_expired_access_token_concurrent_calls(
 
     # Assert that the original call produced results:
     assert len(results) == 2
+
+
+@pytest.mark.asyncio()
+async def test_premature_refresh_token(httpx_mock: HTTPXMock, patch_msal: None) -> None:
+    """Test attempting to refresh the access token before actually getting one.
+
+    Args:
+        httpx_mock: The HTTPX mock fixture.
+        patch_msal: Ensure the MSAL library is patched.
+
+    """
+    microsoft_auth_provider = MicrosoftAuthProvider(TEST_TENANT_ID, TEST_CLIENT_ID)
+    async with httpx.AsyncClient() as httpx_client:
+        client = Client(
+            microsoft_auth_provider, TEST_API_SERVER_URL, httpx_client=httpx_client
+        )
+
+        with pytest.raises(AuthError, match="No valid refresh token provided"):
+            await client.authenticate_from_refresh_token()
+
+
+@pytest.mark.asyncio()
+async def test_refresh_token_callback(
+    httpx_mock: HTTPXMock, mock_client: Client
+) -> None:
+    """Test adding and removing a refresh token callback.
+
+    Args:
+        httpx_mock: The HTTPX mock fixture.
+        mock_client: Client
+
+    """
+    httpx_mock.add_response(
+        method="POST",
+        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token?source=sdk",
+        headers=[
+            ("Set-Cookie", "accessToken=NEW_TOKEN"),
+            ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
+            ("Set-Cookie", "refreshToken=NEW_TOKEN"),
+        ],
+    )
+
+    # Define and attach a refresh token callback, then refresh the access token:
+    refresh_token_callback = Mock()
+    remove_callback = mock_client.add_refresh_token_callback(refresh_token_callback)
+    await mock_client.authenticate_from_refresh_token(refresh_token=TEST_REFRESH_TOKEN)
+
+    # Cancel the callback and refresh the access token again:
+    remove_callback()
+    await mock_client.authenticate_from_refresh_token()
+
+    # Ensure that the callback was called only once:
+    refresh_token_callback.assert_called_once_with(mock_client._refresh_token)

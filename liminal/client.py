@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Callable
 from datetime import UTC, datetime
+from json.decoder import JSONDecodeError
 from typing import Final
 
 from httpx import AsyncClient, Cookies, HTTPStatusError, Request, Response
@@ -171,6 +172,7 @@ class Client:
         try:
             return json_decode(response.content, expected_response_type)
         except (
+            JSONDecodeError,
             MissingField,
             SuitableVariantNotFoundError,
             UnserializableDataError,
