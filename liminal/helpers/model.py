@@ -4,7 +4,7 @@ from mashumaro import DataClassDictMixin
 from mashumaro.config import BaseConfig
 
 
-class BaseModel(DataClassDictMixin):
+class BaseResponseModel(DataClassDictMixin):
     """Define a base model."""
 
     class Config(BaseConfig):
