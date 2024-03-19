@@ -73,6 +73,7 @@ pylint = "3.1.0"
 pytest = "8.1.1"
 pytest-asyncio = "0.23.5.post1"
 pytest-cov = "4.1.0"
+pytest-httpx = "^0.30.0"
 ruff = "0.3.3"
 
 [tool.poetry.urls]
@@ -439,4 +440,5 @@ split-on-trailing-comma = false
     "ARG001", # Tests ofen have unused arguments
     "FBT001", # Test fixtures may be boolean values
     "S101", # Assertions are fine in tests
+    "SLF001", # We want to test some private attributes
 ]

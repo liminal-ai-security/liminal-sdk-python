@@ -1,5 +1,6 @@
 # Liminal Python SDK
 
+[![CI][ci-badge]][ci]
 [![PyPI][pypi-badge]][pypi]
 [![Version][version-badge]][version]
 [![License][license-badge]][license]
@@ -375,6 +376,7 @@ Thanks to all of [our contributors][contributors] so far!
 10. Submit a pull request!
 
 [azure-portal]: https://portal.azure.com
+[ci-badge]: https://img.shields.io/github/actions/workflow/status/liminal-ai-security/liminal-sdk-python/test.yml
 [ci]: https://github.com/liminal-ai-security/liminal-sdk-python/actions
 [contributors]: https://github.com/liminal-ai-security/liminal-sdk-python/graphs/contributors
 [examples]: https://github.com/liminal-ai-security/liminal-sdk-python/tree/development/examples

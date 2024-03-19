@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Callable
 from datetime import UTC, datetime
+from json.decoder import JSONDecodeError
 from typing import Final
 
 from httpx import AsyncClient, Cookies, HTTPStatusError, Request, Response
@@ -55,7 +56,6 @@ class Client:
         # Token information:
         self._access_token: str | None = None
         self._access_token_expires_at: datetime | None = None
-        self._refresh_event = asyncio.Event()
         self._refresh_lock = asyncio.Lock()
         self._refresh_token: str | None = None
         self._refresh_token_callbacks: list[Callable[[str], None]] = []
@@ -75,7 +75,6 @@ class Client:
         cookies: Cookies | None = None,
         params: dict[str, str] | None = None,
         json: dict[str, str] | None = None,
-        refresh_request: bool = False,
     ) -> Response:
         """Make a request to the Liminal API server and return a Response.
 
@@ -86,7 +85,6 @@ class Client:
             cookies: The cookies to use.
             params: The query parameters to use.
             json: The JSON body to use.
-            refresh_request: Whether or not this request is a refresh request.
 
         Returns:
             An HTTPX Response object.
@@ -101,14 +99,6 @@ class Client:
             self._access_token = None
             self._access_token_expires_at = None
             await self.authenticate_from_refresh_token()
-
-        # If an authenticated request arrives while we're refreshing, hold until the
-        # refresh process is done:
-        if not refresh_request and self._refreshing:
-            await self._refresh_event.wait()
-
-        if not endpoint.startswith("/"):
-            endpoint = f"/{endpoint}"
 
         url = f"{self._api_server_url}{endpoint}"
 
@@ -182,6 +172,7 @@ class Client:
         try:
             return json_decode(response.content, expected_response_type)
         except (
+            JSONDecodeError,
             MissingField,
             SuitableVariantNotFoundError,
             UnserializableDataError,
@@ -260,19 +251,15 @@ class Client:
             msg = "No valid refresh token provided"
             raise AuthError(msg)
 
-        self._refreshing = True
-
         async with self._refresh_lock:
-            self._refresh_event.clear()
+            self._refreshing = True
 
             try:
                 refresh_token_response = await self._request(
                     "POST",
                     "/api/v1/auth/refresh-token",
-                    refresh_request=True,
                     cookies=Cookies({"refreshToken": refresh_token}),
                 )
                 self._save_tokens_from_auth_response(refresh_token_response)
             finally:
                 self._refreshing = False
-                self._refresh_event.set()

@@ -37,13 +37,13 @@ jobs:
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
           key: "${{ runner.os }}-pip-\
-            ${{ hashFiles('.github/workflows/requirements-create-release.txt') }}"
+            ${{ hashFiles('.github/workflows/requirements.txt') }}"
           restore-keys: |
             ${{ runner.os }}-pip-
 
       - name: 🏗 Install workflow dependencies
         run: |
-          pip install -r .github/workflows/requirements-create-release.txt
+          pip install -r .github/workflows/requirements.txt
 
       - name: 🗓️ Calculate new version
         id: calver
