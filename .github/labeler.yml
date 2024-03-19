@@ -15,7 +15,8 @@
   - changed-files:
       - any-glob-to-any-file:
           - ".*.*"
-          - ".github/**/*"
+          - ".github/*.yml"
+          - ".github/workflows/*"
           - "pyproject.toml"
           - "renovate.json"
           - "scripts/**/*"
