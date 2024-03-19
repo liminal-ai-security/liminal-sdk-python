@@ -14,7 +14,7 @@ _LOGGER: Final[logging.Logger] = logging.getLogger("quickstart_with_microsoft")
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
     try:
         client_id = os.environ["CLIENT_ID"]
