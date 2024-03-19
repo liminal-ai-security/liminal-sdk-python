@@ -1,4 +1,4 @@
-"""Define the auth endpoint."""
+"""Define Microsoft providers."""
 
 from __future__ import annotations
 
@@ -7,18 +7,18 @@ from typing import Final
 
 from msal import PublicClientApplication
 
-from liminal.const import LOGGER
-from liminal.endpoints.auth.models import (
-    AuthProvider,
+from liminal.auth import AuthProvider
+from liminal.auth.microsoft.models import (
     MSALCacheTokenResponse,
     MSALIdentityProviderTokenResponse,
 )
+from liminal.const import LOGGER
 from liminal.errors import AuthError
 
 DEFAULT_AUTH_CHALLENGE_TIMEOUT: Final[int] = 60
 
 
-class MicrosoftAuthProvider(AuthProvider):
+class DeviceCodeFlowProvider(AuthProvider):
     """Define a Microsoft auth provider."""
 
     AUTHORITY_URL: Final[str] = "https://login.microsoftonline.com"

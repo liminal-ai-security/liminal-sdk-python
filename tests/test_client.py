@@ -8,7 +8,7 @@ import pytest
 from pytest_httpx import HTTPXMock
 
 from liminal import Client
-from liminal.endpoints.auth import MicrosoftAuthProvider
+from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from liminal.errors import RequestError
 from tests.common import TEST_API_SERVER_URL, TEST_CLIENT_ID, TEST_TENANT_ID
 
@@ -62,7 +62,7 @@ async def test_bad_endpoint_explicit_client(
         status_code=404,
     )
 
-    microsoft_auth_provider = MicrosoftAuthProvider(TEST_TENANT_ID, TEST_CLIENT_ID)
+    microsoft_auth_provider = DeviceCodeFlowProvider(TEST_TENANT_ID, TEST_CLIENT_ID)
     client = Client(microsoft_auth_provider, TEST_API_SERVER_URL)
     await client.authenticate_from_auth_provider()
     with pytest.raises(RequestError, match="Not Found"):
