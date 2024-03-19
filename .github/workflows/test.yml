@@ -9,7 +9,7 @@ name: Test
 
 jobs:
   test:
-    name: Run Tests
+    name: 📝 Run Tests
 
     runs-on: ubuntu-latest
 
