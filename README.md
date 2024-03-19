@@ -9,7 +9,18 @@ for interacting with the Liminal API.
 
 - [Installation](#installation)
 - [Python Versions](#python-versions)
-- [Usage](#usage)
+- [Quickstart](#quickstart)
+- [Initial Authentication](#initial-authentication)
+  - [Microsoft Entra ID](#microsoft-entra-id)
+- [Ongoing Authentication](#ongoing-authentication)
+  - [Manually Interacting with the Refresh Token](#manually-interacting-with-the-refresh-token)
+  - [Creating a Liminal Client from a Stored Refresh Token](#creating-a-liminal-client-from-a-stored-refresh-token)
+- [Endpoints](#endpoints)
+  - [Getting Model Instances](#getting-model-instances)
+  - [Managing Threads](#managing-threads)
+  - [Submitting Prompts](#submitting-prompts)
+- [Connection Pooling](#connection-pooling)
+- [Running Examples](#running-examples)
 - [Contributing](#contributing)
 
 # Installation
@@ -164,7 +175,32 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-# Getting Model Instances
+## Creating a Liminal Client from a Stored Refresh Token
+
+Assuming you have a stored refresh token (collected from the callback process shown
+above), it is simple to create a new Limina client using that token:
+
+```python
+import asyncio
+
+from liminal import Client
+
+
+async def main() -> None:
+    """Create the aiohttp session and run the example."""
+    # Retrieve your stored refresh_token:
+    refresh_token = "12345"
+
+    # Create the client:
+    liminal = await client.authenticate_from_refresh_token(refresh_token=refresh_token)
+
+
+asyncio.run(main())
+```
+
+# Endpoints
+
+## Getting Model Instances
 
 Every LLM instance connected in the Liminal admin dashboard is referred to as a "model
 instance." The SDK provides several methods to interact with model instances:
@@ -191,7 +227,7 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-# Managing Threads
+## Managing Threads
 
 Threads are conversations with an LLM instance:
 
@@ -228,7 +264,7 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-# Submitting Prompts
+## Submitting Prompts
 
 Submitting prompts is easy:
 
@@ -275,6 +311,40 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
+# Connection Pooling
+
+By default, the library creates a new connection to the Liminal API server with each
+coroutine. If you are calling a large number of coroutines (or merely want to squeeze
+out every second of runtime savings possible), an [`httpx`][httpx] `AsyncClient` can be
+used for connection pooling:
+
+```python
+import asyncio
+
+from liminal import Client
+from liminal.endpoints.auth import MicrosoftAuthProvider
+
+
+async def main() -> None:
+    # Create an auth provider to authenticate the user:
+    microsoft_auth_provider = MicrosoftAuthProvider("<TENANT_ID>", "<CLIENT_ID>")
+
+    # Create the liminal SDK instance with a shared HTTPX AsyncClient:
+    async with httpx.AsyncClient() as client:
+        liminal = Client(
+            microsoft_auth_provider, "<LIMINAL_API_SERVER_URL>", httpx_client=client
+        )
+
+        # Get to work!
+        # ...
+
+
+asyncio.run(main())
+```
+
+Check out the examples, the tests, and the source files themselves for method
+signatures and more examples.
+
 # Running Examples
 
 You can see examples of how to use this SDK via the [`examples`][examples] folder in
@@ -297,7 +367,7 @@ Thanks to all of [our contributors][contributors] so far!
 2. [Fork the repository][fork].
 3. (_optional, but highly recommended_) Create a virtual environment: `python3 -m venv .venv`
 4. (_optional, but highly recommended_) Enter the virtual environment: `source ./.venv/bin/activate`
-5. Install the dev environment: `script/setup`
+5. Install the dev environment: `./scripts/setup.sh`
 6. Code your new feature or bug fix on a new branch.
 7. Write tests that cover your new functionality.
 8. Run tests and ensure 100% code coverage: `poetry run pytest --cov liminal tests`
@@ -309,6 +379,7 @@ Thanks to all of [our contributors][contributors] so far!
 [contributors]: https://github.com/liminal-ai-security/liminal-sdk-python/graphs/contributors
 [examples]: https://github.com/liminal-ai-security/liminal-sdk-python/tree/development/examples
 [fork]: https://github.com/liminal-ai-security/liminal-sdk-python/fork
+[httpx]: https://www.python-httpx.org/
 [issues]: https://github.com/liminal-ai-security/liminal-sdk-python/issues
 [license-badge]: https://img.shields.io/pypi/l/liminal-sdk-python.svg
 [license]: https://github.com/liminal-ai-security/liminal-sdk-python/blob/main/LICENSE
