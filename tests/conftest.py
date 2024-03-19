@@ -247,23 +247,56 @@ def prompt_submit_response_fixture() -> dict[str, Any]:
     return cast(dict[str, Any], json.loads(load_fixture("prompt-submit-response.json")))
 
 
-@pytest.fixture(name="thread_by_id_response", scope="session")
-def thread_by_id_response_fixture() -> dict[str, Any]:
+@pytest.fixture(name="threads_create_response", scope="session")
+def threads_create_response_fixture() -> dict[str, Any]:
+    """Return a fixture for a threads create response.
+
+    Returns:
+        A fixture for a threads create response.
+
+    """
+    return cast(
+        dict[str, Any], json.loads(load_fixture("threads-create-response.json"))
+    )
+
+
+@pytest.fixture(name="threads_get_available_response", scope="session")
+def threads_get_available_fixture_response() -> dict[str, Any]:
+    """Return a fixture for an available threads response.
+
+    Returns:
+        A fixture for an available threads response.
+
+    """
+    return cast(
+        dict[str, Any], json.loads(load_fixture("threads-get-available-response.json"))
+    )
+
+
+@pytest.fixture(name="threads_get_by_id_response", scope="session")
+def threads_get_by_id_response_fixture() -> dict[str, Any]:
     """Return a fixture for a thread-by-id response.
 
     Returns:
         A fixture for a thread-by-id response.
 
     """
-    return cast(dict[str, Any], json.loads(load_fixture("thread-by-id-response.json")))
+    return cast(
+        dict[str, Any], json.loads(load_fixture("threads-get-by-id-response.json"))
+    )
 
 
-@pytest.fixture(name="threads_response", scope="session")
-def threads_response_fixture() -> dict[str, Any]:
-    """Return a fixture for a threads response.
+@pytest.fixture(
+    name="threads_get_deidentified_context_history_response", scope="session"
+)
+def get_deidentified_context_history_response_fixture() -> dict[str, Any]:
+    """Return a fixture for a thread's deidentified context history response.
 
     Returns:
-        A fixture for a threads response.
+        A fixture for a thread's deidentified context history response.
 
     """
-    return cast(dict[str, Any], json.loads(load_fixture("threads-response.json")))
+    return cast(
+        dict[str, Any],
+        json.loads(load_fixture("threads-deidentified-context-history-response.json")),
+    )

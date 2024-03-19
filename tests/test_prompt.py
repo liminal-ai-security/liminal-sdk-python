@@ -161,4 +161,6 @@ async def test_submit(
         ),
         findings=findings,
     )
+
+    # This is a simple test to ensure the data parsed as appropriate:
     assert len(response.deidentified_input_text_data.items_hashed) == 5
