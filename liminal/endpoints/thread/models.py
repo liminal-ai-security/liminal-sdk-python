@@ -3,16 +3,17 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Literal
 
 from mashumaro import field_options
 
 from liminal.endpoints.llm.models import ModelInstance
-from liminal.helpers.model import BaseModel
+from liminal.helpers.model import BaseResponseModel
 
 
 @dataclass(frozen=True, kw_only=True)
-class DeidentifiedToken(BaseModel):
+class DeidentifiedToken(BaseResponseModel):
     """Define the schema for a deidentified token."""
 
     deid_text: str = field(metadata=field_options(alias="deidText"))
@@ -20,7 +21,7 @@ class DeidentifiedToken(BaseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class Chat(BaseModel):
+class Chat(BaseResponseModel):
     """Define the schema for a chat."""
 
     id: int
@@ -36,13 +37,15 @@ class Chat(BaseModel):
     llm_output: str = field(metadata=field_options(alias="llmOutput"))
     output: str
     status: str
-    created_at: str = field(metadata=field_options(alias="createdAt"))
-    updated_at: str | None = field(metadata=field_options(alias="updatedAt"))
-    deleted_at: str = field(metadata=field_options(alias="deletedAt"))
+    created_at: datetime = field(metadata=field_options(alias="createdAt"))
+    updated_at: datetime | None = field(
+        default=None, metadata=field_options(alias="updatedAt")
+    )
+    deleted_at: datetime = field(metadata=field_options(alias="deletedAt"))
 
 
 @dataclass(frozen=True, kw_only=True)
-class Thread(BaseModel):
+class Thread(BaseResponseModel):
     """Define the schema for a thread."""
 
     id: int
@@ -50,8 +53,9 @@ class Thread(BaseModel):
     model_instance_id: int = field(metadata=field_options(alias="modelInstanceId"))
     name: str
     source: Literal["sdk"]
-    created_at: str = field(metadata=field_options(alias="createdAt"))
-    updated_at: str = field(metadata=field_options(alias="updatedAt"))
-    deleted_at: str = field(metadata=field_options(alias="deletedAt"))
-    chats: list[Chat]
+    created_at: datetime = field(metadata=field_options(alias="createdAt"))
+    deleted_at: datetime | None = field(
+        default=None, metadata=field_options(alias="deletedAt")
+    )
+    updated_at: datetime = field(metadata=field_options(alias="updatedAt"))
     model_instance: ModelInstance = field(metadata=field_options(alias="modelInstance"))
