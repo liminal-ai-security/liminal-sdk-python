@@ -35,7 +35,7 @@ warn_unused_ignores = true
 
 [tool.poetry]
 name = "liminal-sdk-python"
-version = "0.0.1"
+version = "2024.03.4"
 description = "The Liminal SDK for Python"
 readme = "README.md"
 authors = ["Aaron Bach <ab@liminal.ai>"]
@@ -73,7 +73,8 @@ pylint = "3.1.0"
 pytest = "8.1.1"
 pytest-asyncio = "0.23.5.post1"
 pytest-cov = "4.1.0"
-ruff = "0.3.2"
+pytest-httpx = "^0.30.0"
+ruff = "0.3.3"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/liminal-ai-security/liminal-sdk-python/issues"
@@ -185,6 +186,7 @@ disable = [
     "nonlocal-without-binding", # PLE0117
     "not-in-loop", # F701, F702
     "notimplemented-raised", # F901
+    "protected-access", # SLF001
     "return-in-init", # PLE0101
     "return-outside-function", # F706
     "syntax-error", # E999
@@ -438,4 +440,5 @@ split-on-trailing-comma = false
     "ARG001", # Tests ofen have unused arguments
     "FBT001", # Test fixtures may be boolean values
     "S101", # Assertions are fine in tests
+    "SLF001", # We want to test some private attributes
 ]

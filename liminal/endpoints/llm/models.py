@@ -19,13 +19,13 @@ class ModelConnection(BaseModel):
     provider_key: str = field(metadata=field_options(alias="providerKey"))
     params: dict[str, str] | None
     created_at: str = field(metadata=field_options(alias="createdAt"))
+    deleted_at: str | None = field(
+        default=None, metadata=field_options(alias="deletedAt")
+    )
     updated_at: str = field(metadata=field_options(alias="updatedAt"))
     api_key: str | None = field(default=None, metadata=field_options(alias="apiKey"))
     masked_api_key: str | None = field(
         default=None, metadata=field_options(alias="maskedApiKey")
-    )
-    deleted_at: str | None = field(
-        default=None, metadata=field_options(alias="deletedAt")
     )
 
 
@@ -35,12 +35,13 @@ class ModelInstance(BaseModel):
 
     id: int
     policy_group_id: int = field(metadata=field_options(alias="policyGroupId"))
-    model_connection: ModelConnection | None = field(
-        metadata=field_options(alias="modelConnection")
-    )
     name: str
     created_at: str = field(metadata=field_options(alias="createdAt"))
     updated_at: str = field(metadata=field_options(alias="updatedAt"))
     deleted_at: str | None = field(
         default=None, metadata=field_options(alias="deletedAt")
+    )
+    teams: list[str] | None = None
+    model_connection: ModelConnection | None = field(
+        metadata=field_options(alias="modelConnection")
     )
