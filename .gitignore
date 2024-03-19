@@ -67,3 +67,4 @@ ingestion_server.log
 disttags
 .venv/
 tags
+.coverage
