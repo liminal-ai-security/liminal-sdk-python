@@ -3,44 +3,77 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 
 from mashumaro import field_options
 
-from liminal.helpers.model import BaseModel
+from liminal.helpers.model import BaseResponseModel
+
+
+# Define enums to use as types:
+class ModelProviderKey(str, Enum):
+    """Define the enum for the model provider key."""
+
+    ANTHROPIC = "anthropic"
+    AWS_BEDROCK = "aws_bedrock"
+    AWS_SAGEMAKER = "aws_sagemaker"
+    AZURE_OPENAI = "azure_openai"
+    COHERE = "cohere"
+    GOOGLE_GEMINI = "google_gemini"
+    GOOGLE_PALM = "google_palm"
+    HUGGINGFACE = "huggingface"
+    MISTRAL = "mistral"
+    OLLAMA = "ollama"
+    OPENAI = "openai"
 
 
 @dataclass(frozen=True, kw_only=True)
-class ModelConnection(BaseModel):
+class ModelConnection(BaseResponseModel):
     """Define the schema for an LLM model connection."""
 
     id: int
+
+    # References:
     model_instance_id: int = field(metadata=field_options(alias="modelInstanceId"))
-    model: str
-    provider_key: str = field(metadata=field_options(alias="providerKey"))
-    params: dict[str, str] | None
-    created_at: str = field(metadata=field_options(alias="createdAt"))
-    updated_at: str = field(metadata=field_options(alias="updatedAt"))
+
+    # Fields:
     api_key: str | None = field(default=None, metadata=field_options(alias="apiKey"))
     masked_api_key: str | None = field(
         default=None, metadata=field_options(alias="maskedApiKey")
     )
-    deleted_at: str | None = field(
+    model: str
+    params: dict[str, str] | None = field(default_factory=dict)
+    provider_key: ModelProviderKey = field(metadata=field_options(alias="providerKey"))
+
+    # Timestamps:
+    created_at: datetime = field(metadata=field_options(alias="createdAt"))
+    deleted_at: datetime | None = field(
         default=None, metadata=field_options(alias="deletedAt")
     )
+    updated_at: datetime = field(metadata=field_options(alias="updatedAt"))
 
 
 @dataclass(frozen=True, kw_only=True)
-class ModelInstance(BaseModel):
+class ModelInstance(BaseResponseModel):
     """Define the schema for an LLM model instance that Liminal supports."""
 
     id: int
+
+    # References:
     policy_group_id: int = field(metadata=field_options(alias="policyGroupId"))
-    model_connection: ModelConnection | None = field(
-        metadata=field_options(alias="modelConnection")
-    )
+
+    # Fields:
     name: str
-    created_at: str = field(metadata=field_options(alias="createdAt"))
-    updated_at: str = field(metadata=field_options(alias="updatedAt"))
-    deleted_at: str | None = field(
+
+    # Relations:
+    model_connection: ModelConnection | None = field(
+        default=None, metadata=field_options(alias="modelConnection")
+    )
+
+    # Timestamps:
+    created_at: datetime = field(metadata=field_options(alias="createdAt"))
+    deleted_at: datetime | None = field(
         default=None, metadata=field_options(alias="deletedAt")
     )
+    updated_at: datetime = field(metadata=field_options(alias="updatedAt"))

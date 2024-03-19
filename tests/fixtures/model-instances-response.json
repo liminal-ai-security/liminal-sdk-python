@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "policyGroupId": 1,
+    "name": "GPT3.5",
+    "createdAt": "2024-02-29T11:27:03.792Z",
+    "deletedAt": null,
+    "updatedAt": "2024-02-29T11:27:03.792Z",
+    "teams": [],
+    "modelConnection": {
+      "id": 1,
+      "modelInstanceId": 1,
+      "model": "gpt-3.5-turbo",
+      "params": {},
+      "providerKey": "openai",
+      "createdAt": "2024-02-29T11:27:03.792Z",
+      "deletedAt": null,
+      "updatedAt": "2024-02-29T11:27:03.792Z",
+      "apiKey": "",
+      "maskedApiKey": ""
+    }
+  },
+  {
+    "id": 2,
+    "policyGroupId": 2,
+    "name": "GPT4",
+    "createdAt": "2024-02-29T11:27:03.792Z",
+    "deletedAt": null,
+    "updatedAt": "2024-02-29T11:27:03.792Z",
+    "teams": [],
+    "modelConnection": null
+  }
+]

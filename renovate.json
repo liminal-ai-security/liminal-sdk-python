@@ -15,9 +15,13 @@
 
   "packageRules": [
     {
-      "description": "Require dependency dashboard approval for major updates",
       "dependencyDashboardApproval": true,
       "matchUpdateTypes": ["major"]
+    },
+    {
+      "matchManagers": ["poetry"],
+      "matchPackageNames": ["python"],
+      "rangeStrategy": "widen"
     }
   ]
 }
