@@ -7,11 +7,11 @@ from dataclasses import dataclass, field
 from mashumaro import field_options
 
 from liminal.endpoints.thread.models import DeidentifiedToken
-from liminal.helpers.model import BaseModel
+from liminal.helpers.model import BaseResponseModel
 
 
 @dataclass(frozen=True, kw_only=True)
-class AnalysisFinding(BaseModel):
+class AnalysisFinding(BaseResponseModel):
     """Define the schema for an analysis finding.
 
     This object stores information about a piece of text from a prompt, what sensitive
@@ -29,32 +29,14 @@ class AnalysisFinding(BaseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class AnalyzeResponse(BaseModel):
+class AnalyzeResponse(BaseResponseModel):
     """Define the response schema for an analysis request."""
 
     findings: list[AnalysisFinding]
 
 
 @dataclass(frozen=True, kw_only=True)
-class CleansedToken(BaseModel):
-    """Define the schema for a cleansed token."""
-
-    start: int
-    end: int
-    entity_type: str
-
-
-@dataclass(frozen=True, kw_only=True)
-class HydratedToken(BaseModel):
-    """Define the schema for a hydrated token."""
-
-    end: int
-    entity_type: str
-    start: int
-
-
-@dataclass(frozen=True, kw_only=True)
-class CleanseResponse(BaseModel):
+class CleanseResponse(BaseResponseModel):
     """Define the response schema for a cleanse request."""
 
     items: list[CleansedToken]
@@ -67,7 +49,16 @@ class CleanseResponse(BaseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class HydrateResponse(BaseModel):
+class CleansedToken(BaseResponseModel):
+    """Define the schema for a cleansed token."""
+
+    start: int
+    end: int
+    entity_type: str
+
+
+@dataclass(frozen=True, kw_only=True)
+class HydrateResponse(BaseResponseModel):
     """Define the response schema for a hydrate request."""
 
     items: list[HydratedToken]
@@ -75,17 +66,16 @@ class HydrateResponse(BaseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class ReidentifiedToken(BaseModel):
-    """Define the schema for a reidentified token."""
+class HydratedToken(BaseResponseModel):
+    """Define the schema for a hydrated token."""
 
-    start: int
     end: int
     entity_type: str
-    text: str
+    start: int
 
 
 @dataclass(frozen=True, kw_only=True)
-class ProcessResponse(BaseModel):
+class ProcessResponse(BaseResponseModel):
     """Define the response schema for a process request."""
 
     thread_id: int = field(metadata=field_options(alias="threadId"))
@@ -107,3 +97,13 @@ class ProcessResponse(BaseModel):
     reidentified_llm_response_items: list[ReidentifiedToken] = field(
         metadata=field_options(alias="reidentifiedLLMResponseItems")
     )
+
+
+@dataclass(frozen=True, kw_only=True)
+class ReidentifiedToken(BaseResponseModel):
+    """Define the schema for a reidentified token."""
+
+    start: int
+    end: int
+    entity_type: str
+    text: str

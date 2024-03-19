@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime
 from typing import Any
 
 import pytest
@@ -35,10 +36,9 @@ async def test_create(
     assert thread.user_id == 2
     assert thread.name == "My thread"
     assert thread.source == "sdk"
-    assert thread.created_at == "2024-03-18T23:22:17.976Z"
+    assert thread.created_at == datetime(2024, 3, 18, 23, 22, 17, 976000, tzinfo=UTC)
     assert thread.deleted_at is None
-    assert thread.updated_at == "2024-03-18T23:22:17.976Z"  # type: ignore[unreachable]
-    assert thread.chats == []
+    assert thread.updated_at == datetime(2024, 3, 18, 23, 22, 17, 976000, tzinfo=UTC)
 
 
 @pytest.mark.asyncio()
