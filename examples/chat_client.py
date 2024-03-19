@@ -6,7 +6,7 @@ import os
 from typing import Final
 
 from liminal import Client
-from liminal.endpoints.auth import MicrosoftAuthProvider
+from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from liminal.errors import LiminalError
 
 _LOGGER: Final[logging.Logger] = logging.getLogger("chat_client")
@@ -26,7 +26,7 @@ async def main() -> None:
         raise LiminalError(msg) from err
 
     # Create an auth provider to authenticate the user:
-    microsoft_auth_provider = MicrosoftAuthProvider(tenant_id, client_id)
+    microsoft_auth_provider = DeviceCodeFlowProvider(tenant_id, client_id)
 
     # Create the liminal SDK instance:
     liminal = Client(microsoft_auth_provider, liminal_api_server_url)

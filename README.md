@@ -13,6 +13,7 @@ for interacting with the Liminal API.
 - [Quickstart](#quickstart)
 - [Initial Authentication](#initial-authentication)
   - [Microsoft Entra ID](#microsoft-entra-id)
+    - [Device Code Flow](#device-code-flow)
 - [Ongoing Authentication](#ongoing-authentication)
   - [Manually Interacting with the Refresh Token](#manually-interacting-with-the-refresh-token)
   - [Creating a Liminal Client from a Stored Refresh Token](#creating-a-liminal-client-from-a-stored-refresh-token)
@@ -46,16 +47,16 @@ API object is easy:
 import asyncio
 
 from liminal import Client
-from liminal.endpoints.auth import MicrosoftAuthProvider
+from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
     # Create an auth provider to authenticate the user:
-    microsoft_auth_provider = MicrosoftAuthProvider("<TENANT_ID>", "<CLIENT_ID>")
+    auth_provider = DeviceCodeFlowProvider("<TENANT_ID>", "<CLIENT_ID>")
 
     # Create the liminal SDK instance:
-    liminal = Client(microsoft_auth_provider, "<LIMINAL_API_SERVER_URL>")
+    liminal = Client(auth_provider, "<LIMINAL_API_SERVER_URL>")
 
 
 asyncio.run(main())
@@ -73,13 +74,15 @@ the following auth providers are supported:
 
 ## Microsoft Entra ID
 
-Liminal authenticates with Microsoft Entra ID via an
+### Device Code Flow
+
+This authentication process with Microsoft Entra ID involves an
 [OAuth 2.0 Device Authorization Grant][oauth-device-auth-grant]. This flow requires you
 to start your app, retrieve a device code from the logs produced by this SDK, and
 provide that code to Microsoft via a web browser. Once you complete the login process,
 the SDK will be authenticated for use with your Liminal instance.
 
-### Finding your Entra ID Tenant and Client IDs
+To authenticate with this flow, you will need an Entra ID client and tenant ID:
 
 - Log into your [Azure portal][azure-portal].
 - Navigate to `Microsoft Entra ID`.
@@ -88,8 +91,6 @@ the SDK will be authenticated for use with your Liminal instance.
 - In the `Overview` of the registration, look for the `Application (client) ID` and
   `Directory (tenant) ID` values.
 
-### Authenticating Against Entra ID
-
 With a client ID and tenant ID, you can create a Liminal client object and authenticate
 it:
 
@@ -97,16 +98,16 @@ it:
 import asyncio
 
 from liminal import Client
-from liminal.endpoints.auth import MicrosoftAuthProvider
+from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
     # Create an auth provider to authenticate the user:
-    microsoft_auth_provider = MicrosoftAuthProvider("<TENANT_ID>", "<CLIENT_ID>")
+    auth_provider = DeviceCodeFlowProvider("<TENANT_ID>", "<CLIENT_ID>")
 
     # Create the liminal SDK instance and authenticate it:
-    liminal = Client(microsoft_auth_provider, "<LIMINAL_API_SERVER_URL>")
+    liminal = Client(auth_provider, "<LIMINAL_API_SERVER_URL>")
     await liminal.authenticate_from_auth_provider()
 
 
@@ -148,13 +149,13 @@ callback at any time.
 import asyncio
 
 from liminal import Client
-from liminal.endpoints.auth import MicrosoftAuthProvider
+from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
     # Create an auth provider to authenticate the user:
-    microsoft_auth_provider = MicrosoftAuthProvider("<TENANT_ID>", "<CLIENT_ID>")
+    auth_provider = DeviceCodeFlowProvider("<TENANT_ID>", "<CLIENT_ID>")
 
     # Create the liminal SDK instance and authenticate it:
     liminal = Client(microsoft_auth_provider, "<LIMINAL_API_SERVER_URL>")
@@ -210,7 +211,7 @@ instance." The SDK provides several methods to interact with model instances:
 import asyncio
 
 from liminal import Client
-from liminal.endpoints.auth import MicrosoftAuthProvider
+from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 
 
 async def main() -> None:
@@ -236,7 +237,7 @@ Threads are conversations with an LLM instance:
 import asyncio
 
 from liminal import Client
-from liminal.endpoints.auth import MicrosoftAuthProvider
+from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 
 
 async def main() -> None:
@@ -273,7 +274,7 @@ Submitting prompts is easy:
 import asyncio
 
 from liminal import Client
-from liminal.endpoints.auth import MicrosoftAuthProvider
+from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 
 
 async def main() -> None:
@@ -323,7 +324,7 @@ used for connection pooling:
 import asyncio
 
 from liminal import Client
-from liminal.endpoints.auth import MicrosoftAuthProvider
+from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 
 
 async def main() -> None:

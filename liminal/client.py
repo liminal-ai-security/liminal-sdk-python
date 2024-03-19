@@ -16,8 +16,8 @@ from mashumaro.exceptions import (
     UnserializableDataError,
 )
 
+from liminal.auth import AuthProvider
 from liminal.const import LOGGER
-from liminal.endpoints.auth import AuthProvider
 from liminal.endpoints.llm import LLMEndpoint
 from liminal.endpoints.prompt import PromptEndpoint
 from liminal.endpoints.thread import ThreadEndpoint
