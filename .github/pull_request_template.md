@@ -1,3 +1,8 @@
+## Breaking Change
+
+<!-- Breaking changes should be called out early on. -->
+<!-- Add specific instructions to help users who upgrade. Delete this section if appropriate. -->
+
 ## Description
 
 <!-- Concisely describe what the pull request does. -->
