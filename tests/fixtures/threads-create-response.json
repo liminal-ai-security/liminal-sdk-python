@@ -1,0 +1,31 @@
+{
+  "id": 167,
+  "modelInstanceId": 5,
+  "userId": 2,
+  "name": "My thread",
+  "source": "sdk",
+  "createdAt": "2024-03-18T23:22:17.976Z",
+  "deletedAt": null,
+  "updatedAt": "2024-03-18T23:22:17.976Z",
+  "chats": [],
+  "modelInstance": {
+    "id": 5,
+    "policyGroupId": 1,
+    "name": "My GPT3.5",
+    "createdAt": "2024-03-14T19:31:38.278Z",
+    "deletedAt": null,
+    "updatedAt": "2024-03-14T19:31:38.278Z",
+    "modelConnection": {
+      "id": 5,
+      "modelInstanceId": 5,
+      "model": "gpt-3.5-turbo",
+      "params": {},
+      "providerKey": "openai",
+      "createdAt": "2024-03-14T19:31:38.278Z",
+      "deletedAt": null,
+      "updatedAt": "2024-03-14T19:31:38.278Z",
+      "apiKey": "",
+      "maskedApiKey": ""
+    }
+  }
+}
