@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 from collections.abc import Awaitable, Callable
-from typing import cast
+from typing import Final, cast
 
 from httpx import Response
 
 from liminal.endpoints.thread.models import DeidentifiedToken, Thread
 from liminal.helpers.typing import ValidatedResponseT
+
+DEFAULT_SOURCE: Final[str] = "sdk"
 
 
 class ThreadEndpoint:
@@ -49,6 +51,7 @@ class ThreadEndpoint:
                 json={
                     "name": name,
                     "modelInstanceId": model_instance_id,
+                    "source": DEFAULT_SOURCE,
                 },
             ),
         )
@@ -62,7 +65,12 @@ class ThreadEndpoint:
         """
         return cast(
             list[Thread],
-            await self._request_and_validate("GET", "/api/v1/threads", list[Thread]),
+            await self._request_and_validate(
+                "GET",
+                "/api/v1/threads",
+                list[Thread],
+                params={"source": DEFAULT_SOURCE},
+            ),
         )
 
     async def get_by_id(self, thread_id: int) -> Thread:

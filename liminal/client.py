@@ -25,7 +25,6 @@ from liminal.errors import AuthError, RequestError
 from liminal.helpers.typing import ValidatedResponseT
 
 DEFAULT_REQUEST_TIMEOUT: Final[int] = 60
-DEFAULT_SOURCE: Final[str] = "sdk"
 
 
 class Client:
@@ -36,7 +35,6 @@ class Client:
         auth_provider: AuthProvider,
         api_server_url: str,
         *,
-        source: str = DEFAULT_SOURCE,
         httpx_client: AsyncClient | None = None,
     ) -> None:
         """Initialize.
@@ -51,7 +49,6 @@ class Client:
         self._api_server_url = api_server_url
         self._auth_provider = auth_provider
         self._httpx_client = httpx_client
-        self._source = source
 
         # Token information:
         self._access_token: str | None = None
@@ -106,10 +103,6 @@ class Client:
             headers = {}
         if self._access_token:
             headers["Authorization"] = f"Bearer {self._access_token}"
-
-        if not params:
-            params = {}
-        params["source"] = self._source
 
         if running_client := self._httpx_client and not self._httpx_client.is_closed:
             client = self._httpx_client
