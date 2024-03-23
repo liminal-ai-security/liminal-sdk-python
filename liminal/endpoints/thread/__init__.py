@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 from collections.abc import Awaitable, Callable
-from typing import Final, cast
+from typing import cast
 
 from httpx import Response
 
+from liminal.const import SOURCE
 from liminal.endpoints.thread.models import DeidentifiedToken, Thread
 from liminal.helpers.typing import ValidatedResponseT
-
-DEFAULT_SOURCE: Final[str] = "sdk"
 
 
 class ThreadEndpoint:
@@ -51,7 +50,7 @@ class ThreadEndpoint:
                 json={
                     "name": name,
                     "modelInstanceId": model_instance_id,
-                    "source": DEFAULT_SOURCE,
+                    "source": SOURCE,
                 },
             ),
         )
@@ -69,7 +68,7 @@ class ThreadEndpoint:
                 "GET",
                 "/api/v1/threads",
                 list[Thread],
-                params={"source": DEFAULT_SOURCE},
+                params={"source": SOURCE},
             ),
         )
 
@@ -110,5 +109,6 @@ class ThreadEndpoint:
                 "/api/v1/sdk/get_context_history",
                 list[DeidentifiedToken],
                 json={"threadId": thread_id},
+                params={"source": SOURCE},
             ),
         )
