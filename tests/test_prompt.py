@@ -66,12 +66,12 @@ async def test_cleanse_and_hydrate(
     )
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/cleanse_response?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/cleanse_response",
         json=prompt_cleanse_response,
     )
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/hydrate_response?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/hydrate_response",
         json=prompt_hydrate_response,
     )
 
@@ -136,7 +136,7 @@ async def test_submit(
     )
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/process?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/process",
         json=prompt_submit_response,
     )
 

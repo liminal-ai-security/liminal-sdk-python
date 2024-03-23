@@ -5,7 +5,6 @@ from __future__ import annotations
 from collections.abc import Awaitable, Callable
 from typing import cast
 
-from liminal.const import SOURCE
 from liminal.endpoints.prompt.models import (
     AnalyzeResponse,
     CleanseResponse,
@@ -82,7 +81,6 @@ class PromptEndpoint:
                 "/api/v1/sdk/cleanse_response",
                 CleanseResponse,
                 json=payload,
-                params={"source": SOURCE},
             ),
         )
 
@@ -108,7 +106,6 @@ class PromptEndpoint:
                 "/api/v1/sdk/hydrate_response",
                 HydrateResponse,
                 json={"threadId": thread_id, "text": prompt},
-                params={"source": SOURCE},
             ),
         )
 
@@ -144,6 +141,5 @@ class PromptEndpoint:
                 "/api/v1/sdk/process",
                 ProcessResponse,
                 json=payload,
-                params={"source": SOURCE},
             ),
         )

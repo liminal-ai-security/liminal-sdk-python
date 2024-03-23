@@ -109,6 +109,5 @@ class ThreadEndpoint:
                 "/api/v1/sdk/get_context_history",
                 list[DeidentifiedToken],
                 json={"threadId": thread_id},
-                params={"source": SOURCE},
             ),
         )

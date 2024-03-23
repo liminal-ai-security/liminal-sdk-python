@@ -105,7 +105,7 @@ async def test_get_deidentified_context_history(
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/get_context_history?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/get_context_history",
         json=threads_get_deidentified_context_history_response,
     )
 
