@@ -25,7 +25,7 @@ async def test_analyze(
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response",
         json=prompt_analyze_response,
     )
 
@@ -61,7 +61,7 @@ async def test_cleanse_and_hydrate(
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response",
         json=prompt_analyze_response,
     )
     httpx_mock.add_response(
@@ -131,7 +131,7 @@ async def test_submit(
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response",
         json=prompt_analyze_response,
     )
     httpx_mock.add_response(
