@@ -26,7 +26,7 @@ async def test_create(
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/threads?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/threads",
         json=threads_create_response,
     )
 
@@ -81,7 +81,7 @@ async def test_get_by_id(
     """
     httpx_mock.add_response(
         method="GET",
-        url=f"{TEST_API_SERVER_URL}/api/v1/threads/161?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/threads/161",
         json=threads_get_by_id_response,
     )
 

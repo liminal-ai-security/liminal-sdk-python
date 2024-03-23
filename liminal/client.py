@@ -42,7 +42,6 @@ class Client:
         Args:
             auth_provider: The instantiated auth provider to use.
             api_server_url: The URL of the Liminal API server.
-            source: The source of the SDK.
             httpx_client: An optional HTTPX client to use.
 
         """

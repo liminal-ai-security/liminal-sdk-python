@@ -34,7 +34,7 @@ async def test_auth_via_refresh_token_existing_client(
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token",
         headers=[
             ("Set-Cookie", "accessToken=NEW_TOKEN"),
             ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
@@ -64,7 +64,7 @@ async def test_auth_via_refresh_token_new_client(
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token",
         headers=[
             ("Set-Cookie", "accessToken=NEW_TOKEN"),
             ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
@@ -103,7 +103,7 @@ async def test_expired_access_token(
 
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token",
         headers=[
             ("Set-Cookie", "accessToken=NEW_TOKEN"),
             ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
@@ -158,7 +158,7 @@ async def test_expired_access_token_concurrent_calls(
 
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token",
         headers=[
             ("Set-Cookie", "accessToken=NEW_TOKEN"),
             ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
@@ -168,7 +168,7 @@ async def test_expired_access_token_concurrent_calls(
 
     httpx_mock.add_response(
         method="GET",
-        url=f"{TEST_API_SERVER_URL}/api/v1/model-instances?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/model-instances",
         json=model_instances_response,
     )
     httpx_mock.add_response(
@@ -232,7 +232,7 @@ async def test_refresh_token_callback(
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token",
         headers=[
             ("Set-Cookie", "accessToken=NEW_TOKEN"),
             ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
