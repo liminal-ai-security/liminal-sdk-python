@@ -77,7 +77,10 @@ class PromptEndpoint:
         return cast(
             CleanseResponse,
             await self._request_and_validate(
-                "POST", "/api/v1/sdk/cleanse_response", CleanseResponse, json=payload
+                "POST",
+                "/api/v1/sdk/cleanse_response",
+                CleanseResponse,
+                json=payload,
             ),
         )
 
@@ -134,6 +137,9 @@ class PromptEndpoint:
         return cast(
             ProcessResponse,
             await self._request_and_validate(
-                "POST", "/api/v1/sdk/process", ProcessResponse, json=payload
+                "POST",
+                "/api/v1/sdk/process",
+                ProcessResponse,
+                json=payload,
             ),
         )
