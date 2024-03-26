@@ -280,32 +280,43 @@ from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 async def main() -> None:
     # Assuming you have an authenticated `liminal` object:
 
-    # Prompt operations require a thread:
+    # Prompt operations require a model instance:
+    model_instance = await liminal.llm.get_model_instance(model_instance_name)
+
+    # Prompt operations optionally take an existing thread:
     thread = await liminal.thread.get_by_id(123)
     # >>> Thread(...)
 
     # Analayze a prompt for sensitive info:
-    findings = await liminal.prompt.analyze(thread.id)
+    findings = await liminal.prompt.analyze(
+        model_instance.id, "Here is a sensitive prompt"
+    )
     # >>> AnalyzeResponse(...)
 
     # Cleanse input text by applying the policies defined in the Liminal admin
     # dashboard. You can optionally provide existing analysis finidings; if not
     # provided, analyze is # called automatically):
     cleansed = await liminal.prompt.cleanse(
-        thread.id, "Here is a sensitive prompt", findings=findings
+        model_instance.id,
+        "Here is a sensitive prompt",
+        findings=findings,
+        thread_id=thread.id,
     )
     # >>> CleanseResponse(...)
 
     # Submit a prompt to an LLM, cleansing it in the process (once again, providing optional
     # findings):
     response = await liminal.prompt.submit(
-        thread.id, "Here is a sensitive prompt", findings=findings
+        model_instance.id,
+        "Here is a sensitive prompt",
+        findings=findings,
+        thread_id=thread.id,
     )
-    # >>> ProcessResponse(...)
+    # >>> SubmitResponse(...)
 
     # Rehydrate a response with sensitive data:
     hydrated = await liminal.prompt.hydrate(
-        thread.id, "Here is a response to rehdyrate"
+        model_instance.id, "Here is a response to rehdyrate", thread_id=thread.id
     )
     # >>> HydrateResponse(...)
 

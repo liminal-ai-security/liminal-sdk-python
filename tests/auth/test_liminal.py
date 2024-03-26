@@ -113,7 +113,7 @@ async def test_expired_access_token(
 
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/analyze",
         json=prompt_analyze_response,
     )
 
@@ -173,7 +173,7 @@ async def test_expired_access_token_concurrent_calls(
     )
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/analyze",
         json=prompt_analyze_response,
     )
 
