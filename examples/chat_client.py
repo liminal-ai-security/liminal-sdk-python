@@ -47,11 +47,14 @@ async def main() -> None:
             if (prompt := input("Enter a message: ")) == "quit":
                 break
 
-            findings = await liminal.prompt.analyze(created_thread.id, prompt)
+            findings = await liminal.prompt.analyze(model_instance.id, prompt)
             _LOGGER.info("Analysis findings: %s", findings)
 
             response = await liminal.prompt.submit(
-                created_thread.id, prompt, findings=findings
+                model_instance.id,
+                prompt,
+                findings=findings,
+                thread_id=created_thread.id,
             )
             _LOGGER.info("LLM response: %s", response)
     except LiminalError:
