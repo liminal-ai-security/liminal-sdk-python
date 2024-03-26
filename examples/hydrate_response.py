@@ -51,8 +51,9 @@ async def main() -> None:
         _LOGGER.info("Analysis findings: %s", findings)
 
         cleansed_prompt = await liminal.prompt.cleanse(
-            created_thread.id,
+            model_instance.id,
             prompt,
+            thread_id=created_thread.id,
         )
         _LOGGER.info("Cleansed response: %s", cleansed_prompt)
 
@@ -64,7 +65,7 @@ async def main() -> None:
 
         # Rehydrate my cleansed prompt after I have done something with the text
         hydrated_response = await liminal.prompt.hydrate(
-            created_thread.id, prompt_to_hydrate
+            model_instance.id, prompt_to_hydrate, thread_id=created_thread.id
         )
         _LOGGER.info("Hydrated response: %s", hydrated_response)
     except LiminalError:

@@ -9,7 +9,7 @@ from liminal.endpoints.prompt.models import (
     AnalyzeResponse,
     CleanseResponse,
     HydrateResponse,
-    ProcessResponse,
+    SubmitResponse,
 )
 from liminal.helpers.typing import ValidatedResponseT
 
@@ -45,30 +45,40 @@ class PromptEndpoint:
                 "POST",
                 "/api/v1/prompts/analyze",
                 AnalyzeResponse,
-                json={"modelInstanceId": model_instance_id, "text": prompt},
+                json={
+                    "modelInstanceId": model_instance_id,
+                    "text": prompt,
+                },
             ),
         )
 
     async def cleanse(
         self,
-        thread_id: int,
+        model_instance_id: int,
         prompt: str,
         *,
+        thread_id: int | None = None,
         findings: AnalyzeResponse | None = None,
     ) -> CleanseResponse:
         """Cleanse a prompt of sensitive data.
 
         Args:
-            thread_id: The ID of the thread to cleanse the prompt for.
+            model_instance_id: The ID of the model instance to cleanse the prompt with.
             prompt: The prompt to cleanse.
+            thread_id: The ID of the thread to cleanse the prompt for. If this is not provided,
+                a thread will be created automatically.
             findings: The findings from the analyze endpoint. If this is not provided,
-                the analyze endpoint will be called automatically.
+                findings will be created automatically.
 
         Returns:
             An object that contains a cleansed version of the prompt.
 
         """
-        payload = {"threadId": thread_id, "text": prompt}
+        payload = {
+            "modelInstanceId": model_instance_id,
+            "text": prompt,
+            "threadId": thread_id,
+        }
         if findings:
             payload["findings"] = [
                 finding.to_dict(by_alias=True) for finding in findings.findings
@@ -86,14 +96,18 @@ class PromptEndpoint:
 
     async def hydrate(
         self,
-        thread_id: int,
+        model_instance_id: int,
         prompt: str,
+        *,
+        thread_id: int | None = None,
     ) -> HydrateResponse:
         """Rehydrate prompt with sensitive data.
 
         Args:
-            thread_id: The ID of the thread to hydrate the prompt for.
+            model_instance_id: The ID of the model instance to hydrate the prompt with.
             prompt: The prompt to hydrate.
+            thread_id: The ID of the thread to hydrate the prompt for. If this is not provided,
+                a thread will be created automatically.
 
         Returns:
             An object that contains a rehydrated version of the prompt.
@@ -105,22 +119,29 @@ class PromptEndpoint:
                 "POST",
                 "/api/v1/prompts/hydrate",
                 HydrateResponse,
-                json={"threadId": thread_id, "text": prompt},
+                json={
+                    "modelInstanceId": model_instance_id,
+                    "text": prompt,
+                    "threadId": thread_id,
+                },
             ),
         )
 
     async def submit(
         self,
-        thread_id: int,
+        model_instance_id: int,
         prompt: str,
         *,
+        thread_id: int | None = None,
         findings: AnalyzeResponse | None = None,
-    ) -> ProcessResponse:
+    ) -> SubmitResponse:
         """Submit a prompt to a thread and get a response from the LLM.
 
         Args:
-            thread_id: The ID of the thread to cleanse the prompt for.
-            prompt: The prompt to cleanse.
+            model_instance_id: The ID of the model instance to submit the prompt with.
+            prompt: The prompt to submit.
+            thread_id: The ID of the thread to submit the prompt for. If this is not provided,
+                a thread will be created automatically.
             findings: The findings from the analyze endpoint. If this is not provided,
                 the analyze endpoint will be called automatically.
 
@@ -128,18 +149,22 @@ class PromptEndpoint:
             An object that contains a response from the LLM.
 
         """
-        payload = {"threadId": thread_id, "text": prompt}
+        payload = {
+            "modelInstanceId": model_instance_id,
+            "text": prompt,
+            "threadId": thread_id,
+        }
         if findings:
             payload["findings"] = [
                 finding.to_dict(by_alias=True) for finding in findings.findings
             ]
 
         return cast(
-            ProcessResponse,
+            SubmitResponse,
             await self._request_and_validate(
                 "POST",
-                "/api/v1/prompts/process-sdk",
-                ProcessResponse,
+                "/api/v1/prompts/submit",
+                SubmitResponse,
                 json=payload,
             ),
         )

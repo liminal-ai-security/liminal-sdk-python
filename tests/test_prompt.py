@@ -95,6 +95,7 @@ async def test_cleanse_and_hydrate(
             "identifies as Female"
         ),
         findings=findings,
+        thread_id=123,
     )
     assert len(cleansed.items) == 5
     assert len(cleansed.items_hashed) == 5
@@ -105,7 +106,7 @@ async def test_cleanse_and_hydrate(
     )
 
     hydrated = await mock_client.prompt.hydrate(
-        123, "Tell PERSON_0 that we are grateful for their business."
+        123, "Tell PERSON_0 that we are grateful for their business.", thread_id=123
     )
     assert len(hydrated.items) == 1
     assert hydrated.text == (
@@ -136,7 +137,7 @@ async def test_submit(
     )
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/process-sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/submit",
         json=prompt_submit_response,
     )
 
@@ -160,6 +161,7 @@ async def test_submit(
             "identifies as Female"
         ),
         findings=findings,
+        thread_id=123,
     )
 
     # This is a simple test to ensure the data parsed as appropriate:
