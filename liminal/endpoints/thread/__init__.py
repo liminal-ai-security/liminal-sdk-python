@@ -7,6 +7,7 @@ from typing import cast
 
 from httpx import Response
 
+from liminal.const import SOURCE
 from liminal.endpoints.thread.models import DeidentifiedToken, Thread
 from liminal.helpers.typing import ValidatedResponseT
 
@@ -49,6 +50,7 @@ class ThreadEndpoint:
                 json={
                     "name": name,
                     "modelInstanceId": model_instance_id,
+                    "source": SOURCE,
                 },
             ),
         )
@@ -62,7 +64,12 @@ class ThreadEndpoint:
         """
         return cast(
             list[Thread],
-            await self._request_and_validate("GET", "/api/v1/threads", list[Thread]),
+            await self._request_and_validate(
+                "GET",
+                "/api/v1/threads",
+                list[Thread],
+                params={"source": SOURCE},
+            ),
         )
 
     async def get_by_id(self, thread_id: int) -> Thread:
