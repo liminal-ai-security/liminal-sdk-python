@@ -27,7 +27,7 @@ async def test_get_available_model_instances(
     """
     httpx_mock.add_response(
         method="GET",
-        url=f"{TEST_API_SERVER_URL}/api/v1/model-instances?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/model-instances",
         json=model_instances_response,
     )
 
@@ -72,7 +72,7 @@ async def test_get_model_instance_by_name(
     """
     httpx_mock.add_response(
         method="GET",
-        url=f"{TEST_API_SERVER_URL}/api/v1/model-instances?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/model-instances",
         json=model_instances_response,
     )
 
