@@ -47,7 +47,7 @@ async def main() -> None:
             if (prompt := input("Enter a message: ")) == "quit":
                 break
 
-            findings = await liminal.prompt.analyze(created_thread.id, prompt)
+            findings = await liminal.prompt.analyze(model_instance.id, prompt)
             _LOGGER.info("Analysis findings: %s", findings)
 
             response = await liminal.prompt.submit(

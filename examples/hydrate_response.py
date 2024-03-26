@@ -47,7 +47,7 @@ async def main() -> None:
             "Enter a prompt you would like to be cleansed of sensitive info: "
         )
 
-        findings = await liminal.prompt.analyze(created_thread.id, prompt)
+        findings = await liminal.prompt.analyze(model_instance.id, prompt)
         _LOGGER.info("Analysis findings: %s", findings)
 
         cleansed_prompt = await liminal.prompt.cleanse(

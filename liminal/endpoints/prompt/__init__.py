@@ -28,11 +28,11 @@ class PromptEndpoint:
         """
         self._request_and_validate = request_and_validate
 
-    async def analyze(self, thread_id: int, prompt: str) -> AnalyzeResponse:
+    async def analyze(self, model_instance_id: int, prompt: str) -> AnalyzeResponse:
         """Analyze a prompt for sensitive data.
 
         Args:
-            thread_id: The ID of the thread to analyze the prompt for.
+            model_instance_id: The ID of the model instance to analyze the prompt with.
             prompt: The prompt to analyze.
 
         Returns:
@@ -43,9 +43,9 @@ class PromptEndpoint:
             AnalyzeResponse,
             await self._request_and_validate(
                 "POST",
-                "/api/v1/sdk/analyze_response",
+                "/api/v1/prompts/analyze",
                 AnalyzeResponse,
-                json={"threadId": thread_id, "text": prompt},
+                json={"modelInstanceId": model_instance_id, "text": prompt},
             ),
         )
 
@@ -78,7 +78,7 @@ class PromptEndpoint:
             CleanseResponse,
             await self._request_and_validate(
                 "POST",
-                "/api/v1/sdk/cleanse_response",
+                "/api/v1/prompts/cleanse",
                 CleanseResponse,
                 json=payload,
             ),
@@ -103,7 +103,7 @@ class PromptEndpoint:
             HydrateResponse,
             await self._request_and_validate(
                 "POST",
-                "/api/v1/sdk/hydrate_response",
+                "/api/v1/prompts/hydrate",
                 HydrateResponse,
                 json={"threadId": thread_id, "text": prompt},
             ),
@@ -138,7 +138,7 @@ class PromptEndpoint:
             ProcessResponse,
             await self._request_and_validate(
                 "POST",
-                "/api/v1/sdk/process",
+                "/api/v1/prompts/process-sdk",
                 ProcessResponse,
                 json=payload,
             ),

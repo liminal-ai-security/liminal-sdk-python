@@ -25,7 +25,7 @@ async def test_analyze(
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/analyze",
         json=prompt_analyze_response,
     )
 
@@ -61,17 +61,17 @@ async def test_cleanse_and_hydrate(
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/analyze",
         json=prompt_analyze_response,
     )
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/cleanse_response",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/cleanse",
         json=prompt_cleanse_response,
     )
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/hydrate_response",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/hydrate",
         json=prompt_hydrate_response,
     )
 
@@ -131,12 +131,12 @@ async def test_submit(
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/analyze",
         json=prompt_analyze_response,
     )
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/process",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/process-sdk",
         json=prompt_submit_response,
     )
 

@@ -61,7 +61,7 @@ async def main() -> None:
             "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
             "identifies as Female"
         )
-        findings = await liminal.prompt.analyze(retrieved_thread.id, prompt)
+        findings = await liminal.prompt.analyze(model_instance.id, prompt)
         _LOGGER.info("Analysis findings: %s", findings)
 
         # Send a prompt to an LLM and get a response (choosing to include the findings
