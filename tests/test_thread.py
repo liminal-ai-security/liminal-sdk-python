@@ -87,27 +87,3 @@ async def test_get_by_id(
 
     thread = await mock_client.thread.get_by_id(161)
     assert thread.name == "My thread"
-
-
-@pytest.mark.asyncio()
-async def test_get_deidentified_context_history(
-    httpx_mock: HTTPXMock,
-    mock_client: Client,
-    threads_get_deidentified_context_history_response: dict[str, Any],
-) -> None:
-    """Test the get available threads method.
-
-    Args:
-        httpx_mock: The HTTPX mock fixture.
-        mock_client: A mock Liminal client.
-        threads_get_deidentified_context_history_response: The response from the endpoint.
-
-    """
-    httpx_mock.add_response(
-        method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/get_context_history",
-        json=threads_get_deidentified_context_history_response,
-    )
-
-    tokens = await mock_client.thread.get_deidentified_context_history(161)
-    assert len(tokens) == 9

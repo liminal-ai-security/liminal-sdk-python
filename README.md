@@ -258,10 +258,6 @@ async def main() -> None:
     thread = await liminal.thread.create(model_instance.id, "New Thread")
     # >>> Thread(...)
 
-    # Get the "de-identified" (containing sensitive data) context history for a thread:
-    thread = await liminal.thread.get_deidentified_context_history(model_instance.id)
-    # >>> [DeidentifiedToken(...), DeidentifiedToken(...), DeidentifiedToken(...)]
-
 
 asyncio.run(main())
 ```
