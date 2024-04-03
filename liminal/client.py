@@ -40,6 +40,7 @@ class Client:
         """Initialize.
 
         Args:
+        ----
             auth_provider: The instantiated auth provider to use.
             api_server_url: The URL of the Liminal API server.
             httpx_client: An optional HTTPX client to use.
@@ -75,6 +76,7 @@ class Client:
         """Make a request to the Liminal API server and return a Response.
 
         Args:
+        ----
             method: The HTTP method to use.
             endpoint: The endpoint to request.
             headers: The headers to use.
@@ -83,9 +85,11 @@ class Client:
             json: The JSON body to use.
 
         Returns:
+        -------
             An HTTPX Response object.
 
         Raises:
+        ------
             RequestError: If the response fails for any reason.
 
         """
@@ -142,6 +146,7 @@ class Client:
         """Make a request to the Liminal API server and validate the response.
 
         Args:
+        ----
             method: The HTTP method to use.
             endpoint: The endpoint to request.
             expected_response_type: The expected type of the response.
@@ -151,9 +156,11 @@ class Client:
             json: The JSON body to use.
 
         Returns:
+        -------
             A validated response object.
 
         Raises:
+        ------
             RequestError: If the response could not be validated.
 
         """
@@ -176,6 +183,7 @@ class Client:
         """Save tokens from an auth response.
 
         Args:
+        ----
             auth_response: The response from an auth request.
 
         """
@@ -198,9 +206,11 @@ class Client:
         persistent store using their own callback method.
 
         Args:
+        ----
             callback: The callback to add.
 
         Returns:
+        -------
             A method to cancel and remove the callback.
 
         """
@@ -228,10 +238,12 @@ class Client:
         """Authenticate with the Liminal API server (using a refresh token).
 
         Args:
+        ----
             refresh_token: The refresh token to use. If not provided, the refresh token
                 that was used to authenticate the user initially will be used.
 
         Raises:
+        ------
             AuthError: If no refresh token is provided and the user has not been
                 authenticated yet.
 

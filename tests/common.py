@@ -13,9 +13,11 @@ def load_fixture(filename: str) -> str:
     """Load a fixture.
 
     Args:
+    ----
         filename: The filename of the fixtures/ file to load.
 
     Returns:
+    -------
         A string containing the contents of the file.
 
     """

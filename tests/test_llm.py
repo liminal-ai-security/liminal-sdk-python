@@ -20,6 +20,7 @@ async def test_get_available_model_instances(
     """Test getting available model instances.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
         model_instances_response: A model instances response.
@@ -63,6 +64,7 @@ async def test_get_model_instance_by_name(
     """Test getting a model instance by name.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
         model_instance_name: The name of the model instance to retrieve.
