@@ -18,7 +18,7 @@ from liminal.errors import AuthError
 DEFAULT_AUTH_CHALLENGE_TIMEOUT: Final[int] = 60
 
 
-class DeviceCodeFlowProvider(AuthProvider):
+class DeviceCodeFlowProvider(AuthProvider):  # pylint: disable=too-few-public-methods
     """Define a Microsoft auth provider."""
 
     AUTHORITY_URL: Final[str] = "https://login.microsoftonline.com"
@@ -34,6 +34,7 @@ class DeviceCodeFlowProvider(AuthProvider):
         """Initialize.
 
         Args:
+        ----
             tenant_id: The Entra ID tenant ID.
             client_id: The Entra ID client ID.
             auth_challenge_timeout: How long (in seconds) before aborting an auth
@@ -49,14 +50,16 @@ class DeviceCodeFlowProvider(AuthProvider):
     async def get_access_token(self) -> str:
         """Retrieve an access token from Microsoft Entra ID (via MSAL).
 
-        Returns:
+        Returns
+        -------
             The access token.
 
-        Raises:
+        Raises
+        ------
             AuthError: If authentication fails.
 
         """
-        if accounts := self._msal_app.get_accounts():
+        if accounts := self._msal_app.get_accounts():  # noqa: SIM102
             if result := self._msal_app.acquire_token_silent_with_error(
                 self.DEFAULT_SCOPES, account=accounts[0]
             ):

@@ -28,6 +28,7 @@ async def test_auth_via_refresh_token_existing_client(
     """Test authenticating via a refresh token with an existing client.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
 
@@ -58,6 +59,7 @@ async def test_auth_via_refresh_token_new_client(
     """Test authenticating via a refresh token with a new client.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         patch_msal: Ensure the MSAL library is patched.
 
@@ -93,6 +95,7 @@ async def test_expired_access_token(
     """Test handling an expired access token.
 
     Args:
+    ----
         caplog: A mocked logging utility.
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
@@ -147,6 +150,7 @@ async def test_expired_access_token_concurrent_calls(
     """Test handling an expired access token with concurrent incoming calls.
 
     Args:
+    ----
         caplog: A mocked logging utility.
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
@@ -205,6 +209,7 @@ async def test_premature_refresh_token(httpx_mock: HTTPXMock, patch_msal: None) 
     """Test attempting to refresh the access token before actually getting one.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         patch_msal: Ensure the MSAL library is patched.
 
@@ -226,6 +231,7 @@ async def test_refresh_token_callback(
     """Test adding and removing a refresh token callback.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: Client
 
