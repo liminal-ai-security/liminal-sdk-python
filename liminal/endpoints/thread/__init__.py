@@ -23,6 +23,7 @@ class ThreadEndpoint:
         """Initialize.
 
         Args:
+        ----
             request: The request function.
             request_and_validate: The request and validate function.
 
@@ -34,10 +35,12 @@ class ThreadEndpoint:
         """Create a thread.
 
         Args:
+        ----
             model_instance_id: The model instance id.
             name: The name of the thread.
 
         Returns:
+        -------
             A Thread object representing the creatd thread.
 
         """
@@ -58,7 +61,8 @@ class ThreadEndpoint:
     async def get_available(self) -> list[Thread]:
         """Get available threads.
 
-        Returns:
+        Returns
+        -------
             A list of Thread objects.
 
         """
@@ -76,9 +80,11 @@ class ThreadEndpoint:
         """Get a thread by ID.
 
         Args:
+        ----
             thread_id: The ID of the thread.
 
         Returns:
+        -------
             A Thread object representing the thread.
 
         """

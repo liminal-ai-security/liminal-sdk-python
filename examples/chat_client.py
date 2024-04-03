@@ -22,7 +22,10 @@ async def main() -> None:
         model_instance_name = os.environ["MODEL_INSTANCE_NAME"]
         tenant_id = os.environ["TENANT_ID"]
     except KeyError as err:
-        msg = "Please set the LIMINAL_API_SERVER_URL, CLIENT_ID, TENANT_ID, and MODEL_INSTANCE_NAME environment variables"
+        msg = (
+            "Please set the LIMINAL_API_SERVER_URL, CLIENT_ID, TENANT_ID, and "
+            "MODEL_INSTANCE_NAME environment variables"
+        )
         raise LiminalError(msg) from err
 
     # Create an auth provider to authenticate the user:

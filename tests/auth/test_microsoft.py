@@ -30,6 +30,7 @@ async def test_auth_via_device_code_flow(
     """Test the Microsoft auth provider via the device code flow.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         patch_liminal_api_server: Ensure the Liminal API server is patched.
         patch_msal: Ensure the MSAL library is patched.
@@ -59,8 +60,10 @@ async def test_auth_via_device_code_flow_timeout(
     """Test the Microsoft auth provider via the device code flow.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
-        mock_msal_acquire_token_by_device_flow: The mocked MSAL acquire_token_by_device_flow method.
+        mock_msal_acquire_token_by_device_flow: The mocked MSAL acquire_token_by_device
+            flow method.
         patch_msal: Ensure the MSAL library is patched.
 
     """
