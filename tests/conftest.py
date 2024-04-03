@@ -28,6 +28,7 @@ def _patch_liminal_api_server_fixture(httpx_mock: HTTPXMock) -> None:
     """Patch the Liminal API server.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
 
     """
@@ -52,12 +53,15 @@ def _patch_msal_fixture(
     """Patch the MSAL library.
 
     Args:
-        mock_msal_acquire_token_by_device_flow: The MSAL acquire token by device flow method.
+    ----
+        mock_msal_acquire_token_by_device_flow: The MSAL acquire token by device flow
+            method.
         msal_accounts: The MSAL accounts.
         msal_cache_token_response: The MSAL cache token response.
         msal_token_by_device_flow_response: The MSAL token by device flow response.
 
     Yields:
+    ------
         None.
 
     """
@@ -68,8 +72,9 @@ def _patch_msal_fixture(
         msal_app.return_value.initiate_device_flow = Mock(
             return_value={
                 "message": (
-                    "To sign in, use a web browser to open the page https://microsoft.com/devicelogin "
-                    "and enter the code ABCD12345 to authenticate."
+                    "To sign in, use a web browser to open the page "
+                    "https://microsoft.com/devicelogin and enter the code ABCD12345 to "
+                    "authenticate."
                 )
             }
         )
@@ -86,7 +91,8 @@ def _patch_msal_fixture(
 def access_token_expires_at_fixture() -> int:
     """Return a fixture for an access token expiration time.
 
-    Returns:
+    Returns
+    -------
         A fixture for an access token expiration time.
 
     """
@@ -103,12 +109,14 @@ async def mock_client_fixture(
     """Return a fixture for a Liminal client.
 
     Args:
+    ----
         access_token_expires_at: The expiration time of the access token.
         httpx_mock: The HTTPX mock fixture.
         model_instances_response: The model instances response.
         patch_msal: Ensure the MSAL library is patched.
 
     Returns:
+    -------
         A fixture for a Liminal client.
 
     """
@@ -135,7 +143,8 @@ async def mock_client_fixture(
 def msal_accounts_fixture() -> list[Mock]:
     """Return a fixture for MSAL accounts.
 
-    Returns:
+    Returns
+    -------
         A fixture for MSAL accounts.
 
     """
@@ -149,9 +158,12 @@ def mock_msal_acquire_token_by_device_flow_fixture(
     """Return a mocked version of the MSAL acquire_token_by_device_flow method.
 
     Args:
-        msal_token_by_device_flow_response: The MSAL acquire_token_by_device_flow method.
+    ----
+        msal_token_by_device_flow_response: The MSAL acquire_token_by_device_flow
+            method.
 
     Returns:
+    -------
         A mocked version of the MSAL acquire_token_by_device_flow method.
 
     """
@@ -162,7 +174,8 @@ def mock_msal_acquire_token_by_device_flow_fixture(
 def msal_cache_token_response_fixture() -> dict[str, Any]:
     """Return a fixture for an MSAL cache token response.
 
-    Returns:
+    Returns
+    -------
         A fixture for an MSAL cache token response.
 
     """
@@ -176,7 +189,8 @@ def msal_cache_token_response_fixture() -> dict[str, Any]:
 def msal_token_by_device_flow_response_fixture() -> dict[str, Any]:
     """Return a fixture for an MSAL token by device flow response.
 
-    Returns:
+    Returns
+    -------
         A fixture for an MSAL token by device flow response.
 
     """
@@ -190,7 +204,8 @@ def msal_token_by_device_flow_response_fixture() -> dict[str, Any]:
 def model_instances_response_fixture() -> dict[str, Any]:
     """Return a fixture for a model instances response.
 
-    Returns:
+    Returns
+    -------
         A fixture for a model instances response.
 
     """
@@ -203,7 +218,8 @@ def model_instances_response_fixture() -> dict[str, Any]:
 def prompt_analyze_response_fixture() -> dict[str, Any]:
     """Return a fixture for an analyze response.
 
-    Returns:
+    Returns
+    -------
         A fixture for an analyze response.
 
     """
@@ -216,7 +232,8 @@ def prompt_analyze_response_fixture() -> dict[str, Any]:
 def prompt_cleanse_response_fixture() -> dict[str, Any]:
     """Return a fixture for an cleanse response.
 
-    Returns:
+    Returns
+    -------
         A fixture for an cleanse response.
 
     """
@@ -229,7 +246,8 @@ def prompt_cleanse_response_fixture() -> dict[str, Any]:
 def prompt_hydrate_response_fixture() -> dict[str, Any]:
     """Return a fixture for an hydrate response.
 
-    Returns:
+    Returns
+    -------
         A fixture for an hydrate response.
 
     """
@@ -242,7 +260,8 @@ def prompt_hydrate_response_fixture() -> dict[str, Any]:
 def prompt_submit_response_fixture() -> dict[str, Any]:
     """Return a fixture for a prompt submit response.
 
-    Returns:
+    Returns
+    -------
         A fixture for a prompt response.
 
     """
@@ -253,7 +272,8 @@ def prompt_submit_response_fixture() -> dict[str, Any]:
 def threads_create_response_fixture() -> dict[str, Any]:
     """Return a fixture for a threads create response.
 
-    Returns:
+    Returns
+    -------
         A fixture for a threads create response.
 
     """
@@ -266,7 +286,8 @@ def threads_create_response_fixture() -> dict[str, Any]:
 def threads_get_available_fixture_response() -> dict[str, Any]:
     """Return a fixture for an available threads response.
 
-    Returns:
+    Returns
+    -------
         A fixture for an available threads response.
 
     """
@@ -279,7 +300,8 @@ def threads_get_available_fixture_response() -> dict[str, Any]:
 def threads_get_by_id_response_fixture() -> dict[str, Any]:
     """Return a fixture for a thread-by-id response.
 
-    Returns:
+    Returns
+    -------
         A fixture for a thread-by-id response.
 
     """
@@ -294,7 +316,8 @@ def threads_get_by_id_response_fixture() -> dict[str, Any]:
 def get_deidentified_context_history_response_fixture() -> dict[str, Any]:
     """Return a fixture for a thread's deidentified context history response.
 
-    Returns:
+    Returns
+    -------
         A fixture for a thread's deidentified context history response.
 
     """
