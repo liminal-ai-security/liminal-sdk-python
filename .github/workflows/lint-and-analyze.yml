@@ -55,9 +55,9 @@ jobs:
 
       - name: Get all changed files
         id: changed-files
-        uses: tj-actions/changed-files@v43.0.1
+        uses: tj-actions/changed-files@v44.0.0
         with:
-          fetch-depth: 0
+          fetch_depth: 0
 
       - name: Run pre-commit hooks
         uses: pre-commit/action@v3.0.1
