@@ -75,7 +75,7 @@ class HydratedToken(BaseResponseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class ProcessResponse(BaseResponseModel):
+class SubmitResponse(BaseResponseModel):
     """Define the response schema for a process request."""
 
     thread_id: int = field(metadata=field_options(alias="threadId"))

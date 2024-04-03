@@ -28,13 +28,14 @@ async def test_auth_via_refresh_token_existing_client(
     """Test authenticating via a refresh token with an existing client.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
 
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token",
         headers=[
             ("Set-Cookie", "accessToken=NEW_TOKEN"),
             ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
@@ -58,13 +59,14 @@ async def test_auth_via_refresh_token_new_client(
     """Test authenticating via a refresh token with a new client.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         patch_msal: Ensure the MSAL library is patched.
 
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token",
         headers=[
             ("Set-Cookie", "accessToken=NEW_TOKEN"),
             ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
@@ -93,6 +95,7 @@ async def test_expired_access_token(
     """Test handling an expired access token.
 
     Args:
+    ----
         caplog: A mocked logging utility.
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
@@ -103,7 +106,7 @@ async def test_expired_access_token(
 
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token",
         headers=[
             ("Set-Cookie", "accessToken=NEW_TOKEN"),
             ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
@@ -113,7 +116,7 @@ async def test_expired_access_token(
 
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/analyze",
         json=prompt_analyze_response,
     )
 
@@ -147,6 +150,7 @@ async def test_expired_access_token_concurrent_calls(
     """Test handling an expired access token with concurrent incoming calls.
 
     Args:
+    ----
         caplog: A mocked logging utility.
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
@@ -158,7 +162,7 @@ async def test_expired_access_token_concurrent_calls(
 
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token",
         headers=[
             ("Set-Cookie", "accessToken=NEW_TOKEN"),
             ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
@@ -168,12 +172,12 @@ async def test_expired_access_token_concurrent_calls(
 
     httpx_mock.add_response(
         method="GET",
-        url=f"{TEST_API_SERVER_URL}/api/v1/model-instances?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/model-instances",
         json=model_instances_response,
     )
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/sdk/analyze_response?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/analyze",
         json=prompt_analyze_response,
     )
 
@@ -205,6 +209,7 @@ async def test_premature_refresh_token(httpx_mock: HTTPXMock, patch_msal: None) 
     """Test attempting to refresh the access token before actually getting one.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         patch_msal: Ensure the MSAL library is patched.
 
@@ -226,13 +231,14 @@ async def test_refresh_token_callback(
     """Test adding and removing a refresh token callback.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: Client
 
     """
     httpx_mock.add_response(
         method="POST",
-        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token?source=sdk",
+        url=f"{TEST_API_SERVER_URL}/api/v1/auth/refresh-token",
         headers=[
             ("Set-Cookie", "accessToken=NEW_TOKEN"),
             ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),

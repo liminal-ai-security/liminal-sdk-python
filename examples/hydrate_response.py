@@ -22,7 +22,10 @@ async def main() -> None:
         model_instance_name = os.environ["MODEL_INSTANCE_NAME"]
         tenant_id = os.environ["TENANT_ID"]
     except KeyError as err:
-        msg = "Please set the LIMINAL_API_SERVER_URL, CLIENT_ID, TENANT_ID, and MODEL_INSTANCE_NAME environment variables"
+        msg = (
+            "Please set the LIMINAL_API_SERVER_URL, CLIENT_ID, TENANT_ID, and "
+            "MODEL_INSTANCE_NAME environment variables"
+        )
         raise LiminalError(msg) from err
 
     # Create an auth provider to authenticate the user:
@@ -47,12 +50,13 @@ async def main() -> None:
             "Enter a prompt you would like to be cleansed of sensitive info: "
         )
 
-        findings = await liminal.prompt.analyze(created_thread.id, prompt)
+        findings = await liminal.prompt.analyze(model_instance.id, prompt)
         _LOGGER.info("Analysis findings: %s", findings)
 
         cleansed_prompt = await liminal.prompt.cleanse(
-            created_thread.id,
+            model_instance.id,
             prompt,
+            thread_id=created_thread.id,
         )
         _LOGGER.info("Cleansed response: %s", cleansed_prompt)
 
@@ -64,7 +68,7 @@ async def main() -> None:
 
         # Rehydrate my cleansed prompt after I have done something with the text
         hydrated_response = await liminal.prompt.hydrate(
-            created_thread.id, prompt_to_hydrate
+            model_instance.id, prompt_to_hydrate, thread_id=created_thread.id
         )
         _LOGGER.info("Hydrated response: %s", hydrated_response)
     except LiminalError:

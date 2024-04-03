@@ -22,7 +22,10 @@ async def main() -> None:
         model_instance_name = os.environ["MODEL_INSTANCE_NAME"]
         tenant_id = os.environ["TENANT_ID"]
     except KeyError as err:
-        msg = "Please set the LIMINAL_API_SERVER_URL, CLIENT_ID, TENANT_ID, and MODEL_INSTANCE_NAME environment variables"
+        msg = (
+            "Please set the LIMINAL_API_SERVER_URL, CLIENT_ID, TENANT_ID, and "
+            "MODEL_INSTANCE_NAME environment variables"
+        )
         raise LiminalError(msg) from err
 
     # Create an auth provider to authenticate the user:
@@ -61,15 +64,16 @@ async def main() -> None:
             "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
             "identifies as Female"
         )
-        findings = await liminal.prompt.analyze(retrieved_thread.id, prompt)
+        findings = await liminal.prompt.analyze(model_instance.id, prompt)
         _LOGGER.info("Analysis findings: %s", findings)
 
         # Send a prompt to an LLM and get a response (choosing to include the findings
         # and deidentified context history we've already retrieved):
         response = await liminal.prompt.submit(
-            created_thread.id,
+            model_instance.id,
             prompt,
             findings=findings,
+            thread_id=created_thread.id,
         )
         _LOGGER.info("LLM response: %s", response)
     except LiminalError:

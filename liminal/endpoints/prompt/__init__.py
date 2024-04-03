@@ -5,11 +5,12 @@ from __future__ import annotations
 from collections.abc import Awaitable, Callable
 from typing import cast
 
+from liminal.const import SOURCE
 from liminal.endpoints.prompt.models import (
     AnalyzeResponse,
     CleanseResponse,
     HydrateResponse,
-    ProcessResponse,
+    SubmitResponse,
 )
 from liminal.helpers.typing import ValidatedResponseT
 
@@ -23,19 +24,22 @@ class PromptEndpoint:
         """Initialize.
 
         Args:
+        ----
             request_and_validate: The request and validate function.
 
         """
         self._request_and_validate = request_and_validate
 
-    async def analyze(self, thread_id: int, prompt: str) -> AnalyzeResponse:
+    async def analyze(self, model_instance_id: int, prompt: str) -> AnalyzeResponse:
         """Analyze a prompt for sensitive data.
 
         Args:
-            thread_id: The ID of the thread to analyze the prompt for.
+        ----
+            model_instance_id: The ID of the model instance to analyze the prompt with.
             prompt: The prompt to analyze.
 
         Returns:
+        -------
             An object that contains identified sensitive data ("findings").
 
         """
@@ -43,32 +47,46 @@ class PromptEndpoint:
             AnalyzeResponse,
             await self._request_and_validate(
                 "POST",
-                "/api/v1/sdk/analyze_response",
+                "/api/v1/prompts/analyze",
                 AnalyzeResponse,
-                json={"threadId": thread_id, "text": prompt},
+                json={
+                    "modelInstanceId": model_instance_id,
+                    "source": SOURCE,
+                    "text": prompt,
+                },
             ),
         )
 
     async def cleanse(
         self,
-        thread_id: int,
+        model_instance_id: int,
         prompt: str,
         *,
+        thread_id: int | None = None,
         findings: AnalyzeResponse | None = None,
     ) -> CleanseResponse:
         """Cleanse a prompt of sensitive data.
 
         Args:
-            thread_id: The ID of the thread to cleanse the prompt for.
+        ----
+            model_instance_id: The ID of the model instance to cleanse the prompt with.
             prompt: The prompt to cleanse.
+            thread_id: The ID of the thread to cleanse the prompt for. If this is not
+                provided, a thread will be created automatically.
             findings: The findings from the analyze endpoint. If this is not provided,
-                the analyze endpoint will be called automatically.
+                findings will be created automatically.
 
         Returns:
+        -------
             An object that contains a cleansed version of the prompt.
 
         """
-        payload = {"threadId": thread_id, "text": prompt}
+        payload = {
+            "modelInstanceId": model_instance_id,
+            "source": SOURCE,
+            "text": prompt,
+            "threadId": thread_id,
+        }
         if findings:
             payload["findings"] = [
                 finding.to_dict(by_alias=True) for finding in findings.findings
@@ -77,22 +95,31 @@ class PromptEndpoint:
         return cast(
             CleanseResponse,
             await self._request_and_validate(
-                "POST", "/api/v1/sdk/cleanse_response", CleanseResponse, json=payload
+                "POST",
+                "/api/v1/prompts/cleanse",
+                CleanseResponse,
+                json=payload,
             ),
         )
 
     async def hydrate(
         self,
-        thread_id: int,
+        model_instance_id: int,
         prompt: str,
+        *,
+        thread_id: int | None = None,
     ) -> HydrateResponse:
         """Rehydrate prompt with sensitive data.
 
         Args:
-            thread_id: The ID of the thread to hydrate the prompt for.
+        ----
+            model_instance_id: The ID of the model instance to hydrate the prompt with.
             prompt: The prompt to hydrate.
+            thread_id: The ID of the thread to hydrate the prompt for. If this is not
+                provided, a thread will be created automatically.
 
         Returns:
+        -------
             An object that contains a rehydrated version of the prompt.
 
         """
@@ -100,40 +127,58 @@ class PromptEndpoint:
             HydrateResponse,
             await self._request_and_validate(
                 "POST",
-                "/api/v1/sdk/hydrate_response",
+                "/api/v1/prompts/hydrate",
                 HydrateResponse,
-                json={"threadId": thread_id, "text": prompt},
+                json={
+                    "modelInstanceId": model_instance_id,
+                    "source": SOURCE,
+                    "text": prompt,
+                    "threadId": thread_id,
+                },
             ),
         )
 
     async def submit(
         self,
-        thread_id: int,
+        model_instance_id: int,
         prompt: str,
         *,
+        thread_id: int | None = None,
         findings: AnalyzeResponse | None = None,
-    ) -> ProcessResponse:
+    ) -> SubmitResponse:
         """Submit a prompt to a thread and get a response from the LLM.
 
         Args:
-            thread_id: The ID of the thread to cleanse the prompt for.
-            prompt: The prompt to cleanse.
+        ----
+            model_instance_id: The ID of the model instance to submit the prompt with.
+            prompt: The prompt to submit.
+            thread_id: The ID of the thread to submit the prompt for. If this is not
+                provided, a thread will be created automatically.
             findings: The findings from the analyze endpoint. If this is not provided,
                 the analyze endpoint will be called automatically.
 
         Returns:
+        -------
             An object that contains a response from the LLM.
 
         """
-        payload = {"threadId": thread_id, "text": prompt}
+        payload = {
+            "modelInstanceId": model_instance_id,
+            "source": SOURCE,
+            "text": prompt,
+            "threadId": thread_id,
+        }
         if findings:
             payload["findings"] = [
                 finding.to_dict(by_alias=True) for finding in findings.findings
             ]
 
         return cast(
-            ProcessResponse,
+            SubmitResponse,
             await self._request_and_validate(
-                "POST", "/api/v1/sdk/process", ProcessResponse, json=payload
+                "POST",
+                "/api/v1/prompts/submit",
+                SubmitResponse,
+                json=payload,
             ),
         )
