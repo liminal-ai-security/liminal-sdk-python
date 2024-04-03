@@ -18,6 +18,7 @@ async def test_bad_endpoint(httpx_mock: HTTPXMock, mock_client: Client) -> None:
     """Test for a bad endpoint.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
 
@@ -40,6 +41,7 @@ async def test_bad_endpoint_explicit_client(
     """Test for a bad endpoint with an explicit HTTPX AsyncClient.
 
     Args:
+    ----
         access_token_expires_at: The access token expiration time.
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
@@ -79,6 +81,7 @@ async def test_unexpected_response(
     """Test for a bad endpoint.
 
     Args:
+    ----
         content: The content to return in the response.
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.

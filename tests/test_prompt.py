@@ -18,6 +18,7 @@ async def test_analyze(
     """Test the analyze endpoint.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
         prompt_analyze_response: An analyze response.
@@ -52,6 +53,7 @@ async def test_cleanse_and_hydrate(
     """Test the cleanse endpoint.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
         prompt_analyze_response: An analyze response.
@@ -124,6 +126,7 @@ async def test_submit(
     """Test the submit endpoint.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
         prompt_analyze_response: An analyze response.

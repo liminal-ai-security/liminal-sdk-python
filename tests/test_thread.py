@@ -19,6 +19,7 @@ async def test_create(
     """Test the create thread method.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
         threads_create_response: The response from the endpoint.
@@ -50,6 +51,7 @@ async def test_get_available(
     """Test the get available threads method.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
         threads_get_available_response: The response from the endpoint.
@@ -74,6 +76,7 @@ async def test_get_by_id(
     """Test the get available threads method.
 
     Args:
+    ----
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
         threads_get_by_id_response: The response from the endpoint.

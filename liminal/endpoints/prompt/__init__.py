@@ -24,6 +24,7 @@ class PromptEndpoint:
         """Initialize.
 
         Args:
+        ----
             request_and_validate: The request and validate function.
 
         """
@@ -33,10 +34,12 @@ class PromptEndpoint:
         """Analyze a prompt for sensitive data.
 
         Args:
+        ----
             model_instance_id: The ID of the model instance to analyze the prompt with.
             prompt: The prompt to analyze.
 
         Returns:
+        -------
             An object that contains identified sensitive data ("findings").
 
         """
@@ -65,14 +68,16 @@ class PromptEndpoint:
         """Cleanse a prompt of sensitive data.
 
         Args:
+        ----
             model_instance_id: The ID of the model instance to cleanse the prompt with.
             prompt: The prompt to cleanse.
-            thread_id: The ID of the thread to cleanse the prompt for. If this is not provided,
-                a thread will be created automatically.
+            thread_id: The ID of the thread to cleanse the prompt for. If this is not
+                provided, a thread will be created automatically.
             findings: The findings from the analyze endpoint. If this is not provided,
                 findings will be created automatically.
 
         Returns:
+        -------
             An object that contains a cleansed version of the prompt.
 
         """
@@ -107,12 +112,14 @@ class PromptEndpoint:
         """Rehydrate prompt with sensitive data.
 
         Args:
+        ----
             model_instance_id: The ID of the model instance to hydrate the prompt with.
             prompt: The prompt to hydrate.
-            thread_id: The ID of the thread to hydrate the prompt for. If this is not provided,
-                a thread will be created automatically.
+            thread_id: The ID of the thread to hydrate the prompt for. If this is not
+                provided, a thread will be created automatically.
 
         Returns:
+        -------
             An object that contains a rehydrated version of the prompt.
 
         """
@@ -142,14 +149,16 @@ class PromptEndpoint:
         """Submit a prompt to a thread and get a response from the LLM.
 
         Args:
+        ----
             model_instance_id: The ID of the model instance to submit the prompt with.
             prompt: The prompt to submit.
-            thread_id: The ID of the thread to submit the prompt for. If this is not provided,
-                a thread will be created automatically.
+            thread_id: The ID of the thread to submit the prompt for. If this is not
+                provided, a thread will be created automatically.
             findings: The findings from the analyze endpoint. If this is not provided,
                 the analyze endpoint will be called automatically.
 
         Returns:
+        -------
             An object that contains a response from the LLM.
 
         """

@@ -19,6 +19,7 @@ class LLMEndpoint:
         """Initialize.
 
         Args:
+        ----
             request_and_validate: The function to request and validate a response.
 
         """
@@ -27,7 +28,8 @@ class LLMEndpoint:
     async def get_available_model_instances(self) -> list[ModelInstance]:
         """Get available model instances.
 
-        Returns:
+        Returns
+        -------
             A list of available model instances.
 
         """
@@ -42,12 +44,15 @@ class LLMEndpoint:
         """Get a model instance by name.
 
         Args:
+        ----
             model_instance_name: The name of the model instance to retrieve.
 
         Returns:
+        -------
             The model instance.
 
         Raises:
+        ------
             ModelInstanceUnknownError: When the model instance is unknown.
 
         """
