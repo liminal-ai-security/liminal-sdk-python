@@ -51,9 +51,7 @@ async def test_bad_endpoint_explicit_client(
         method="GET",
         url=f"{TEST_API_SERVER_URL}/api/v1/auth/login/oauth/access-token",
         headers=[
-            ("Set-Cookie", "accessToken=REDACTED"),
-            ("Set-Cookie", f"accessTokenExpiresAt={access_token_expires_at}"),
-            ("Set-Cookie", "refreshToken=REDACTED"),
+            ("Set-Cookie", "session=REDACTED"),
         ],
     )
 

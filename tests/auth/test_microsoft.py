@@ -43,9 +43,7 @@ async def test_auth_via_device_code_flow(
             microsoft_auth_provider, TEST_API_SERVER_URL, httpx_client=httpx_client
         )
         await client.authenticate_from_auth_provider()
-        assert client._access_token is not None
-        assert client._access_token_expires_at is not None
-        assert client._refresh_token is not None
+        assert client._session is not None
 
 
 @pytest.mark.asyncio()

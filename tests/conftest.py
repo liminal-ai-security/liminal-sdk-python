@@ -36,9 +36,7 @@ def _patch_liminal_api_server_fixture(httpx_mock: HTTPXMock) -> None:
         method="GET",
         url=f"{TEST_API_SERVER_URL}/api/v1/auth/login/oauth/access-token",
         headers=[
-            ("Set-Cookie", "accessToken=REDACTED"),
-            ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
-            ("Set-Cookie", "refreshToken=REDACTED"),
+            ("Set-Cookie", "session=REDACTED"),
         ],
     )
 
@@ -124,9 +122,7 @@ async def mock_client_fixture(
         method="GET",
         url=f"{TEST_API_SERVER_URL}/api/v1/auth/login/oauth/access-token",
         headers=[
-            ("Set-Cookie", "accessToken=REDACTED"),
-            ("Set-Cookie", f"accessTokenExpiresAt={access_token_expires_at}"),
-            ("Set-Cookie", "refreshToken=REDACTED"),
+            ("Set-Cookie", "session=REDACTED"),
         ],
     )
 
