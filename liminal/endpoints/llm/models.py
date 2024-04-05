@@ -20,8 +20,6 @@ class ModelProviderKey(str, Enum):
     AWS_SAGEMAKER = "aws_sagemaker"
     AZURE_OPENAI = "azure_openai"
     COHERE = "cohere"
-    GOOGLE_GEMINI = "google_gemini"
-    GOOGLE_PALM = "google_palm"
     HUGGINGFACE = "huggingface"
     MISTRAL = "mistral"
     OLLAMA = "ollama"
