@@ -134,6 +134,7 @@ disable = [
     "bad-classmethod-argument",             # N804
     "bad-format-string",                    # W1302, F
     "bad-format-string-key",                # W1300, F
+    "bad-staticmethod-argument",            # PLW0211
     "bad-str-strip-call",                   # PLE1310
     "bad-string-format-type",               # PLE1307
     "bare-except",                          # E722
@@ -169,6 +170,7 @@ disable = [
     "format-string-without-interpolation",  # F
     "function-redefined",                   # F811
     "global-variable-not-assigned",         # PLW0602
+    "if-stmt-min-max",                      # PLR1730, PLR1371 
     "implicit-str-concat",                  # ISC001
     "import-self",                          # PLW0406
     "inconsistent-quotes",                  # Q000
