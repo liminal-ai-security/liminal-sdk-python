@@ -170,7 +170,7 @@ disable = [
     "format-string-without-interpolation",  # F
     "function-redefined",                   # F811
     "global-variable-not-assigned",         # PLW0602
-    "if-stmt-min-max",                      # PLR1730, PLR1371 
+    "if-stmt-min-max",                      # PLR1730, PLR1371
     "implicit-str-concat",                  # ISC001
     "import-self",                          # PLW0406
     "inconsistent-quotes",                  # Q000
