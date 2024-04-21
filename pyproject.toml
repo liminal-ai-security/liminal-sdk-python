@@ -170,17 +170,21 @@ disable = [
     "format-string-without-interpolation",  # F
     "function-redefined",                   # F811
     "global-variable-not-assigned",         # PLW0602
-    "if-stmt-min-max",                      # PLR1730, PLR1371
+    "if-stmt-min-max",                      # PLR1730, PLR1731
     "implicit-str-concat",                  # ISC001
     "import-self",                          # PLW0406
     "inconsistent-quotes",                  # Q000
     "invalid-all-object",                   # PLE0604
+    "invalid-bytes-returned",               # E0308
     "invalid-character-backspace",          # PLE2510
     "invalid-character-esc",                # PLE2513
     "invalid-character-nul",                # PLE2514
     "invalid-character-sub",                # PLE2512
     "invalid-character-zero-width-space",   # PLE2515
     "invalid-envvar-default",               # PLW1508
+    "invalid-hash-returned",                # PLE0309
+    "invalid-index-returned",               # PLE0305
+    "invalid-length-returned",              # E0303
     "invalid-name",                         # N815
     "keyword-arg-before-vararg",            # B026
     "line-too-long",                        # E501
@@ -197,7 +201,7 @@ disable = [
     "missing-function-docstring",           # D103
     "missing-module-docstring",             # D100
     "mixed-format-string",                  # F506
-    "multiple-imports",                     #E401
+    "multiple-imports",                     # E401
     "named-expr-without-context",           # PLW0131
     "nested-min-max",                       # PLW3301
     "no-method-argument",                   # N805
@@ -208,10 +212,10 @@ disable = [
     "notimplemented-raised",                # F901
     "pointless-statement",                  # B018
     "property-with-parameters",             # PLR0206
-    "protected-access",                     # SLF001
     "raise-missing-from",                   # B904
     "return-in-init",                       # PLE0101
     "return-outside-function",              # F706
+    "self-cls-assignment",                  # W0642
     "singleton-comparison",                 # E711, E712
     "subprocess-run-check",                 # PLW1510
     "super-with-arguments",                 # UP008
