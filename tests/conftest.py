@@ -17,7 +17,7 @@ from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from tests.common import (
     TEST_API_SERVER_URL,
     TEST_CLIENT_ID,
-    TEST_SESSION_COOKIE,
+    TEST_SESSION_ID,
     TEST_TENANT_ID,
     load_fixture,
 )
@@ -36,7 +36,7 @@ def _patch_liminal_api_server_fixture(httpx_mock: HTTPXMock) -> None:
         method="GET",
         url=f"{TEST_API_SERVER_URL}/api/v1/auth/login/oauth/access-token",
         headers=[
-            ("Set-Cookie", f"session={TEST_SESSION_COOKIE}"),
+            ("Set-Cookie", f"session={TEST_SESSION_ID}"),
         ],
     )
 

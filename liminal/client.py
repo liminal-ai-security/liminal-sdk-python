@@ -52,8 +52,8 @@ class Client:
         # Token information:
         self._refresh_lock = asyncio.Lock()
         self._refreshing = False
-        self._session_cookie_callbacks: list[Callable[[str], None]] = []
-        self._session_cookie: str | None = None
+        self._session_id: str | None = None
+        self._session_id_callbacks: list[Callable[[str], None]] = []
 
         # Define endpoints:
         self.llm = LLMEndpoint(self._request_and_validate)
@@ -94,8 +94,8 @@ class Client:
 
         if not cookies:
             cookies = {}
-        if self._session_cookie:
-            cookies["session"] = self._session_cookie
+        if self._session_id:
+            cookies["session"] = self._session_id
 
         if running_client := self._httpx_client and not self._httpx_client.is_closed:
             client = self._httpx_client
@@ -174,7 +174,7 @@ class Client:
             msg = f"Could not validate response: {err}"
             raise RequestError(msg) from err
 
-    def _save_session_cookie_from_auth_response(self, auth_response: Response) -> None:
+    def _save_session_id_from_auth_response(self, auth_response: Response) -> None:
         """Save a session cookie value from an auth response.
 
         Args:
@@ -183,18 +183,18 @@ class Client:
 
         """
         LOGGER.debug("Saving session cookie from auth response")
-        self._session_cookie = auth_response.cookies["session"]
+        self._session_id = auth_response.cookies["session"]
 
-        if self._session_cookie:
-            for callback in self._session_cookie_callbacks:
-                callback(self._session_cookie)
+        if self._session_id:
+            for callback in self._session_id_callbacks:
+                callback(self._session_id)
 
-    def add_session_cookie_callback(
+    def add_session_id_callback(
         self, callback: Callable[[str], None]
     ) -> Callable[[], None]:
-        """Add a callback to be called when a new session cookie is generated.
+        """Add a callback to be called when a new session is generated.
 
-        The purpose of this is to allow the user to save the session cookie to a
+        The purpose of this is to allow the user to save the session ID to a
         persistent store using their own callback method.
 
         Args:
@@ -206,11 +206,11 @@ class Client:
             A method to cancel and remove the callback.
 
         """
-        self._session_cookie_callbacks.append(callback)
+        self._session_id_callbacks.append(callback)
 
         def cancel() -> None:
             """Cancel and remove the callback."""
-            self._session_cookie_callbacks.remove(callback)
+            self._session_id_callbacks.remove(callback)
 
         return cancel
 
@@ -222,40 +222,40 @@ class Client:
             "/api/v1/auth/login/oauth/access-token",
             headers={"Authorization": f"Bearer {provider_access_token}"},
         )
-        self._save_session_cookie_from_auth_response(liminal_auth_response)
+        self._save_session_id_from_auth_response(liminal_auth_response)
 
-    async def authenticate_from_session_cookie(
-        self, *, session_cookie: str | None = None
+    async def authenticate_from_session_id(
+        self, *, session_id: str | None = None
     ) -> None:
         """Authenticate with the Liminal API server (using a session).
 
         Args:
         ----
-            session_cookie: The session coookie to use. If not provided, the session
-                cookie that was used to authenticate the user initially will be used.
+            session_id: The session ID to use. If not provided, the session that was
+                used to authenticate the user initially will be used.
 
         Raises:
         ------
-            AuthError: If no session cookie is provided and the user has not been
-                authenticated yet.
+            AuthError: If no session is provided and the user has not been authenticated
+                yet.
 
         """
-        if not session_cookie:
-            session_cookie = self._session_cookie
+        if not session_id:
+            session_id = self._session_id
 
-        if not session_cookie:
-            msg = "No valid session cookie provided"
+        if not session_id:
+            msg = "No valid session ID provided"
             raise AuthError(msg)
 
         async with self._refresh_lock:
             self._refreshing = True
 
             try:
-                session_cookie_response = await self._request(
+                session_id_response = await self._request(
                     "GET",
                     "/api/v1/users/me",
-                    cookies={"session": session_cookie},
+                    cookies={"session": session_id},
                 )
-                self._save_session_cookie_from_auth_response(session_cookie_response)
+                self._save_session_id_from_auth_response(session_id_response)
             finally:
                 self._refreshing = False

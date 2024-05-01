@@ -7,7 +7,7 @@ from typing import Final
 
 TEST_API_SERVER_URL: Final[str] = "https://api.domain.liminal.ai"
 TEST_CLIENT_ID: Final[str] = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-TEST_SESSION_COOKIE: Final[str] = "session-cookie"
+TEST_SESSION_ID: Final[str] = "session-id"
 TEST_TENANT_ID: Final[str] = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
 

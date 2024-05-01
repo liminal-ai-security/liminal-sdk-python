@@ -1,4 +1,4 @@
-"""Define a simple example."""
+"""Define an example of authenticating with a Liminal API server session."""
 
 import asyncio
 import logging
@@ -9,7 +9,7 @@ from liminal import Client
 from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from liminal.errors import LiminalError
 
-_LOGGER: Final[logging.Logger] = logging.getLogger("authenticate_from_session_cookie")
+_LOGGER: Final[logging.Logger] = logging.getLogger("authenticate_from_session_id")
 
 
 async def main() -> None:
@@ -34,22 +34,20 @@ async def main() -> None:
     liminal = Client(microsoft_auth_provider, liminal_api_server_url)
 
     try:
-        saved_session_cookie = None
+        saved_session_id = None
 
-        def save_session_cookie(session_cookie: str) -> None:
+        def save_session_id(session_id: str) -> None:
             """Save the session cookie."""
-            nonlocal saved_session_cookie
-            saved_session_cookie = session_cookie
+            nonlocal saved_session_id
+            saved_session_id = session_id
 
-        liminal.add_session_cookie_callback(save_session_cookie)
+        liminal.add_session_id_callback(save_session_id)
 
         # Authenticate the user:
         await liminal.authenticate_from_auth_provider()
 
         # Authenticate from session:
-        await liminal.authenticate_from_session_cookie(
-            session_cookie=saved_session_cookie
-        )
+        await liminal.authenticate_from_session_id(session_id=saved_session_id)
     except LiminalError:
         _LOGGER.exception("Error running the script")
 

@@ -64,7 +64,6 @@ async def test_auth_via_device_code_flow_timeout(
 
     """
     microsoft_auth_provider = DeviceCodeFlowProvider(TEST_TENANT_ID, TEST_CLIENT_ID)
-
     async with httpx.AsyncClient() as httpx_client:
         client = Client(
             microsoft_auth_provider, TEST_API_SERVER_URL, httpx_client=httpx_client
