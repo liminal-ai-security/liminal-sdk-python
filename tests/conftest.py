@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections.abc import AsyncGenerator, Generator
 import json
-from time import time
 from typing import Any, cast
 from unittest.mock import Mock, patch
 
@@ -18,6 +17,7 @@ from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from tests.common import (
     TEST_API_SERVER_URL,
     TEST_CLIENT_ID,
+    TEST_SESSION_COOKIE,
     TEST_TENANT_ID,
     load_fixture,
 )
@@ -36,9 +36,7 @@ def _patch_liminal_api_server_fixture(httpx_mock: HTTPXMock) -> None:
         method="GET",
         url=f"{TEST_API_SERVER_URL}/api/v1/auth/login/oauth/access-token",
         headers=[
-            ("Set-Cookie", "accessToken=REDACTED"),
-            ("Set-Cookie", f"accessTokenExpiresAt={(int(time()) + 3600) * 1000}"),
-            ("Set-Cookie", "refreshToken=REDACTED"),
+            ("Set-Cookie", f"session={TEST_SESSION_COOKIE}"),
         ],
     )
 
@@ -87,32 +85,20 @@ def _patch_msal_fixture(
         yield
 
 
-@pytest.fixture(name="access_token_expires_at")
-def access_token_expires_at_fixture() -> int:
-    """Return a fixture for an access token expiration time.
-
-    Returns
-    -------
-        A fixture for an access token expiration time.
-
-    """
-    return (int(time()) + 3600) * 1000
-
-
 @pytest_asyncio.fixture(name="mock_client")
 async def mock_client_fixture(
-    access_token_expires_at: int,
     httpx_mock: HTTPXMock,
     model_instances_response: dict[str, Any],
+    patch_liminal_api_server: None,
     patch_msal: None,
 ) -> AsyncGenerator[Client, None]:
     """Return a fixture for a Liminal client.
 
     Args:
     ----
-        access_token_expires_at: The expiration time of the access token.
         httpx_mock: The HTTPX mock fixture.
         model_instances_response: The model instances response.
+        patch_liminal_api_server: Ensure the Liminal API server is patched.
         patch_msal: Ensure the MSAL library is patched.
 
     Returns:
@@ -120,16 +106,6 @@ async def mock_client_fixture(
         A fixture for a Liminal client.
 
     """
-    httpx_mock.add_response(
-        method="GET",
-        url=f"{TEST_API_SERVER_URL}/api/v1/auth/login/oauth/access-token",
-        headers=[
-            ("Set-Cookie", "accessToken=REDACTED"),
-            ("Set-Cookie", f"accessTokenExpiresAt={access_token_expires_at}"),
-            ("Set-Cookie", "refreshToken=REDACTED"),
-        ],
-    )
-
     microsoft_auth_provider = DeviceCodeFlowProvider(TEST_TENANT_ID, TEST_CLIENT_ID)
     async with httpx.AsyncClient() as httpx_client:
         client = Client(

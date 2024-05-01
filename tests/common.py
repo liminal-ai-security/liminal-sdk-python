@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Final
 
-TEST_API_SERVER_URL = "https://api.domain.liminal.ai"
-TEST_CLIENT_ID = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-TEST_TENANT_ID = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+TEST_API_SERVER_URL: Final[str] = "https://api.domain.liminal.ai"
+TEST_CLIENT_ID: Final[str] = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+TEST_SESSION_COOKIE: Final[str] = "session-cookie"
+TEST_TENANT_ID: Final[str] = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
 
 def load_fixture(filename: str) -> str:

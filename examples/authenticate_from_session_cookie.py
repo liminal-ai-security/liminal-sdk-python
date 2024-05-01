@@ -9,7 +9,7 @@ from liminal import Client
 from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from liminal.errors import LiminalError
 
-_LOGGER: Final[logging.Logger] = logging.getLogger("authenticate_from_session")
+_LOGGER: Final[logging.Logger] = logging.getLogger("authenticate_from_session_cookie")
 
 
 async def main() -> None:
@@ -34,20 +34,22 @@ async def main() -> None:
     liminal = Client(microsoft_auth_provider, liminal_api_server_url)
 
     try:
-        saved_session = None
+        saved_session_cookie = None
 
-        def save_session(session: str) -> None:
-            """Save the session."""
-            nonlocal saved_session
-            saved_session = session
+        def save_session_cookie(session_cookie: str) -> None:
+            """Save the session cookie."""
+            nonlocal saved_session_cookie
+            saved_session_cookie = session_cookie
 
-        liminal.add_session_callback(save_session)
+        liminal.add_session_cookie_callback(save_session_cookie)
 
         # Authenticate the user:
         await liminal.authenticate_from_auth_provider()
 
         # Authenticate from session:
-        await liminal.authenticate_from_session(session=saved_session)
+        await liminal.authenticate_from_session_cookie(
+            session_cookie=saved_session_cookie
+        )
     except LiminalError:
         _LOGGER.exception("Error running the script")
 

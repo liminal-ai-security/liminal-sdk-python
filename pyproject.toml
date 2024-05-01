@@ -212,6 +212,7 @@ disable = [
     "notimplemented-raised",                # F901
     "pointless-statement",                  # B018
     "property-with-parameters",             # PLR0206
+    "protected-access",                     # SLF001
     "raise-missing-from",                   # B904
     "return-in-init",                       # PLE0101
     "return-outside-function",              # F706
