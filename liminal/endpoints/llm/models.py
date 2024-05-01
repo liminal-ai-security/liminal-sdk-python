@@ -36,12 +36,8 @@ class ModelConnection(BaseResponseModel):
     model_instance_id: int = field(metadata=field_options(alias="modelInstanceId"))
 
     # Fields:
-    api_key: str | None = field(default=None, metadata=field_options(alias="apiKey"))
-    masked_api_key: str | None = field(
-        default=None, metadata=field_options(alias="maskedApiKey")
-    )
+    credentials: dict[str, str] | None = field(default_factory=dict)
     model: str
-    params: dict[str, str] | None = field(default_factory=dict)
     provider_key: ModelProviderKey = field(metadata=field_options(alias="providerKey"))
 
     # Timestamps:
