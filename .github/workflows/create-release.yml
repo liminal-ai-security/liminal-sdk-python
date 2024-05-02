@@ -49,12 +49,3 @@ jobs:
         run: |
           pip install poetry
           poetry publish --build -u __token__ -p  ${{ secrets.PYPI_API_KEY }}
-
-      - name: ✏️ Run Release Drafter
-        uses: release-drafter/release-drafter@v6.0.0
-        with:
-          tag: ${{ steps.calver.outputs.version }}
-          name: ${{ steps.calver.outputs.version }}
-          version: ${{ steps.calver.outputs.version }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
