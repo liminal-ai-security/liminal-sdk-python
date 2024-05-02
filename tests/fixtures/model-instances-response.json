@@ -9,15 +9,13 @@
     "teams": [],
     "modelConnection": {
       "id": 1,
+      "credentials": {},
       "modelInstanceId": 1,
       "model": "gpt-3.5-turbo",
-      "params": {},
       "providerKey": "openai",
       "createdAt": "2024-02-29T11:27:03.792Z",
       "deletedAt": null,
-      "updatedAt": "2024-02-29T11:27:03.792Z",
-      "apiKey": "",
-      "maskedApiKey": ""
+      "updatedAt": "2024-02-29T11:27:03.792Z"
     }
   },
   {

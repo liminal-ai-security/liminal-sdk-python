@@ -36,27 +36,16 @@ async def test_bad_endpoint(httpx_mock: HTTPXMock, mock_client: Client) -> None:
 
 @pytest.mark.asyncio()
 async def test_bad_endpoint_explicit_client(
-    access_token_expires_at: int, httpx_mock: HTTPXMock, mock_client: Client
+    httpx_mock: HTTPXMock, mock_client: Client
 ) -> None:
     """Test for a bad endpoint with an explicit HTTPX AsyncClient.
 
     Args:
     ----
-        access_token_expires_at: The access token expiration time.
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
 
     """
-    httpx_mock.add_response(
-        method="GET",
-        url=f"{TEST_API_SERVER_URL}/api/v1/auth/login/oauth/access-token",
-        headers=[
-            ("Set-Cookie", "accessToken=REDACTED"),
-            ("Set-Cookie", f"accessTokenExpiresAt={access_token_expires_at}"),
-            ("Set-Cookie", "refreshToken=REDACTED"),
-        ],
-    )
-
     httpx_mock.add_response(
         method="GET",
         url=f"{TEST_API_SERVER_URL}/foobar",
