@@ -85,9 +85,13 @@ jobs:
           git config --local user.name "GitHub Action"
           git add pyproject.toml
           git commit -m "Update version to ${{ steps.calver.outputs.version }}"
+          git tag \
+            -a ${{ steps.calver.outputs.version }} \
+            -m "Release ${{ steps.calver.outputs.version }}"
           git push origin release/${{ steps.calver.outputs.version }}
+          git push origin tag ${{ steps.calver.outputs.version }}
 
-      - name: Create the PR
+      - name: 📝 Create the PR
         run: |
           gh pr create \
             --head release/${{ steps.calver.outputs.version }} \
@@ -96,5 +100,14 @@ jobs:
             --body-file ".github/PULL_REQUEST_TEMPLATE/release.md" \
             --draft \
             --label release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: ✏️ Run Release Drafter
+        uses: release-drafter/release-drafter@v6.0.0
+        with:
+          tag: ${{ steps.calver.outputs.version }}
+          name: ${{ steps.calver.outputs.version }}
+          version: ${{ steps.calver.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
