@@ -50,13 +50,26 @@ jobs:
         run: |
           latest_tag="$(git tag --sort=committerdate | tail -1)"
           month="$(date +'%Y.%m')"
+          is_beta="${{ inputs.beta }}"
 
           if [[ "$latest_tag" =~ "$month".* ]]; then
-              patch="$(echo "$latest_tag" | cut -d . -f 3)"
+              main_version="$(echo "$latest_tag" | awk -F'b' '{print $1}' | awk '{print $NF}')"
+              patch="$(echo "$main_version" | cut -d . -f 3)"
               ((patch=patch+1))
               version="$month.$patch"
           else
               version="$month.0"
+          fi
+
+          if [[ "$is_beta" == "true" ]]; then
+              beta_tag=$(git tag --list | awk "/$version/ && /b[0-9]+/ {print}" | awk -F'b' '{print $2}' | sort -n | tail -1)
+              if [ -z "$beta_tag" ]; then
+                  version="${version}b0"
+              else
+                  beta_number=$beta_tag
+                  ((beta_number=beta_number+1))
+                  version="${version}b${beta_number}"
+              fi
           fi
 
           echo "version=$version" >> $GITHUB_OUTPUT
