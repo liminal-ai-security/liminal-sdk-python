@@ -74,7 +74,7 @@ pytest = "8.2.0"
 pytest-asyncio = "0.23.6"
 pytest-cov = "5.0.0"
 pytest-httpx = "0.30.0"
-ruff = "0.4.3"
+ruff = "0.4.4"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/liminal-ai-security/liminal-sdk-python/issues"
@@ -240,6 +240,7 @@ disable = [
     "unnecessary-lambda-assignment",        # PLC3001
     "unnecessary-pass",                     # PIE790
     "unneeded-not",                         # SIM208
+    "unspecified-encoding",                 # PLW1514
     "unused-argument",                      # ARG001
     "unused-format-string-argument",        # F507
     "unused-format-string-key",             # F504
