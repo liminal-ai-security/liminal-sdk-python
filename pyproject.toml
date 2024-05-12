@@ -240,6 +240,7 @@ disable = [
     "unnecessary-lambda-assignment",        # PLC3001
     "unnecessary-pass",                     # PIE790
     "unneeded-not",                         # SIM208
+    "unspecified-encoding",                 # PLW1514
     "unused-argument",                      # ARG001
     "unused-format-string-argument",        # F507
     "unused-format-string-key",             # F504
