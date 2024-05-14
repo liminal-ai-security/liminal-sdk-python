@@ -75,6 +75,24 @@ class HydratedToken(BaseResponseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
+class ReidentifiedToken(BaseResponseModel):
+    """Define the schema for a reidentified token."""
+
+    start: int
+    end: int
+    entity_type: str
+    text: str
+
+
+@dataclass(frozen=True, kw_only=True)
+class StreamResponseChunk(BaseResponseModel):
+    """Define the response schema for a streaming response chunk."""
+
+    content: str
+    finish_reason: str | None = field(metadata=field_options(alias="finishReason"))
+
+
+@dataclass(frozen=True, kw_only=True)
 class SubmitResponse(BaseResponseModel):
     """Define the response schema for a process request."""
 
@@ -97,13 +115,3 @@ class SubmitResponse(BaseResponseModel):
     reidentified_llm_response_items: list[ReidentifiedToken] = field(
         metadata=field_options(alias="reidentifiedLLMResponseItems")
     )
-
-
-@dataclass(frozen=True, kw_only=True)
-class ReidentifiedToken(BaseResponseModel):
-    """Define the schema for a reidentified token."""
-
-    start: int
-    end: int
-    entity_type: str
-    text: str

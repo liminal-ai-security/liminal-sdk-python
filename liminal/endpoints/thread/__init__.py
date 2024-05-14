@@ -5,8 +5,6 @@ from __future__ import annotations
 from collections.abc import Awaitable, Callable
 from typing import cast
 
-from httpx import Response
-
 from liminal.const import SOURCE
 from liminal.endpoints.thread.models import Thread
 from liminal.helpers.typing import ValidatedResponseT
@@ -16,19 +14,15 @@ class ThreadEndpoint:
     """Define the threads endpoint."""
 
     def __init__(
-        self,
-        request: Callable[..., Awaitable[Response]],
-        request_and_validate: Callable[..., Awaitable[ValidatedResponseT]],
+        self, request_and_validate: Callable[..., Awaitable[ValidatedResponseT]]
     ) -> None:
         """Initialize.
 
         Args:
         ----
-            request: The request function.
             request_and_validate: The request and validate function.
 
         """
-        self._request = request
         self._request_and_validate = request_and_validate
 
     async def create(self, model_instance_id: int, name: str) -> Thread:

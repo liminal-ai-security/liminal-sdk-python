@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 import httpx
 import pytest
 import pytest_asyncio
-from pytest_httpx import HTTPXMock
+from pytest_httpx import HTTPXMock, IteratorStream
 
 from liminal import Client
 from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
@@ -232,13 +232,52 @@ def prompt_hydrate_response_fixture() -> dict[str, Any]:
     )
 
 
+@pytest.fixture(name="prompt_stream_response", scope="session")
+def prompt_stream_response_fixture() -> str:
+    """Return a fixture for a prompt stream response.
+
+    Returns
+    -------
+        A fixture for a prompt stream iterator.
+
+    """
+    return load_fixture("prompt-stream-response.txt")
+
+
+@pytest.fixture(name="prompt_stream_response_iterator", scope="session")
+def prompt_stream_response_iterator_fixture(
+    prompt_stream_response: str,
+) -> IteratorStream:
+    """Return a fixture for a prompt stream iterator.
+
+    Args:
+    ----
+        prompt_stream_response: The prompt stream response.
+
+    Returns:
+    -------
+        A fixture for a prompt stream iterator.
+
+    """
+    chunks = prompt_stream_response.split(" ")
+    output = []
+    for index, text in enumerate(chunks):
+        raw_chunk: dict[str, Any] = {"content": text}
+        if index != len(chunks) - 1:
+            raw_chunk["finishReason"] = None
+        else:
+            raw_chunk["finishReason"] = "stop"
+        output.append(json.dumps(raw_chunk).encode())
+    return IteratorStream(output)
+
+
 @pytest.fixture(name="prompt_submit_response", scope="session")
 def prompt_submit_response_fixture() -> dict[str, Any]:
     """Return a fixture for a prompt submit response.
 
     Returns
     -------
-        A fixture for a prompt response.
+        A fixture for a prompt submit response.
 
     """
     return cast(dict[str, Any], json.loads(load_fixture("prompt-submit-response.json")))
