@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
-from collections.abc import Awaitable, Callable
-from typing import cast
+from collections.abc import AsyncIterator, Awaitable, Callable
+from typing import Any, cast
+
+from mashumaro.codecs.json import json_decode
 
 from liminal.const import SOURCE
 from liminal.endpoints.prompt.models import (
     AnalyzeResponse,
     CleanseResponse,
     HydrateResponse,
+    StreamResponseChunk,
     SubmitResponse,
 )
 from liminal.helpers.typing import ValidatedResponseT
@@ -19,16 +22,58 @@ class PromptEndpoint:
     """Define the prompts endpoint."""
 
     def __init__(
-        self, request_and_validate: Callable[..., Awaitable[ValidatedResponseT]]
+        self,
+        request_and_validate: Callable[..., Awaitable[ValidatedResponseT]],
+        stream: Callable[..., AsyncIterator[bytes]],
     ) -> None:
         """Initialize.
 
         Args:
         ----
             request_and_validate: The request and validate function.
+            stream: The stream function.
 
         """
         self._request_and_validate = request_and_validate
+        self._stream = stream
+
+    def _generate_payload_for_request(
+        self,
+        model_instance_id: int,
+        prompt: str,
+        *,
+        thread_id: int | None = None,
+        findings: AnalyzeResponse | None = None,
+    ) -> dict[str, Any]:
+        """Generate a payload for the request.
+
+        Args:
+        ----
+            model_instance_id: The ID of the model instance to submit the prompt with.
+            prompt: The prompt to submit.
+            thread_id: The ID of the thread to submit the prompt for. If this is not
+                provided, a thread will be created automatically.
+            findings: The findings from the analyze endpoint. If this is not provided,
+                the analyze endpoint will be called automatically.
+
+        Returns:
+        -------
+            A request payload.
+
+        """
+        payload = {
+            "modelInstanceId": model_instance_id,
+            "source": SOURCE,
+            "text": prompt,
+            "threadId": thread_id,
+        }
+
+        if findings:
+            payload["findings"] = [
+                finding.to_dict(by_alias=True) for finding in findings.findings
+            ]
+
+        return payload
 
     async def analyze(self, model_instance_id: int, prompt: str) -> AnalyzeResponse:
         """Analyze a prompt for sensitive data.
@@ -138,15 +183,15 @@ class PromptEndpoint:
             ),
         )
 
-    async def submit(
+    async def stream(
         self,
         model_instance_id: int,
         prompt: str,
         *,
         thread_id: int | None = None,
         findings: AnalyzeResponse | None = None,
-    ) -> SubmitResponse:
-        """Submit a prompt to a thread and get a response from the LLM.
+    ) -> AsyncIterator[StreamResponseChunk]:
+        """Submit a prompt to a thread and stream a response from the LLM.
 
         Args:
         ----
@@ -162,17 +207,40 @@ class PromptEndpoint:
             An object that contains a response from the LLM.
 
         """
-        payload = {
-            "modelInstanceId": model_instance_id,
-            "source": SOURCE,
-            "text": prompt,
-            "threadId": thread_id,
-        }
-        if findings:
-            payload["findings"] = [
-                finding.to_dict(by_alias=True) for finding in findings.findings
-            ]
+        payload = self._generate_payload_for_request(
+            model_instance_id, prompt, thread_id=thread_id, findings=findings
+        )
+        payload["isStreaming"] = True
+        async for chunk in self._stream("POST", "/api/v1/prompts/submit", json=payload):
+            yield json_decode(chunk.decode(), StreamResponseChunk)
 
+    async def submit(
+        self,
+        model_instance_id: int,
+        prompt: str,
+        *,
+        thread_id: int | None = None,
+        findings: AnalyzeResponse | None = None,
+    ) -> SubmitResponse:
+        """Submit a prompt to a thread and get a complete response from the LLM.
+
+        Args:
+        ----
+            model_instance_id: The ID of the model instance to submit the prompt with.
+            prompt: The prompt to submit.
+            thread_id: The ID of the thread to submit the prompt for. If this is not
+                provided, a thread will be created automatically.
+            findings: The findings from the analyze endpoint. If this is not provided,
+                the analyze endpoint will be called automatically.
+
+        Returns:
+        -------
+            An object that contains a response from the LLM.
+
+        """
+        payload = self._generate_payload_for_request(
+            model_instance_id, prompt, thread_id=thread_id, findings=findings
+        )
         return cast(
             SubmitResponse,
             await self._request_and_validate(

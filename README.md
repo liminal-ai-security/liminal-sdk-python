@@ -203,25 +203,13 @@ Every LLM instance connected in the Liminal admin dashboard is referred to as a 
 instance." The SDK provides several methods to interact with model instances:
 
 ```python
-import asyncio
+# Get all available model instances:
+model_instances = await liminal.llm.get_available_model_instances()
+# >>> [ModelInstance(...), ModelInstance(...)]
 
-from liminal import Client
-from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
-
-
-async def main() -> None:
-    # Assuming you have an authenticated `liminal` object:
-
-    # Get all available model instances:
-    model_instances = await liminal.llm.get_available_model_instances()
-    # >>> [ModelInstance(...), ModelInstance(...)]
-
-    # Get a specific model instance (if it exists):
-    model_instance = await liminal.llm.get_model_instance("My Model")
-    # >>> ModelInstance(...)
-
-
-asyncio.run(main())
+# Get a specific model instance (if it exists):
+model_instance = await liminal.llm.get_model_instance("My Model")
+# >>> ModelInstance(...)
 ```
 
 ## Managing Threads
@@ -229,90 +217,74 @@ asyncio.run(main())
 Threads are conversations with an LLM instance:
 
 ```python
-import asyncio
+# Get all available threads:
+threads = await liminal.thread.get_available()
+# >>> [Thread(...), Thread(...)]
 
-from liminal import Client
-from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
+# Get a specific thread by ID:
+thread = await liminal.thread.get_by_id(123)
+# >>> Thread(...)
 
+# Some operations require a model instance:
+model_instance = await liminal.llm.get_model_instance("My Model")
 
-async def main() -> None:
-    # Assuming you have an authenticated `liminal` object:
-
-    # Get all available threads:
-    threads = await liminal.thread.get_available()
-    # >>> [Thread(...), Thread(...)]
-
-    # Get a specific thread by ID:
-    thread = await liminal.thread.get_by_id(123)
-    # >>> Thread(...)
-
-    # Some operations require a model instance:
-    model_instance = await liminal.llm.get_model_instance("My Model")
-
-    # Create a new thread:
-    thread = await liminal.thread.create(model_instance.id, "New Thread")
-    # >>> Thread(...)
-
-
-asyncio.run(main())
+# Create a new thread:
+thread = await liminal.thread.create(model_instance.id, "New Thread")
+# >>> Thread(...)
 ```
 
 ## Submitting Prompts
 
-Submitting prompts is easy:
-
 ```python
-import asyncio
+# Prompt operations require a model instance:
+model_instance = await liminal.llm.get_model_instance(model_instance_name)
 
-from liminal import Client
-from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
+# Prompt operations optionally take an existing thread:
+thread = await liminal.thread.get_by_id(123)
+# >>> Thread(...)
 
+# Analayze a prompt for sensitive info:
+findings = await liminal.prompt.analyze(model_instance.id, "Here is a sensitive prompt")
+# >>> AnalyzeResponse(...)
 
-async def main() -> None:
-    # Assuming you have an authenticated `liminal` object:
+# Cleanse input text by applying the policies defined in the Liminal admin
+# dashboard. You can optionally provide existing analysis finidings; if not
+# provided, analyze is # called automatically):
+cleansed = await liminal.prompt.cleanse(
+    model_instance.id,
+    "Here is a sensitive prompt",
+    findings=findings,
+    thread_id=thread.id,
+)
+# >>> CleanseResponse(...)
 
-    # Prompt operations require a model instance:
-    model_instance = await liminal.llm.get_model_instance(model_instance_name)
+# Submit a prompt to an LLM, cleansing it in the process (once again, providing optional
+# findings), and receive the whole response:
+response = await liminal.prompt.submit(
+    model_instance.id,
+    "Here is a sensitive prompt",
+    findings=findings,
+    thread_id=thread.id,
+)
+# >>> SubmitResponse(...)
 
-    # Prompt operations optionally take an existing thread:
-    thread = await liminal.thread.get_by_id(123)
-    # >>> Thread(...)
+# Submit a prompt, but this time, stream the response back chunk by chunk:
+response = liminal.prompt.stream(
+    model_instance.id,
+    "Here is a sensitive prompt",
+    findings=findings,
+    thread_id=thread.id,
+)
+async for chunk in resp:
+    # Each chunk is a liminal.endpoints.prompt.models.StreamResponseChunk object:
+    print(chunk.content)
+    print(chunk.finish_reason)
 
-    # Analayze a prompt for sensitive info:
-    findings = await liminal.prompt.analyze(
-        model_instance.id, "Here is a sensitive prompt"
-    )
-    # >>> AnalyzeResponse(...)
-
-    # Cleanse input text by applying the policies defined in the Liminal admin
-    # dashboard. You can optionally provide existing analysis finidings; if not
-    # provided, analyze is # called automatically):
-    cleansed = await liminal.prompt.cleanse(
-        model_instance.id,
-        "Here is a sensitive prompt",
-        findings=findings,
-        thread_id=thread.id,
-    )
-    # >>> CleanseResponse(...)
-
-    # Submit a prompt to an LLM, cleansing it in the process (once again, providing optional
-    # findings):
-    response = await liminal.prompt.submit(
-        model_instance.id,
-        "Here is a sensitive prompt",
-        findings=findings,
-        thread_id=thread.id,
-    )
-    # >>> SubmitResponse(...)
-
-    # Rehydrate a response with sensitive data:
-    hydrated = await liminal.prompt.hydrate(
-        model_instance.id, "Here is a response to rehdyrate", thread_id=thread.id
-    )
-    # >>> HydrateResponse(...)
-
-
-asyncio.run(main())
+# Rehydrate a response with sensitive data:
+hydrated = await liminal.prompt.hydrate(
+    model_instance.id, "Here is a response to rehdyrate", thread_id=thread.id
+)
+# >>> HydrateResponse(...)
 ```
 
 # Connection Pooling
