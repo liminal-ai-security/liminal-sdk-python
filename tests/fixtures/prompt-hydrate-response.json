@@ -1,11 +1,13 @@
 {
-  "items": [
-    {
-      "end": 20,
-      "entity_type": "PERSON_0",
-      "start": 5,
-      "text": "Jane Gansbuhler"
-    }
-  ],
-  "text": "Tell Jane Gansbuhler that we are grateful for their business."
+  "data": {
+    "items": [
+      {
+        "end": 20,
+        "entity_type": "PERSON_0",
+        "start": 5,
+        "text": "Jane Gansbuhler"
+      }
+    ],
+    "text": "Tell Jane Gansbuhler that we are grateful for their business."
+  }
 }

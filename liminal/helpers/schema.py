@@ -1,11 +1,11 @@
-"""Define model helpers."""
+"""Define schema helpers."""
 
 from mashumaro import DataClassDictMixin
 from mashumaro.config import BaseConfig
 
 
-class BaseModel(DataClassDictMixin):
-    """Define a base model."""
+class BaseResponseSchema(DataClassDictMixin):
+    """Define a base response schema."""
 
     class Config(BaseConfig):  # pylint: disable=too-few-public-methods
         """Define the configuration."""

@@ -9,10 +9,16 @@ from mashumaro.codecs.json import json_decode
 
 from liminal.const import SOURCE
 from liminal.endpoints.prompt.models import (
+    AnalysisFindings,
+    CleanseData,
+    HydrateData,
+    StreamResponseChunk,
+    SubmitData,
+)
+from liminal.endpoints.prompt.schemas import (
     AnalyzeResponse,
     CleanseResponse,
     HydrateResponse,
-    StreamResponseChunk,
     SubmitResponse,
 )
 from liminal.helpers.typing import ValidatedResponseT
@@ -43,7 +49,7 @@ class PromptEndpoint:
         prompt: str,
         *,
         thread_id: int | None = None,
-        findings: AnalyzeResponse | None = None,
+        findings: AnalysisFindings | None = None,
     ) -> dict[str, Any]:
         """Generate a payload for the request.
 
@@ -75,7 +81,7 @@ class PromptEndpoint:
 
         return payload
 
-    async def analyze(self, model_instance_id: int, prompt: str) -> AnalyzeResponse:
+    async def analyze(self, model_instance_id: int, prompt: str) -> AnalysisFindings:
         """Analyze a prompt for sensitive data.
 
         Args:
@@ -88,7 +94,7 @@ class PromptEndpoint:
             An object that contains identified sensitive data ("findings").
 
         """
-        return cast(
+        response = cast(
             AnalyzeResponse,
             await self._request_and_validate(
                 "POST",
@@ -101,6 +107,7 @@ class PromptEndpoint:
                 },
             ),
         )
+        return response.data
 
     async def cleanse(
         self,
@@ -108,8 +115,8 @@ class PromptEndpoint:
         prompt: str,
         *,
         thread_id: int | None = None,
-        findings: AnalyzeResponse | None = None,
-    ) -> CleanseResponse:
+        findings: AnalysisFindings | None = None,
+    ) -> CleanseData:
         """Cleanse a prompt of sensitive data.
 
         Args:
@@ -126,18 +133,10 @@ class PromptEndpoint:
             An object that contains a cleansed version of the prompt.
 
         """
-        payload = {
-            "modelInstanceId": model_instance_id,
-            "source": SOURCE,
-            "text": prompt,
-            "threadId": thread_id,
-        }
-        if findings:
-            payload["findings"] = [
-                finding.to_dict(by_alias=True) for finding in findings.findings
-            ]
-
-        return cast(
+        payload = self._generate_payload_for_request(
+            model_instance_id, prompt, thread_id=thread_id, findings=findings
+        )
+        response = cast(
             CleanseResponse,
             await self._request_and_validate(
                 "POST",
@@ -146,6 +145,7 @@ class PromptEndpoint:
                 json=payload,
             ),
         )
+        return response.data
 
     async def hydrate(
         self,
@@ -153,7 +153,7 @@ class PromptEndpoint:
         prompt: str,
         *,
         thread_id: int | None = None,
-    ) -> HydrateResponse:
+    ) -> HydrateData:
         """Rehydrate prompt with sensitive data.
 
         Args:
@@ -168,7 +168,7 @@ class PromptEndpoint:
             An object that contains a rehydrated version of the prompt.
 
         """
-        return cast(
+        response = cast(
             HydrateResponse,
             await self._request_and_validate(
                 "POST",
@@ -182,6 +182,7 @@ class PromptEndpoint:
                 },
             ),
         )
+        return response.data
 
     async def stream(
         self,
@@ -189,7 +190,7 @@ class PromptEndpoint:
         prompt: str,
         *,
         thread_id: int | None = None,
-        findings: AnalyzeResponse | None = None,
+        findings: AnalysisFindings | None = None,
     ) -> AsyncIterator[StreamResponseChunk]:
         """Submit a prompt to a thread and stream a response from the LLM.
 
@@ -220,8 +221,8 @@ class PromptEndpoint:
         prompt: str,
         *,
         thread_id: int | None = None,
-        findings: AnalyzeResponse | None = None,
-    ) -> SubmitResponse:
+        findings: AnalysisFindings | None = None,
+    ) -> SubmitData:
         """Submit a prompt to a thread and get a complete response from the LLM.
 
         Args:
@@ -241,7 +242,7 @@ class PromptEndpoint:
         payload = self._generate_payload_for_request(
             model_instance_id, prompt, thread_id=thread_id, findings=findings
         )
-        return cast(
+        response = cast(
             SubmitResponse,
             await self._request_and_validate(
                 "POST",
@@ -250,3 +251,4 @@ class PromptEndpoint:
                 json=payload,
             ),
         )
+        return response.data

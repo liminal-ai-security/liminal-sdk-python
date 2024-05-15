@@ -5,11 +5,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from liminal.helpers.model import BaseResponseModel
+from liminal.helpers.model import BaseModel
 
 
 @dataclass(frozen=True, kw_only=True)
-class MSALCacheTokenResponse(BaseResponseModel):
+class MSALCacheTokenResponse(BaseModel):
     """Define an MSAL token response from Entra ID."""
 
     token_type: Literal["Bearer"]
@@ -19,7 +19,7 @@ class MSALCacheTokenResponse(BaseResponseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class MSALIdentityProviderTokenResponse(BaseResponseModel):
+class MSALIdentityProviderTokenResponse(BaseModel):
     """Define an MSAL token response from the local in-memory cache."""
 
     token_type: Literal["Bearer"]
