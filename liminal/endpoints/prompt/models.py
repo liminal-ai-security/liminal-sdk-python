@@ -1,4 +1,4 @@
-"""Define models for the LLM endpoint."""
+"""Define models for the prompt endpoint."""
 
 from __future__ import annotations
 
@@ -7,12 +7,12 @@ from dataclasses import dataclass, field
 from mashumaro import field_options
 
 from liminal.endpoints.thread.models import DeidentifiedToken
-from liminal.helpers.model import BaseResponseModel
+from liminal.helpers.model import BaseModel
 
 
 @dataclass(frozen=True, kw_only=True)
-class AnalysisFinding(BaseResponseModel):
-    """Define the schema for an analysis finding.
+class AnalysisFinding(BaseModel):
+    """Define a detection analysis finding.
 
     This object stores information about a piece of text from a prompt, what sensitive
     data type was detected, and what the current policy is for this type of data.
@@ -29,15 +29,15 @@ class AnalysisFinding(BaseResponseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class AnalyzeResponse(BaseResponseModel):
-    """Define the response schema for an analysis request."""
+class AnalysisFindings(BaseModel):
+    """Define consolidated detection analysis findings."""
 
     findings: list[AnalysisFinding]
 
 
 @dataclass(frozen=True, kw_only=True)
-class CleanseResponse(BaseResponseModel):
-    """Define the response schema for a cleanse request."""
+class CleanseData(BaseModel):
+    """Define the result of a cleanse request."""
 
     items: list[CleansedToken]
     # Represents the prompt with the sensitive data replaced with cleansed tokens:
@@ -49,8 +49,8 @@ class CleanseResponse(BaseResponseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class CleansedToken(BaseResponseModel):
-    """Define the schema for a cleansed token."""
+class CleansedToken(BaseModel):
+    """Define a cleansed token."""
 
     start: int
     end: int
@@ -58,16 +58,16 @@ class CleansedToken(BaseResponseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class HydrateResponse(BaseResponseModel):
-    """Define the response schema for a hydrate request."""
+class HydrateData(BaseModel):
+    """Define the result of a hydration request."""
 
     items: list[HydratedToken]
     text: str
 
 
 @dataclass(frozen=True, kw_only=True)
-class HydratedToken(BaseResponseModel):
-    """Define the schema for a hydrated token."""
+class HydratedToken(BaseModel):
+    """Define a hydrated token."""
 
     end: int
     entity_type: str
@@ -75,8 +75,8 @@ class HydratedToken(BaseResponseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class ReidentifiedToken(BaseResponseModel):
-    """Define the schema for a reidentified token."""
+class ReidentifiedToken(BaseModel):
+    """Define a reidentified token."""
 
     start: int
     end: int
@@ -85,21 +85,21 @@ class ReidentifiedToken(BaseResponseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class StreamResponseChunk(BaseResponseModel):
-    """Define the response schema for a streaming response chunk."""
+class StreamResponseChunk(BaseModel):
+    """Define a streaming response chunk."""
 
     content: str
     finish_reason: str | None = field(metadata=field_options(alias="finishReason"))
 
 
 @dataclass(frozen=True, kw_only=True)
-class SubmitResponse(BaseResponseModel):
-    """Define the response schema for a process request."""
+class SubmitData(BaseModel):
+    """Define the result of a submit request."""
 
     thread_id: int = field(metadata=field_options(alias="threadId"))
     chat_id: int = field(metadata=field_options(alias="chatId"))
     input_text: str = field(metadata=field_options(alias="inputText"))
-    deidentified_input_text_data: CleanseResponse = field(
+    deidentified_input_text_data: CleanseData = field(
         metadata=field_options(alias="deidentifiedInputTextData")
     )
     deidentified_context_history: list[DeidentifiedToken] = field(

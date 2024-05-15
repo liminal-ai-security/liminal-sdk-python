@@ -7,6 +7,11 @@ from typing import cast
 
 from liminal.const import SOURCE
 from liminal.endpoints.thread.models import Thread
+from liminal.endpoints.thread.schemas import (
+    CreateThreadResponse,
+    GetAvailableThreadsResponse,
+    GetThreadByIdResponse,
+)
 from liminal.helpers.typing import ValidatedResponseT
 
 
@@ -38,12 +43,12 @@ class ThreadEndpoint:
             A Thread object representing the creatd thread.
 
         """
-        return cast(
-            Thread,
+        response = cast(
+            CreateThreadResponse,
             await self._request_and_validate(
                 "POST",
                 "/api/v1/threads",
-                Thread,
+                CreateThreadResponse,
                 json={
                     "name": name,
                     "modelInstanceId": model_instance_id,
@@ -51,6 +56,7 @@ class ThreadEndpoint:
                 },
             ),
         )
+        return response.data
 
     async def get_available(self) -> list[Thread]:
         """Get available threads.
@@ -60,15 +66,16 @@ class ThreadEndpoint:
             A list of Thread objects.
 
         """
-        return cast(
-            list[Thread],
+        response = cast(
+            GetAvailableThreadsResponse,
             await self._request_and_validate(
                 "GET",
                 "/api/v1/threads",
-                list[Thread],
+                GetAvailableThreadsResponse,
                 params={"source": SOURCE},
             ),
         )
+        return response.data
 
     async def get_by_id(self, thread_id: int) -> Thread:
         """Get a thread by ID.
@@ -82,9 +89,12 @@ class ThreadEndpoint:
             A Thread object representing the thread.
 
         """
-        return cast(
-            Thread,
+        response = cast(
+            GetThreadByIdResponse,
             await self._request_and_validate(
-                "GET", f"/api/v1/threads/{thread_id}", Thread
+                "GET",
+                f"/api/v1/threads/{thread_id}",
+                GetThreadByIdResponse,
             ),
         )
+        return response.data
