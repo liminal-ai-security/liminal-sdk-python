@@ -245,6 +245,7 @@ class Client:
         url = f"{self._api_server_url}{endpoint}"
         cookie_jar = self._create_cookie_jar(cookies)
 
+        # pylint: disable=contextmanager-generator-missing-cleanup
         async with self._get_httpx_client() as client, client.stream(
             method,
             url,
