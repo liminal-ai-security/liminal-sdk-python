@@ -6,6 +6,7 @@ from collections.abc import Awaitable, Callable
 from typing import cast
 
 from liminal.endpoints.llm.models import ModelInstance
+from liminal.endpoints.llm.schemas import GetAvailableModelInstancesResponse
 from liminal.errors import ModelInstanceUnknownError
 from liminal.helpers.typing import ValidatedResponseT
 
@@ -33,12 +34,13 @@ class LLMEndpoint:
             A list of available model instances.
 
         """
-        return cast(
-            list[ModelInstance],
+        response = cast(
+            GetAvailableModelInstancesResponse,
             await self._request_and_validate(
-                "GET", "/api/v1/model-instances", list[ModelInstance]
+                "GET", "/api/v1/model-instances", GetAvailableModelInstancesResponse
             ),
         )
+        return response.data
 
     async def get_model_instance(self, model_instance_name: str) -> ModelInstance:
         """Get a model instance by name.

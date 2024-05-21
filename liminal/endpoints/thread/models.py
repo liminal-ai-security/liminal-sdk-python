@@ -9,11 +9,11 @@ from typing import Literal
 from mashumaro import field_options
 
 from liminal.endpoints.llm.models import ModelInstance
-from liminal.helpers.model import BaseResponseModel
+from liminal.helpers.model import BaseModel
 
 
 @dataclass(frozen=True, kw_only=True)
-class DeidentifiedToken(BaseResponseModel):
+class DeidentifiedToken(BaseModel):
     """Define the schema for a deidentified token."""
 
     deid_text: str = field(metadata=field_options(alias="deidText"))
@@ -21,7 +21,7 @@ class DeidentifiedToken(BaseResponseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class Chat(BaseResponseModel):
+class Chat(BaseModel):
     """Define the schema for a chat."""
 
     id: int
@@ -45,7 +45,7 @@ class Chat(BaseResponseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class Thread(BaseResponseModel):
+class Thread(BaseModel):
     """Define the schema for a thread."""
 
     id: int

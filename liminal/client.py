@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Callable
+from collections.abc import AsyncIterator, Callable
+from contextlib import asynccontextmanager
 from json.decoder import JSONDecodeError
-from typing import Final
+from typing import Any, Final
 
-from httpx import AsyncClient, Cookies, HTTPStatusError, Request, Response
+from httpx import AsyncClient, Cookies, HTTPStatusError, Response
 from mashumaro.codecs.json import json_decode
 from mashumaro.exceptions import (
     MissingField,
@@ -57,8 +58,45 @@ class Client:
 
         # Define endpoints:
         self.llm = LLMEndpoint(self._request_and_validate)
-        self.prompt = PromptEndpoint(self._request_and_validate)
-        self.thread = ThreadEndpoint(self._request, self._request_and_validate)
+        self.prompt = PromptEndpoint(self._request_and_validate, self._stream)
+        self.thread = ThreadEndpoint(self._request_and_validate)
+
+    def _create_cookie_jar(self, raw_cookies: dict[str, Any] | None) -> Cookies:
+        """Create a cookie jar from raw cookies.
+
+        Args:
+        ----
+            raw_cookies: The raw cookies to use.
+
+        Returns:
+        -------
+            A cookie jar.
+
+        """
+        if not raw_cookies:
+            raw_cookies = {}
+        if self._session_id:
+            raw_cookies["session"] = self._session_id
+        return Cookies(raw_cookies)
+
+    @asynccontextmanager
+    async def _get_httpx_client(self) -> AsyncIterator[AsyncClient]:
+        """Get an HTTPX client.
+
+        Returns
+        -------
+            An HTTPX client.
+
+        """
+        if running_client := self._httpx_client and not self._httpx_client.is_closed:
+            client = self._httpx_client
+        else:
+            client = AsyncClient()
+
+        yield client
+
+        if not running_client:
+            await client.aclose()
 
     async def _request(
         self,
@@ -68,9 +106,9 @@ class Client:
         headers: dict[str, str] | None = None,
         cookies: dict[str, str] | None = None,
         params: dict[str, str] | None = None,
-        json: dict[str, str] | None = None,
+        json: dict[str, Any] | None = None,
     ) -> Response:
-        """Make a request to the Liminal API server and return a Response.
+        """Make a request to the Liminal API server and return a response.
 
         Args:
         ----
@@ -91,41 +129,30 @@ class Client:
 
         """
         url = f"{self._api_server_url}{endpoint}"
+        cookie_jar = self._create_cookie_jar(cookies)
 
-        if not cookies:
-            cookies = {}
-        if self._session_id:
-            cookies["session"] = self._session_id
-
-        if running_client := self._httpx_client and not self._httpx_client.is_closed:
-            client = self._httpx_client
-        else:
-            client = AsyncClient()
-
-        request = Request(
-            method,
-            url,
-            headers=headers,
-            cookies=Cookies(cookies),
-            params=params,
-            json=json,
-        )
-        response = await client.send(request)
-
-        try:
-            response.raise_for_status()
-        except HTTPStatusError as err:
-            msg = (
-                f"Error while sending request to {url}: {err.response.content.decode()}"
+        async with self._get_httpx_client() as client:
+            response = await client.request(
+                method,
+                url,
+                headers=headers,
+                cookies=cookie_jar,
+                params=params,
+                json=json,
             )
-            raise RequestError(msg) from err
 
-        if not running_client:
-            await client.aclose()
+            try:
+                response.raise_for_status()
+            except HTTPStatusError as err:
+                msg = (
+                    f"Error while sending request to {url}: "
+                    f"{err.response.content.decode()}"
+                )
+                raise RequestError(msg) from err
 
-        LOGGER.debug("Received data from %s: %s", url, response.content)
+            LOGGER.debug("Received data from %s: %s", url, response.content)
 
-        return response
+            return response
 
     async def _request_and_validate(
         self,
@@ -136,7 +163,7 @@ class Client:
         headers: dict[str, str] | None = None,
         cookies: dict[str, str] | None = None,
         params: dict[str, str] | None = None,
-        json: dict[str, str] | None = None,
+        json: dict[str, Any] | None = None,
     ) -> ValidatedResponseT:
         """Make a request to the Liminal API server and validate the response.
 
@@ -188,6 +215,47 @@ class Client:
         if self._session_id:
             for callback in self._session_id_callbacks:
                 callback(self._session_id)
+
+    async def _stream(
+        self,
+        method: str,
+        endpoint: str,
+        *,
+        headers: dict[str, str] | None = None,
+        cookies: dict[str, str] | None = None,
+        params: dict[str, str] | None = None,
+        json: dict[str, Any] | None = None,
+    ) -> AsyncIterator[bytes]:
+        """Make a request to the Liminal API server and return a streaming response.
+
+        Args:
+        ----
+            method: The HTTP method to use.
+            endpoint: The endpoint to request.
+            headers: The headers to use.
+            cookies: The cookies to use.
+            params: The query parameters to use.
+            json: The JSON body to use.
+
+        Returns:
+        -------
+            An AsyncIterator containing the raw JSON response chunks.
+
+        """
+        url = f"{self._api_server_url}{endpoint}"
+        cookie_jar = self._create_cookie_jar(cookies)
+
+        # pylint: disable=contextmanager-generator-missing-cleanup
+        async with self._get_httpx_client() as client, client.stream(
+            method,
+            url,
+            headers=headers,
+            cookies=cookie_jar,
+            params=params,
+            json=json,
+        ) as resp:
+            async for chunk in resp.aiter_bytes():
+                yield chunk
 
     def add_session_id_callback(
         self, callback: Callable[[str], None]

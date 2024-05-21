@@ -8,7 +8,7 @@ from enum import Enum
 
 from mashumaro import field_options
 
-from liminal.helpers.model import BaseResponseModel
+from liminal.helpers.model import BaseModel
 
 
 # Define enums to use as types:
@@ -27,8 +27,8 @@ class ModelProviderKey(str, Enum):
 
 
 @dataclass(frozen=True, kw_only=True)
-class ModelConnection(BaseResponseModel):
-    """Define the schema for an LLM model connection."""
+class ModelConnection(BaseModel):
+    """Define the model for an LLM model connection."""
 
     id: int
 
@@ -49,8 +49,8 @@ class ModelConnection(BaseResponseModel):
 
 
 @dataclass(frozen=True, kw_only=True)
-class ModelInstance(BaseResponseModel):
-    """Define the schema for an LLM model instance that Liminal supports."""
+class ModelInstance(BaseModel):
+    """Define the model for an LLM model instance that Liminal supports."""
 
     id: int
 

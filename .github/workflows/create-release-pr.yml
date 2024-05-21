@@ -3,9 +3,10 @@ name: Create Release PR
 "on":
   workflow_dispatch:
     inputs:
-      beta:
-        type: boolean
-        description: Create a beta release
+      version:
+        type: string
+        description: The CalVer version number
+        required: true
 
 permissions:
   contents: write
@@ -48,53 +49,37 @@ jobs:
         run: |
           pip install -r .github/workflows/requirements.txt
 
-      - name: 🗓️ Calculate new version
-        id: calver
-        run: |
-          latest_tag="$(git tag --sort=committerdate | tail -1)"
-          month="$(date +'%Y.%m')"
-          is_beta="${{ inputs.beta }}"
-
-          if [[ "$latest_tag" =~ "$month".* ]]; then
-              main_version="$(echo "$latest_tag" | awk -F'b' '{print $1}' | awk '{print $NF}')"
-              patch="$(echo "$main_version" | cut -d . -f 3)"
-              ((patch=patch+1))
-              version="$month.$patch"
-          else
-              version="$month.0"
-          fi
-
-          if [[ "$is_beta" == "true" ]]; then
-              beta_tag=$(git tag --list | awk "/$version/ && /b[0-9]+/ {print}" | awk -F'b' '{print $2}' | sort -n | tail -1)
-              if [ -z "$beta_tag" ]; then
-                  version="${version}b0"
-              else
-                  beta_number=$beta_tag
-                  ((beta_number=beta_number+1))
-                  version="${version}b${beta_number}"
-              fi
-          fi
-
-          echo "version=$version" >> $GITHUB_OUTPUT
-
       - name: 🔢 Update pyproject.toml version
         run: |
-          python -c "import toml; d = toml.load('pyproject.toml'); d['tool']['poetry']['version'] = '${{ steps.calver.outputs.version }}'; toml.dump(d, open('pyproject.toml', 'w'))"
-          git checkout -b release/${{ steps.calver.outputs.version }}
+          python -c "import toml; d = toml.load('pyproject.toml'); d['tool']['poetry']['version'] = '${{ inputs.version }}'; toml.dump(d, open('pyproject.toml', 'w'))"
+          git checkout -b release/${{ inputs.version }}
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add pyproject.toml
-          git commit -m "Update version to ${{ steps.calver.outputs.version }}"
-          git push origin release/${{ steps.calver.outputs.version }}
+          git commit -m "Update version to ${{ inputs.version }}"
+          git tag \
+            -a ${{ inputs.version }} \
+            -m "Release ${{ inputs.version }}"
+          git push origin release/${{ inputs.version }}
+          git push origin tag ${{ inputs.version }}
 
-      - name: Create the PR
+      - name: 📝 Create the PR
         run: |
           gh pr create \
-            --head release/${{ steps.calver.outputs.version }} \
+            --head release/${{ inputs.version }} \
             --base main \
-            --title "chore(release): ${{ steps.calver.outputs.version }}" \
+            --title "chore(release): ${{ inputs.version }}" \
             --body-file ".github/PULL_REQUEST_TEMPLATE/release.md" \
             --draft \
             --label release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: ✏️ Run Release Drafter
+        uses: release-drafter/release-drafter@v6.0.0
+        with:
+          tag: ${{ inputs.version }}
+          name: ${{ inputs.version }}
+          version: ${{ inputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
