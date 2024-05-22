@@ -139,6 +139,7 @@ class Client:
                 cookies=cookie_jar,
                 params=params,
                 json=json,
+                timeout=DEFAULT_REQUEST_TIMEOUT,
             )
 
             try:
