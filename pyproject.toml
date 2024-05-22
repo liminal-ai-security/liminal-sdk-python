@@ -35,7 +35,7 @@ warn_unused_ignores = true
 
 [tool.poetry]
 name = "liminal-sdk-python"
-version = "2024.05.0b1"
+version = "2024.05.0b2"
 description = "The Liminal SDK for Python"
 readme = "README.md"
 authors = ["Aaron Bach <ab@liminal.ai>"]
