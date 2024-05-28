@@ -3,7 +3,7 @@
     "items": [
       {
         "end": 20,
-        "entity_type": "PERSON_0",
+        "entityType": "PERSON_0",
         "start": 5,
         "text": "Jane Gansbuhler"
       }
