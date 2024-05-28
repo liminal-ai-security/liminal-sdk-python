@@ -3,58 +3,58 @@
     "items": [
       {
         "end": 61,
-        "entity_type": "PERSON_0",
+        "entityType": "PERSON_0",
         "start": 53
       },
       {
         "end": 101,
-        "entity_type": "EMAIL_ADDRESS_0",
+        "entityType": "EMAIL_ADDRESS_0",
         "start": 86
       },
       {
         "end": 129,
-        "entity_type": "LOCATION_0",
+        "entityType": "LOCATION_0",
         "start": 119
       },
       {
         "end": 139,
-        "entity_type": "PERSON_1",
+        "entityType": "PERSON_1",
         "start": 131
       },
       {
         "end": 158,
-        "entity_type": "DATE_TIME_0",
+        "entityType": "DATE_TIME_0",
         "start": 152
       }
     ],
     "text": "Write a short marketing email for a banking customer PERSON_0, whose email address is EMAIL_ADDRESS_0 and who lives at LOCATION_0. PERSON_1 was born on DATE_0 and identifies as Female",
-    "items_hashed": [
+    "itemsHashed": [
       {
         "end": 97,
-        "entity_type": "PERSON_0",
+        "entityType": "PERSON_0",
         "start": 53
       },
       {
         "end": 186,
-        "entity_type": "EMAIL_ADDRESS_0",
+        "entityType": "EMAIL_ADDRESS_0",
         "start": 122
       },
       {
         "end": 292,
-        "entity_type": "LOCATION_0",
+        "entityType": "LOCATION_0",
         "start": 204
       },
       {
         "end": 338,
-        "entity_type": "PERSON_1",
+        "entityType": "PERSON_1",
         "start": 294
       },
       {
         "end": 395,
-        "entity_type": "DATE_TIME_0",
+        "entityType": "DATE_TIME_0",
         "start": 351
       }
     ],
-    "text_hashed": "Write a short marketing email for a banking customer p5kiunkFbGzlyPqBKX7KxQGD5G3eFWuqlpydYFq7qE0=, whose email address is iZxzRa3Ri+incabxWusSS/JMygPlUcPYzfYXAOaDrR/TAzq7T9Xpnp9Qm/4+KGXT and who lives at ZQ3qoTPqDnzv+gv+sCizSPb8zGb+t0/KGZJ6EPn3MQuAVDKV5Cr0aqveqWnkkm5Xw7169dKkrz2AH45scPsIJA==. cTkYHPvdRCj53fR7hqUJTZhm7Wgy7PAwGifWm2v+n3I= was born on tNPhXCGjlRRf7bmTcBAYNjYLP2E1XDXltYVp4DoXaxs= and identifies as Female"
+    "textHashed": "Write a short marketing email for a banking customer p5kiunkFbGzlyPqBKX7KxQGD5G3eFWuqlpydYFq7qE0=, whose email address is iZxzRa3Ri+incabxWusSS/JMygPlUcPYzfYXAOaDrR/TAzq7T9Xpnp9Qm/4+KGXT and who lives at ZQ3qoTPqDnzv+gv+sCizSPb8zGb+t0/KGZJ6EPn3MQuAVDKV5Cr0aqveqWnkkm5Xw7169dKkrz2AH45scPsIJA==. cTkYHPvdRCj53fR7hqUJTZhm7Wgy7PAwGifWm2v+n3I= was born on tNPhXCGjlRRf7bmTcBAYNjYLP2E1XDXltYVp4DoXaxs= and identifies as Female"
   }
 }

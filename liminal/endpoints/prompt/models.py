@@ -42,10 +42,12 @@ class CleanseData(BaseModel):
     items: list[CleansedToken]
     # Represents the prompt with the sensitive data replaced with cleansed tokens:
     text: str
-    items_hashed: list[CleansedToken]
+    items_hashed: list[CleansedToken] = field(
+        metadata=field_options(alias="itemsHashed")
+    )
     # Represents the prompt with the sensitive data replaced with hashed tokens (which
     # are help in mapping):
-    text_hashed: str
+    text_hashed: str = field(metadata=field_options(alias="textHashed"))
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -54,7 +56,7 @@ class CleansedToken(BaseModel):
 
     start: int
     end: int
-    entity_type: str
+    entity_type: str = field(metadata=field_options(alias="entityType"))
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -70,7 +72,7 @@ class HydratedToken(BaseModel):
     """Define a hydrated token."""
 
     end: int
-    entity_type: str
+    entity_type: str = field(metadata=field_options(alias="entityType"))
     start: int
 
 
@@ -80,7 +82,7 @@ class ReidentifiedToken(BaseModel):
 
     start: int
     end: int
-    entity_type: str
+    entity_type: str = field(metadata=field_options(alias="entityType"))
     text: str
 
 
