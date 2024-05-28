@@ -42,7 +42,9 @@ class CleanseData(BaseModel):
     items: list[CleansedToken]
     # Represents the prompt with the sensitive data replaced with cleansed tokens:
     text: str
-    items_hashed: list[CleansedToken] = field(metadata=field_options(alias="itemsHashed"))
+    items_hashed: list[CleansedToken] = field(
+        metadata=field_options(alias="itemsHashed")
+    )
     # Represents the prompt with the sensitive data replaced with hashed tokens (which
     # are help in mapping):
     text_hashed: str = field(metadata=field_options(alias="textHashed"))

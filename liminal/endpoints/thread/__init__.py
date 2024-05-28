@@ -40,7 +40,7 @@ class ThreadEndpoint:
 
         Returns:
         -------
-            A Thread object representing the creatd thread.
+            A Thread object representing the created thread.
 
         """
         response = cast(
