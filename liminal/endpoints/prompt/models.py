@@ -83,7 +83,6 @@ class ReidentifiedToken(BaseModel):
     start: int
     end: int
     entity_type: str = field(metadata=field_options(alias="entityType"))
-    text: str
 
 
 @dataclass(frozen=True, kw_only=True)
