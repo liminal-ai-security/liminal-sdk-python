@@ -226,7 +226,7 @@ class Client:
         cookies: dict[str, str] | None = None,
         params: dict[str, str] | None = None,
         json: dict[str, Any] | None = None,
-    ) -> AsyncIterator[bytes]:
+    ) -> AsyncIterator[str]:
         """Make a request to the Liminal API server and return a streaming response.
 
         Args:
@@ -256,7 +256,9 @@ class Client:
             json=json,
         ) as resp:
             async for chunk in resp.aiter_bytes():
-                yield chunk
+                decoded_chunk = chunk.decode()
+                LOGGER.info("Received chunk of streaming response: %s", decoded_chunk)
+                yield decoded_chunk
 
     def add_session_id_callback(
         self, callback: Callable[[str], None]
