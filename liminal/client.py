@@ -255,10 +255,9 @@ class Client:
             params=params,
             json=json,
         ) as resp:
-            async for chunk in resp.aiter_bytes():
-                decoded_chunk = chunk.decode()
-                LOGGER.info("Received chunk of streaming response: %s", decoded_chunk)
-                yield decoded_chunk
+            async for line in resp.aiter_lines():
+                LOGGER.info("Received line of streaming response: %s", line)
+                yield line
 
     def add_session_id_callback(
         self, callback: Callable[[str], None]

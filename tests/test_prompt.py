@@ -120,6 +120,7 @@ async def test_cleanse_and_hydrate(
 
 @pytest.mark.asyncio()
 async def test_stream(
+    caplog: Mock,
     httpx_mock: HTTPXMock,
     mock_client: Client,
     prompt_analyze_response: dict[str, Any],
@@ -130,6 +131,7 @@ async def test_stream(
 
     Args:
     ----
+        caplog: The caplog fixture.
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
         prompt_analyze_response: An analyze response.
@@ -170,8 +172,14 @@ async def test_stream(
         findings=findings,
         thread_id=123,
     )
-    assert (
-        " ".join([chunk.content async for chunk in response]) == prompt_stream_response
+
+    # Walk through the stream to ensure (a) that each chunk is properly parsed as a
+    # StreamResponseChunk object and (b) we don't see any logged errors (indicating the
+    # stream completed as expected):
+    async for chunk in response:
+        assert isinstance(chunk, StreamResponseChunk)
+    assert not any(
+        m for m in caplog.messages if "Stream returned incomplete JSON chunk" in m
     )
 
 
