@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 from typing import Any
+from unittest.mock import Mock
 
 import pytest
 from pytest_httpx import HTTPXMock, IteratorStream
 
 from liminal import Client
+from liminal.endpoints.prompt.models import StreamResponseChunk
 from tests.common import TEST_API_SERVER_URL
 
 
@@ -118,23 +120,23 @@ async def test_cleanse_and_hydrate(
 
 @pytest.mark.asyncio()
 async def test_stream(
+    caplog: Mock,
     httpx_mock: HTTPXMock,
     mock_client: Client,
     prompt_analyze_response: dict[str, Any],
     prompt_stream_response: str,
     prompt_stream_response_iterator: IteratorStream,
-    prompt_submit_response: dict[str, Any],
 ) -> None:
-    """Test the submit endpoint.
+    """Test the stream endpoint.
 
     Args:
     ----
+        caplog: The caplog fixture.
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
         prompt_analyze_response: An analyze response.
         prompt_stream_response: A stream response.
         prompt_stream_response_iterator: A stream response iterator.
-        prompt_submit_response: A submit response.
 
     """
     httpx_mock.add_response(
@@ -170,8 +172,91 @@ async def test_stream(
         findings=findings,
         thread_id=123,
     )
-    assert (
-        " ".join([chunk.content async for chunk in response]) == prompt_stream_response
+
+    # Walk through the stream to ensure (a) that each chunk is properly parsed as a
+    # StreamResponseChunk object and (b) we don't see any logged errors (indicating the
+    # stream completed as expected):
+    async for chunk in response:
+        assert isinstance(chunk, StreamResponseChunk)
+    assert not any(
+        m for m in caplog.messages if "Stream returned incomplete JSON chunk" in m
+    )
+
+
+@pytest.mark.asyncio()
+@pytest.mark.parametrize(
+    "prompt_stream_response_iterator",
+    [
+        IteratorStream(
+            [
+                b"{'content': 'This '}",
+                b"{'content': 'is '}",
+                b"{'content': 'an '}",
+                b"{'content': 'incomplete",
+                b"{'content': 'test.'}",
+            ]
+        )
+    ],
+)
+async def test_stream_incomplete_chunk(
+    caplog: Mock,
+    httpx_mock: HTTPXMock,
+    mock_client: Client,
+    prompt_analyze_response: dict[str, Any],
+    prompt_stream_response_iterator: IteratorStream,
+) -> None:
+    """Test the stream endpoint when an incomplete JSON chunk is received.
+
+    Args:
+    ----
+        caplog: The caplog fixture.
+        httpx_mock: The HTTPX mock fixture.
+        mock_client: A mock Liminal client.
+        prompt_analyze_response: An analyze response.
+        prompt_stream_response_iterator: A stream response iterator.
+
+    """
+    httpx_mock.add_response(
+        method="POST",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/analyze",
+        json=prompt_analyze_response,
+    )
+    httpx_mock.add_response(
+        method="POST",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/submit",
+        stream=prompt_stream_response_iterator,
+    )
+
+    findings = await mock_client.prompt.analyze(
+        123,
+        (
+            "Write a short marketing email for a banking customer Jane Gansbuhler, "
+            "whose email address is egansbuhler0@pinterest.com and who lives at 14309 "
+            "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
+            "identifies as Female"
+        ),
+    )
+    assert len(findings.findings) == 5
+
+    response = mock_client.prompt.stream(
+        123,
+        (
+            "Write a short marketing email for a banking customer Jane Gansbuhler, "
+            "whose email address is egansbuhler0@pinterest.com and who lives at 14309 "
+            "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
+            "identifies as Female"
+        ),
+        findings=findings,
+        thread_id=123,
+    )
+
+    # Walk through the stream to ensure (a) that each chunk is properly parsed as a
+    # StreamResponseChunk object and (b) we properly log an error when the incomplete
+    # chunk is detected:
+    async for chunk in response:
+        assert isinstance(chunk, StreamResponseChunk)
+    assert any(
+        m for m in caplog.messages if "Stream returned incomplete JSON chunk" in m
     )
 
 

@@ -267,7 +267,7 @@ def prompt_stream_response_iterator_fixture(
             raw_chunk["finishReason"] = None
         else:
             raw_chunk["finishReason"] = "stop"
-        output.append(json.dumps(raw_chunk).encode())
+        output.append(f"{json.dumps(raw_chunk)}\n".encode())
     return IteratorStream(output)
 
 
