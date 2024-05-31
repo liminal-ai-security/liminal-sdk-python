@@ -9,6 +9,7 @@ import pytest
 from pytest_httpx import HTTPXMock, IteratorStream
 
 from liminal import Client
+from liminal.endpoints.prompt.models import StreamResponseChunk
 from tests.common import TEST_API_SERVER_URL
 
 
@@ -241,10 +242,11 @@ async def test_stream_incomplete_chunk(
         thread_id=123,
     )
 
-    # Walk through the stream purely to ensure a log is generated when an incomplete
-    # chunk is received:
-    async for _ in response:
-        pass
+    # Walk through the stream to ensure (a) that each chunk is properly parsed as a
+    # StreamResponseChunk object and (b) we properly log an error when the incomplete
+    # chunk is detected:
+    async for chunk in response:
+        assert isinstance(chunk, StreamResponseChunk)
     assert any(
         m for m in caplog.messages if "Stream returned incomplete JSON chunk" in m
     )
