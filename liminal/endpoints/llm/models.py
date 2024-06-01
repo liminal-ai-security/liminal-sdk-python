@@ -20,10 +20,12 @@ class ModelProviderKey(str, Enum):
     AWS_SAGEMAKER = "aws_sagemaker"
     AZURE_OPENAI = "azure_openai"
     COHERE = "cohere"
+    GOOGLE_VERTEX_AI = "google_vertex_ai"
     HUGGINGFACE = "huggingface"
     MISTRAL = "mistral"
     OLLAMA = "ollama"
     OPENAI = "openai"
+    PERPLEXITY = "perplexity"
 
 
 @dataclass(frozen=True, kw_only=True)

@@ -246,19 +246,23 @@ def prompt_stream_response_fixture() -> str:
 
 @pytest.fixture(name="prompt_stream_response_iterator", scope="session")
 def prompt_stream_response_iterator_fixture(
-    prompt_stream_response: str,
+    prompt_stream_response: str, request: pytest.FixtureRequest
 ) -> IteratorStream:
     """Return a fixture for a prompt stream iterator.
 
     Args:
     ----
         prompt_stream_response: The prompt stream response.
+        request: The pytest request object.
 
     Returns:
     -------
         A fixture for a prompt stream iterator.
 
     """
+    if param := request.param.values[0]:  # noqa: PD011
+        return param
+
     chunks = prompt_stream_response.split(" ")
     output = []
     for index, text in enumerate(chunks):
@@ -267,7 +271,7 @@ def prompt_stream_response_iterator_fixture(
             raw_chunk["finishReason"] = None
         else:
             raw_chunk["finishReason"] = "stop"
-        output.append(json.dumps(raw_chunk).encode())
+        output.append(f"{json.dumps(raw_chunk)}\n".encode())
     return IteratorStream(output)
 
 

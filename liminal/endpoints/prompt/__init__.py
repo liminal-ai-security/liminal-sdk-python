@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 from collections.abc import AsyncIterator, Awaitable, Callable
+import json
 from typing import Any, cast
 
 from mashumaro.codecs.json import json_decode
 
-from liminal.const import SOURCE
+from liminal.const import LOGGER, SOURCE
 from liminal.endpoints.prompt.models import (
     AnalysisFindings,
     CleanseData,
@@ -30,7 +31,7 @@ class PromptEndpoint:
     def __init__(
         self,
         request_and_validate: Callable[..., Awaitable[ValidatedResponseT]],
-        stream: Callable[..., AsyncIterator[bytes]],
+        stream: Callable[..., AsyncIterator[str]],
     ) -> None:
         """Initialize.
 
@@ -213,7 +214,11 @@ class PromptEndpoint:
         )
         payload["isStreaming"] = True
         async for chunk in self._stream("POST", "/api/v1/prompts/submit", json=payload):
-            yield json_decode(chunk.decode(), StreamResponseChunk)
+            try:
+                yield json_decode(chunk, StreamResponseChunk)
+            except json.decoder.JSONDecodeError:
+                LOGGER.warning("Stream returned incomplete JSON chunk: %s", chunk)
+                yield StreamResponseChunk(content=chunk, finish_reason=None)
 
     async def submit(
         self,

@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 from typing import Any
+from unittest.mock import Mock
 
 import pytest
 from pytest_httpx import HTTPXMock, IteratorStream
 
 from liminal import Client
+from liminal.endpoints.prompt.models import StreamResponseChunk
 from tests.common import TEST_API_SERVER_URL
 
 
@@ -117,24 +119,51 @@ async def test_cleanse_and_hydrate(
 
 
 @pytest.mark.asyncio()
+@pytest.mark.parametrize(
+    ("prompt_stream_response_iterator", "should_log_warning"),
+    [
+        (
+            pytest.param(None),
+            False,
+        ),
+        (
+            pytest.param(
+                IteratorStream(
+                    [
+                        b"{'content': 'This '}",
+                        b"{'content': 'is '}",
+                        b"{'content': 'an '}",
+                        b"{'content': 'incomplete",
+                        b"{'content': 'test.'}",
+                    ]
+                )
+            ),
+            True,
+        ),
+    ],
+    indirect=["prompt_stream_response_iterator"],
+)
 async def test_stream(
+    caplog: Mock,
     httpx_mock: HTTPXMock,
     mock_client: Client,
     prompt_analyze_response: dict[str, Any],
-    prompt_stream_response: str,
     prompt_stream_response_iterator: IteratorStream,
-    prompt_submit_response: dict[str, Any],
+    should_log_warning: bool,
 ) -> None:
-    """Test the submit endpoint.
+    """Test the stream endpoint.
+
+    We test for both a fully-functional stream and a stream that, for whatever reason,
+    returns an incomplete JSON string chunk.
 
     Args:
     ----
+        caplog: The caplog fixture.
         httpx_mock: The HTTPX mock fixture.
         mock_client: A mock Liminal client.
         prompt_analyze_response: An analyze response.
-        prompt_stream_response: A stream response.
         prompt_stream_response_iterator: A stream response iterator.
-        prompt_submit_response: A submit response.
+        should_log_warning: A flag indicating whether a warning should be logged.
 
     """
     httpx_mock.add_response(
@@ -170,9 +199,20 @@ async def test_stream(
         findings=findings,
         thread_id=123,
     )
-    assert (
-        " ".join([chunk.content async for chunk in response]) == prompt_stream_response
+
+    # Walk through the stream to ensure that each chunk is properly parsed as a
+    # StreamResponseChunk object:
+    async for chunk in response:
+        assert isinstance(chunk, StreamResponseChunk)
+
+    log_generator = (
+        m for m in caplog.messages if "Stream returned incomplete JSON chunk" in m
     )
+
+    if should_log_warning:
+        assert any(log_generator)
+    else:
+        assert not any(log_generator)
 
 
 @pytest.mark.asyncio()
