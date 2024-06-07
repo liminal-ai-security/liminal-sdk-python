@@ -23,7 +23,7 @@ N/A
 <!-- Replace  the [ ] with [x] to check the boxes. -->
 
 - [ ] My pull request has a descriptive title (not a vague title like `Update index.md`).
-- [ ] My pull request targets the _default_ branch of the repository (`main`) or a parent feature branch.
+- [ ] My pull request targets the _default_ branch of the repository (`development`) or a parent feature branch.
 - [ ] My commit messages follow [best practices][best_practices].
 - [ ] My code follows the established code style of the repository.
 - [ ] I added or updated tests for my changes (if applicable).
