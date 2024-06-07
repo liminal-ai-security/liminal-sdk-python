@@ -20,7 +20,6 @@ class AnalysisFinding(BaseModel):
 
     start: int
     end: int
-    origin: str
     score: float
     score_category: str = field(metadata=field_options(alias="scoreCategory"))
     text: str
