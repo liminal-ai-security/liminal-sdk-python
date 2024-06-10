@@ -24,7 +24,7 @@ warn_unused_ignores = true
 
 [tool.poetry]
 name = "liminal-sdk-python"
-version = "2024.05.1"
+version = "2024.05.1b0"
 description = "The Liminal SDK for Python"
 readme = "README.md"
 authors = [ "Aaron Bach <ab@liminal.ai>",]
@@ -35,14 +35,6 @@ classifiers = [ "License :: OSI Approved :: MIT License", "Programming Language 
 include = "liminal"
 from = "."
 
-[tool.coverage.report]
-exclude_lines = [ "TYPE_CHECKING", "raise NotImplementedError",]
-fail_under = 100
-show_missing = true
-
-[tool.coverage.run]
-source = [ "liminal",]
-
 [tool.poetry.dependencies]
 httpx = "0.27.0"
 msal = "1.28.0"
@@ -52,6 +44,14 @@ mashumaro = "3.13"
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/liminal-ai-security/liminal-sdk-python/issues"
 Changelog = "https://github.com/liminal-ai-security/liminal-sdk-python/releases"
+
+[tool.coverage.report]
+exclude_lines = [ "TYPE_CHECKING", "raise NotImplementedError",]
+fail_under = 100
+show_missing = true
+
+[tool.coverage.run]
+source = [ "liminal",]
 
 [tool.pylint.BASIC]
 class-const-naming-style = "any"
