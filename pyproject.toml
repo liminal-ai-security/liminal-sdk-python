@@ -45,7 +45,7 @@ source = [ "liminal",]
 
 [tool.poetry.dependencies]
 httpx = "0.27.0"
-msal = "1.28.0"
+msal = "1.28.1"
 python = "^3.11.8"
 mashumaro = "3.13"
 
