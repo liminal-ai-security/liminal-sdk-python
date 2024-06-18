@@ -47,7 +47,7 @@ source = [ "liminal",]
 httpx = "0.27.0"
 msal = "1.28.1"
 python = "^3.11.8"
-mashumaro = "3.13"
+mashumaro = "3.13.1"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/liminal-ai-security/liminal-sdk-python/issues"

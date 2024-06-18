@@ -594,13 +594,13 @@ colors = ["colorama (>=0.4.6)"]
 
 [[package]]
 name = "mashumaro"
-version = "3.13"
+version = "3.13.1"
 description = "Fast and well tested serialization library"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "mashumaro-3.13-py3-none-any.whl", hash = "sha256:59457aebb90e85b8b195e5ccc2d46b608f2709bedb679f9d19a952f9bb1fb6ec"},
-    {file = "mashumaro-3.13.tar.gz", hash = "sha256:636c31afe39d991efe4cad269fef0c8ba408d87581118784d2a47924c2073faa"},
+    {file = "mashumaro-3.13.1-py3-none-any.whl", hash = "sha256:ad0a162b8f4ea232dadd2891d77ff20165b855b9d84610f36ac84462d4576aa0"},
+    {file = "mashumaro-3.13.1.tar.gz", hash = "sha256:169f0290253b3e6077bcb39c14a9dd0791a3fdedd9e286e536ae561d4ff1975b"},
 ]
 
 [package.dependencies]
@@ -1202,4 +1202,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11.8"
-content-hash = "2f475ff420ffd97fc2e4af7fd0b45c60b56d52fc3b2a34371c26f929969273e6"
+content-hash = "33599a9e368f848b62a62c42f57edbd9e6e7b1b6be9bcbff424f62f5840de8d5"
