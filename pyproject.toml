@@ -52,7 +52,7 @@ msal = "1.29.0"
 python = "^3.11.8"
 
 [tool.poetry.group.dev.dependencies]
-blacken-docs = "1.16.0"
+blacken-docs = "1.18.0"
 codespell = "2.3.0"
 darglint = "1.8.1"
 mypy = "1.10.1"
