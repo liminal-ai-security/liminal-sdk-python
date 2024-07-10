@@ -153,7 +153,6 @@ disable = [
     "comparison-of-constants",              # PLR0133
     "comparison-with-itself",               # PLR0124
     "consider-alternative-union-syntax",    # UP007
-    "consider-dict-items",                  # C0206
     "consider-iterating-dictionary",        # SIM118
     "consider-merging-isinstance",          # PLR1701
     "consider-using-alias",                 # UP006
@@ -220,7 +219,6 @@ disable = [
     "notimplemented-raised",                # F901
     "pointless-statement",                  # B018
     "property-with-parameters",             # PLR0206
-    "protected-access",                     # SLF001
     "raise-missing-from",                   # B904
     "return-in-init",                       # PLE0101
     "return-outside-function",              # F706
@@ -371,6 +369,7 @@ ignore = [
     "ANN102",  # Missing type annotation for cls
     "D202",    # No blank lines allowed after function docstring
     "D203",    # 1 blank line required before class docstring
+    "D213",    # Multi-line docstring summary should start at the second line
     "PLR0913", # This is subjective
     "PLW2901", # Outer {outer_kind} variable {name} overwritten by inner {inner_kind} target
     "PT012",   # `pytest.raises()` block should contain a single simple statement
