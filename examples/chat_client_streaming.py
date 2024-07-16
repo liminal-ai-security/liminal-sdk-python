@@ -31,12 +31,11 @@ async def main() -> None:
     # Create an auth provider to authenticate the user:
     microsoft_auth_provider = DeviceCodeFlowProvider(tenant_id, client_id)
 
-    # Create the liminal SDK instance:
-    liminal = Client(microsoft_auth_provider, liminal_api_server_url)
-
     try:
-        # Authenticate the user:
-        await liminal.authenticate_from_auth_provider()
+        # Create the liminal SDK instance:
+        liminal = await Client.authenticate_from_auth_provider(
+            liminal_api_server_url, microsoft_auth_provider
+        )
     except LiminalError:
         _LOGGER.exception("Error during authentication")
 

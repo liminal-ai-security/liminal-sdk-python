@@ -9,7 +9,7 @@ from liminal import Client
 from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from liminal.errors import LiminalError
 
-_LOGGER: Final[logging.Logger] = logging.getLogger("quickstart_with_microsoft")
+_LOGGER: Final[logging.Logger] = logging.getLogger("authenticate_from_auth_provider")
 
 
 async def main() -> None:

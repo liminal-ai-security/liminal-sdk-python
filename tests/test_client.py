@@ -4,19 +4,13 @@ from __future__ import annotations
 
 import json
 
-import httpx
 import pytest
 from pytest_httpx import HTTPXMock
 
 from liminal import Client
 from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from liminal.errors import RequestError
-from tests.common import (
-    TEST_API_SERVER_URL,
-    TEST_CLIENT_ID,
-    TEST_HTTPX_DEFAULT_TIMEOUT,
-    TEST_TENANT_ID,
-)
+from tests.common import TEST_API_SERVER_URL, TEST_CLIENT_ID, TEST_TENANT_ID
 
 
 @pytest.mark.asyncio()
