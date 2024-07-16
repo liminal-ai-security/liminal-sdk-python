@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-import asyncio
-from collections.abc import AsyncIterator, Callable
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from json.decoder import JSONDecodeError
 from typing import Any, Final
@@ -21,7 +20,7 @@ from liminal.const import LOGGER
 from liminal.endpoints.llm import LLMEndpoint
 from liminal.endpoints.prompt import PromptEndpoint
 from liminal.endpoints.thread import ThreadEndpoint
-from liminal.errors import AuthError, RequestError
+from liminal.errors import RequestError
 from liminal.helpers.typing import ValidatedResponseT
 
 DEFAULT_REQUEST_TIMEOUT: Final[int] = 60
@@ -32,7 +31,6 @@ class Client:
 
     def __init__(
         self,
-        auth_provider: AuthProvider,
         api_server_url: str,
         *,
         httpx_client: AsyncClient | None = None,
@@ -41,25 +39,117 @@ class Client:
 
         Args:
         ----
-            auth_provider: The instantiated auth provider to use.
             api_server_url: The URL of the Liminal API server.
             httpx_client: An optional HTTPX client to use.
 
         """
         self._api_server_url = api_server_url
-        self._auth_provider = auth_provider
         self._httpx_client = httpx_client
 
         # Token information:
-        self._refresh_lock = asyncio.Lock()
-        self._refreshing = False
         self._session_id: str | None = None
-        self._session_id_callbacks: list[Callable[[str], None]] = []
 
         # Define endpoints:
         self.llm = LLMEndpoint(self._request_and_validate)
         self.prompt = PromptEndpoint(self._request_and_validate, self._stream)
         self.thread = ThreadEndpoint(self._request_and_validate)
+
+    @classmethod
+    async def authenticate_from_auth_provider(
+        cls,
+        api_server_url: str,
+        auth_provider: AuthProvider,
+        *,
+        httpx_client: AsyncClient | None = None,
+    ) -> Client:
+        """Authenticate with the Liminal API server (using the auth provider).
+
+        Args:
+        ----
+            api_server_url: The URL of the Liminal API server.
+            auth_provider: The auth provider to use.
+            httpx_client: An optional HTTPX client to use.
+
+        Returns:
+        -------
+            A new client instance.
+
+        """
+        client = cls(api_server_url, httpx_client=httpx_client)
+        provider_access_token = await auth_provider.get_access_token()
+        liminal_auth_response = await client._request(
+            "GET",
+            "/api/v1/auth/login/oauth/access-token",
+            headers={"Authorization": f"Bearer {provider_access_token}"},
+        )
+        client._save_session_id_from_auth_response(liminal_auth_response)
+        return client
+
+    @classmethod
+    async def authenticate_from_session_id(
+        cls,
+        api_server_url: str,
+        session_id: str,
+        *,
+        httpx_client: AsyncClient | None = None,
+    ) -> Client:
+        """Authenticate with the Liminal API server (using a session).
+
+        Args:
+        ----
+            api_server_url: The URL of the Liminal API server.
+            httpx_client: An optional HTTPX client to use.
+            session_id: The session ID to use. If not provided, the session that was
+                used to authenticate the user initially will be used.
+
+        Returns:
+        -------
+            A new client instance.
+
+        """
+        client = cls(api_server_url, httpx_client=httpx_client)
+        session_id_response = await client._request(
+            "GET", "/api/v1/users/me", cookies={"session": session_id}
+        )
+        client._save_session_id_from_auth_response(session_id_response)
+        return client
+
+    @classmethod
+    async def authenticate_from_token(
+        cls,
+        api_server_url: str,
+        token: str,
+        *,
+        httpx_client: AsyncClient | None = None,
+    ) -> Client:
+        """Authenticate with the Liminal API server (using a Liminal-provided token).
+
+        Args:
+        ----
+            api_server_url: The URL of the Liminal API server.
+            token: The token to use.
+            httpx_client: An optional HTTPX client to use.
+
+        """
+        client = cls(api_server_url, httpx_client=httpx_client)
+        liminal_auth_response = await client._request(
+            "POST",
+            "/api/v1/auth/test-automation/login",
+            headers={"x-test-automation-api-key": token},
+        )
+        client._save_session_id_from_auth_response(liminal_auth_response)
+        return client
+
+    @property
+    def session_id(self) -> str | None:
+        """Return the session ID.
+
+        Returns
+        -------
+            The session ID.
+
+        """
+        return self._session_id
 
     def _create_cookie_jar(self, raw_cookies: dict[str, Any] | None) -> Cookies:
         """Create a cookie jar from raw cookies.
@@ -91,7 +181,7 @@ class Client:
         if running_client := self._httpx_client and not self._httpx_client.is_closed:
             client = self._httpx_client
         else:
-            client = AsyncClient()
+            client = AsyncClient(timeout=DEFAULT_REQUEST_TIMEOUT)
 
         yield client
 
@@ -213,10 +303,6 @@ class Client:
         LOGGER.debug("Saving session cookie from auth response")
         self._session_id = auth_response.cookies["session"]
 
-        if self._session_id:
-            for callback in self._session_id_callbacks:
-                callback(self._session_id)
-
     async def _stream(
         self,
         method: str,
@@ -258,74 +344,3 @@ class Client:
             async for line in resp.aiter_lines():
                 LOGGER.info("Received line of streaming response: %s", line)
                 yield line
-
-    def add_session_id_callback(
-        self, callback: Callable[[str], None]
-    ) -> Callable[[], None]:
-        """Add a callback to be called when a new session is generated.
-
-        The purpose of this is to allow the user to save the session ID to a
-        persistent store using their own callback method.
-
-        Args:
-        ----
-            callback: The callback to add.
-
-        Returns:
-        -------
-            A method to cancel and remove the callback.
-
-        """
-        self._session_id_callbacks.append(callback)
-
-        def cancel() -> None:
-            """Cancel and remove the callback."""
-            self._session_id_callbacks.remove(callback)
-
-        return cancel
-
-    async def authenticate_from_auth_provider(self) -> None:
-        """Authenticate with the Liminal API server (using the auth provider)."""
-        provider_access_token = await self._auth_provider.get_access_token()
-        liminal_auth_response = await self._request(
-            "GET",
-            "/api/v1/auth/login/oauth/access-token",
-            headers={"Authorization": f"Bearer {provider_access_token}"},
-        )
-        self._save_session_id_from_auth_response(liminal_auth_response)
-
-    async def authenticate_from_session_id(
-        self, *, session_id: str | None = None
-    ) -> None:
-        """Authenticate with the Liminal API server (using a session).
-
-        Args:
-        ----
-            session_id: The session ID to use. If not provided, the session that was
-                used to authenticate the user initially will be used.
-
-        Raises:
-        ------
-            AuthError: If no session is provided and the user has not been authenticated
-                yet.
-
-        """
-        if not session_id:
-            session_id = self._session_id
-
-        if not session_id:
-            msg = "No valid session ID provided"
-            raise AuthError(msg)
-
-        async with self._refresh_lock:
-            self._refreshing = True
-
-            try:
-                session_id_response = await self._request(
-                    "GET",
-                    "/api/v1/users/me",
-                    cookies={"session": session_id},
-                )
-                self._save_session_id_from_auth_response(session_id_response)
-            finally:
-                self._refreshing = False

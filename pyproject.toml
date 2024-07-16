@@ -219,6 +219,7 @@ disable = [
     "notimplemented-raised",                # F901
     "pointless-statement",                  # B018
     "property-with-parameters",             # PLR0206
+    "protected-access",                     # W0212
     "raise-missing-from",                   # B904
     "return-in-init",                       # PLE0101
     "return-outside-function",              # F706
@@ -403,6 +404,9 @@ combine-as-imports = true
 split-on-trailing-comma = false
 
 [tool.ruff.lint.per-file-ignores]
+"liminal/client.py" = [
+    "SLF001",   # Class methods may choose to access private members
+]
 "tests/*" = [
     "ARG001",   # Tests often have unused arguments
     "FBT001",   # Test fixtures may be boolean values

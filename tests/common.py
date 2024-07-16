@@ -7,8 +7,10 @@ from typing import Final
 
 TEST_API_SERVER_URL: Final[str] = "https://api.domain.liminal.ai"
 TEST_CLIENT_ID: Final[str] = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+TEST_HTTPX_DEFAULT_TIMEOUT: Final[int] = 10
 TEST_SESSION_ID: Final[str] = "session-id"
 TEST_TENANT_ID: Final[str] = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+TEST_TOKEN: Final[str] = "token"
 
 
 def load_fixture(filename: str) -> str:
