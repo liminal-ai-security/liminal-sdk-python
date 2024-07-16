@@ -9,7 +9,7 @@ from liminal import Client
 from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from liminal.errors import LiminalError
 
-_LOGGER: Final[logging.Logger] = logging.getLogger("quickstart_with_microsoft")
+_LOGGER: Final[logging.Logger] = logging.getLogger("authenticate_from_auth_provider")
 
 
 async def main() -> None:
@@ -31,12 +31,11 @@ async def main() -> None:
     # Create an auth provider to authenticate the user:
     microsoft_auth_provider = DeviceCodeFlowProvider(tenant_id, client_id)
 
-    # Create the liminal SDK instance:
-    liminal = Client(microsoft_auth_provider, liminal_api_server_url)
-
     try:
-        # Authenticate the user:
-        await liminal.authenticate_from_auth_provider()
+        # Create the liminal SDK instance:
+        liminal = await Client.authenticate_from_auth_provider(
+            liminal_api_server_url, microsoft_auth_provider
+        )
 
         # Get available model instances:
         model_instances = await liminal.llm.get_available_model_instances()
