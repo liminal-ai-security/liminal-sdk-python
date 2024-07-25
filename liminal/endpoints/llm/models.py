@@ -63,8 +63,8 @@ class ModelInstance(BaseModel):
     name: str
 
     # Relations:
-    model_connection: ModelConnection | None = field(
-        default=None, metadata=field_options(alias="modelConnection")
+    model_connections: list[ModelConnection] = field(
+        metadata=field_options(alias="modelConnections")
     )
 
     # Timestamps:

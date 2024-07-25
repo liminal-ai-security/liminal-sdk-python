@@ -70,7 +70,7 @@ class LLMEndpoint:
             msg = f"Unknown model instance name: {model_instance_name}"
             raise ModelInstanceUnknownError(msg) from err
 
-        if model_instance.model_connection is None:
+        if len(model_instance.model_connections) <= 0:
             msg = f"Unknown model instance name: {model_instance_name}"
             raise ModelInstanceUnknownError(msg)
 
