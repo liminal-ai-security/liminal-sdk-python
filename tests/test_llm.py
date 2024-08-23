@@ -13,7 +13,7 @@ from liminal.errors import ModelInstanceUnknownError
 from tests.common import TEST_API_SERVER_URL
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_get_available_model_instances(
     httpx_mock: HTTPXMock, mock_client: Client, model_instances_response: dict[str, Any]
 ) -> None:
@@ -48,7 +48,7 @@ async def test_get_available_model_instances(
     )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("model_instance_name", "should_exist"),
     [

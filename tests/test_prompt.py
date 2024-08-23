@@ -13,7 +13,7 @@ from liminal.endpoints.prompt.models import StreamResponseChunk
 from tests.common import TEST_API_SERVER_URL
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_analyze(
     httpx_mock: HTTPXMock, mock_client: Client, prompt_analyze_response: dict[str, Any]
 ) -> None:
@@ -44,7 +44,7 @@ async def test_analyze(
     assert len(findings.findings) == 5
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_cleanse_and_hydrate(
     httpx_mock: HTTPXMock,
     mock_client: Client,
@@ -118,7 +118,7 @@ async def test_cleanse_and_hydrate(
     )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("prompt_stream_response_iterator", "should_log_warning"),
     [
@@ -215,7 +215,7 @@ async def test_stream(
         assert not any(log_generator)
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_submit(
     httpx_mock: HTTPXMock,
     mock_client: Client,
