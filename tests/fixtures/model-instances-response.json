@@ -27,6 +27,9 @@
     {
       "id": 2,
       "policyGroupId": 2,
+      "trainerThreadId": null,
+      "userId": null,
+      "instructions": "",
       "name": "GPT4",
       "createdAt": "2024-02-29T11:27:03.792Z",
       "deletedAt": null,
