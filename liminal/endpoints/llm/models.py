@@ -58,8 +58,13 @@ class ModelInstance(BaseModel):
 
     # References:
     policy_group_id: int = field(metadata=field_options(alias="policyGroupId"))
+    trainer_thread_id: int | None = field(
+        default=None, metadata=field_options(alias="trainerThreadId")
+    )
+    user_id: int | None = field(default=None, metadata=field_options(alias="userId"))
 
     # Fields:
+    instructions: str
     name: str
 
     # Relations:
