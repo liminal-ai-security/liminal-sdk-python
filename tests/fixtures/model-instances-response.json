@@ -3,6 +3,9 @@
     {
       "id": 1,
       "policyGroupId": 1,
+      "trainerThreadId": null,
+      "userId": null,
+      "instructions": "",
       "name": "GPT3.5",
       "createdAt": "2024-02-29T11:27:03.792Z",
       "deletedAt": null,

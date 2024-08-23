@@ -35,6 +35,9 @@ async def test_get_available_model_instances(
     instances = await mock_client.llm.get_available_model_instances()
     assert instances[0].id == 1
     assert instances[0].policy_group_id == 1
+    assert instances[0].trainer_thread_id is None
+    assert instances[0].user_id is None
+    assert instances[0].instructions == ""
     assert instances[0].name == "GPT3.5"
     assert instances[0].created_at == datetime(
         2024, 2, 29, 11, 27, 3, 792000, tzinfo=UTC

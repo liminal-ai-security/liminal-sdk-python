@@ -6,6 +6,7 @@
       "userId": 2,
       "name": "My thread",
       "source": "sdk",
+      "type": "default",
       "createdAt": "2024-03-17T03:24:10.827Z",
       "deletedAt": null,
       "updatedAt": "2024-03-17T03:24:10.827Z",
@@ -65,6 +66,9 @@
       "modelInstance": {
         "id": 1,
         "policyGroupId": 1,
+        "trainerThreadId": null,
+        "userId": null,
+        "instructions": "",
         "name": "GPT3.5",
         "createdAt": "2024-02-29T11:27:03.792Z",
         "deletedAt": null,
