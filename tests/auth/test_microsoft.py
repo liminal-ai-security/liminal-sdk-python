@@ -19,7 +19,7 @@ from tests.common import (
 )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "msal_accounts",
     [
@@ -48,7 +48,7 @@ async def test_auth_via_device_code_flow(
         )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "mock_msal_acquire_token_by_device_flow", [Mock(side_effect=TimeoutError)]
 )

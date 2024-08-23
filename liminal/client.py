@@ -77,12 +77,12 @@ class Client:
         """
         client = cls(api_server_url, httpx_client=httpx_client)
         provider_access_token = await auth_provider.get_access_token()
-        liminal_auth_response = await client._request(
+        liminal_auth_response = await client._request(  # noqa: SLF001
             "GET",
             "/api/v1/auth/login/oauth/access-token",
             headers={"Authorization": f"Bearer {provider_access_token}"},
         )
-        client._save_session_id_from_auth_response(liminal_auth_response)
+        client._save_session_id_from_auth_response(liminal_auth_response)  # noqa: SLF001
         return client
 
     @classmethod
@@ -108,10 +108,10 @@ class Client:
 
         """
         client = cls(api_server_url, httpx_client=httpx_client)
-        session_id_response = await client._request(
+        session_id_response = await client._request(  # noqa: SLF001
             "GET", "/api/v1/users/me", cookies={"session": session_id}
         )
-        client._save_session_id_from_auth_response(session_id_response)
+        client._save_session_id_from_auth_response(session_id_response)  # noqa: SLF001
         return client
 
     @classmethod
@@ -132,12 +132,12 @@ class Client:
 
         """
         client = cls(api_server_url, httpx_client=httpx_client)
-        liminal_auth_response = await client._request(
+        liminal_auth_response = await client._request(  # noqa: SLF001
             "POST",
             "/api/v1/auth/test-automation/login",
             headers={"x-test-automation-api-key": token},
         )
-        client._save_session_id_from_auth_response(liminal_auth_response)
+        client._save_session_id_from_auth_response(liminal_auth_response)  # noqa: SLF001
         return client
 
     @property
