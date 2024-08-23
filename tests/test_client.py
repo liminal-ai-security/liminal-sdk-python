@@ -13,7 +13,7 @@ from liminal.errors import RequestError
 from tests.common import TEST_API_SERVER_URL, TEST_CLIENT_ID, TEST_TENANT_ID
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_bad_endpoint(httpx_mock: HTTPXMock, mock_client: Client) -> None:
     """Test for a bad endpoint.
 
@@ -34,7 +34,7 @@ async def test_bad_endpoint(httpx_mock: HTTPXMock, mock_client: Client) -> None:
         await mock_client._request("GET", "/foobar")
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_bad_endpoint_generated_client(
     httpx_mock: HTTPXMock, patch_liminal_api_server: None, patch_msal: None
 ) -> None:
@@ -53,7 +53,7 @@ async def test_bad_endpoint_generated_client(
     )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "content", [b"This is unexpected", json.dumps({"foo": "bar"}).encode()]
 )

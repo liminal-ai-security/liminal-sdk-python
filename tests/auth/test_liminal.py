@@ -15,7 +15,7 @@ from tests.common import (
 )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_auth_via_session_id(httpx_mock: HTTPXMock, patch_msal: None) -> None:
     """Test authenticating via a saved session cookie.
 
@@ -40,7 +40,7 @@ async def test_auth_via_session_id(httpx_mock: HTTPXMock, patch_msal: None) -> N
         assert client.session_id is not None
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_auth_via_token(httpx_mock: HTTPXMock, patch_msal: None) -> None:
     """Test authenticating via a saved session cookie.
 

@@ -12,7 +12,7 @@ from liminal import Client
 from tests.common import TEST_API_SERVER_URL
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_create(
     httpx_mock: HTTPXMock, mock_client: Client, threads_create_response: dict[str, Any]
 ) -> None:
@@ -42,7 +42,7 @@ async def test_create(
     assert thread.updated_at == datetime(2024, 3, 18, 23, 22, 17, 976000, tzinfo=UTC)
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_get_available(
     httpx_mock: HTTPXMock,
     mock_client: Client,
@@ -67,7 +67,7 @@ async def test_get_available(
     assert len(threads) == 1
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_get_by_id(
     httpx_mock: HTTPXMock,
     mock_client: Client,
