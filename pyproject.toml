@@ -114,7 +114,6 @@ ruff = "0.6.2"
 
 [tool.poetry.group.dev.dependencies.coverage]
 version = "7.6.1"
-=======
 mypy = "1.11.0"
 packaging = "==24.1"
 pre-commit = "3.7.1"
