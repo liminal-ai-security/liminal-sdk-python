@@ -21,6 +21,7 @@ class ModelProviderKey(str, Enum):
     AZURE_OPENAI = "azure_openai"
     COHERE = "cohere"
     GOOGLE_VERTEX_AI = "google_vertex_ai"
+    GOOGLE_AI_STUDIO = "google_ai_studio"
     HUGGINGFACE = "huggingface"
     MISTRAL = "mistral"
     OLLAMA = "ollama"
