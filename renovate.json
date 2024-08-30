@@ -19,9 +19,8 @@
       "matchUpdateTypes": ["major"]
     },
     {
-      "matchManagers": ["poetry"],
       "matchPackageNames": ["python"],
-      "rangeStrategy": "replace"
+      "rangeStrategy": "widen"
     }
   ]
 }
