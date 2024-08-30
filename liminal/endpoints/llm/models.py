@@ -21,6 +21,7 @@ class ModelProviderKey(str, Enum):
     AZURE_OPENAI = "azure_openai"
     COHERE = "cohere"
     GOOGLE_VERTEX_AI = "google_vertex_ai"
+    GOOGLE_AI_STUDIO = "google_ai_studio"
     HUGGINGFACE = "huggingface"
     MISTRAL = "mistral"
     OLLAMA = "ollama"
@@ -58,8 +59,13 @@ class ModelInstance(BaseModel):
 
     # References:
     policy_group_id: int = field(metadata=field_options(alias="policyGroupId"))
+    trainer_thread_id: int | None = field(
+        default=None, metadata=field_options(alias="trainerThreadId")
+    )
+    user_id: int | None = field(default=None, metadata=field_options(alias="userId"))
 
     # Fields:
+    instructions: str
     name: str
 
     # Relations:

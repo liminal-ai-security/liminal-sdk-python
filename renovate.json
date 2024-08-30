@@ -21,7 +21,7 @@
     {
       "matchManagers": ["poetry"],
       "matchPackageNames": ["python"],
-      "rangeStrategy": "widen"
+      "rangeStrategy": "replace"
     }
   ]
 }

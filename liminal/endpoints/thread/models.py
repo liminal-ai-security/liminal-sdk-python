@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
+from enum import StrEnum
 from typing import Literal
 
 from mashumaro import field_options
@@ -44,18 +45,37 @@ class Chat(BaseModel):
     deleted_at: datetime = field(metadata=field_options(alias="deletedAt"))
 
 
+class ThreadType(StrEnum):
+    """Define a thread type."""
+
+    # The thread is default:
+    DEFAULT = "default"
+
+    # The thread used for training a model instance:
+    TRAINER = "trainer"
+
+
 @dataclass(frozen=True, kw_only=True)
 class Thread(BaseModel):
     """Define the schema for a thread."""
 
     id: int
-    user_id: int = field(metadata=field_options(alias="userId"))
+
+    # References:
     model_instance_id: int = field(metadata=field_options(alias="modelInstanceId"))
+    user_id: int = field(metadata=field_options(alias="userId"))
+
+    # Fields:
     name: str
     source: Literal["sdk"]
+    type: ThreadType
+
+    # Relations:
+    model_instance: ModelInstance = field(metadata=field_options(alias="modelInstance"))
+
+    # Timestamps:
     created_at: datetime = field(metadata=field_options(alias="createdAt"))
     deleted_at: datetime | None = field(
         default=None, metadata=field_options(alias="deletedAt")
     )
     updated_at: datetime = field(metadata=field_options(alias="updatedAt"))
-    model_instance: ModelInstance = field(metadata=field_options(alias="modelInstance"))

@@ -13,7 +13,7 @@ from liminal.errors import ModelInstanceUnknownError
 from tests.common import TEST_API_SERVER_URL
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_get_available_model_instances(
     httpx_mock: HTTPXMock, mock_client: Client, model_instances_response: dict[str, Any]
 ) -> None:
@@ -35,6 +35,9 @@ async def test_get_available_model_instances(
     instances = await mock_client.llm.get_available_model_instances()
     assert instances[0].id == 1
     assert instances[0].policy_group_id == 1
+    assert instances[0].trainer_thread_id is None
+    assert instances[0].user_id is None
+    assert instances[0].instructions == ""
     assert instances[0].name == "GPT3.5"
     assert instances[0].created_at == datetime(
         2024, 2, 29, 11, 27, 3, 792000, tzinfo=UTC
@@ -45,7 +48,7 @@ async def test_get_available_model_instances(
     )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("model_instance_name", "should_exist"),
     [
