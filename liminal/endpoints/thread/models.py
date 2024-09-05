@@ -32,12 +32,6 @@ class Chat(BaseModel):
 
     # Fields:
     cleansed_input: str = field(metadata=field_options(alias="cleansedInput"))
-    dedentified_text: list[DeidentifiedToken] = field(
-        metadata=field_options(alias="deidentifiedText")
-    )
-    hashed_deidentified_input: str = field(
-        metadata=field_options(alias="hashedDeidentifiedInput")
-    )
     hydrated_output: str = field(metadata=field_options(alias="hydratedOutput"))
     raw_input: str = field(metadata=field_options(alias="rawInput"))
     raw_output: str = field(metadata=field_options(alias="rawOutput"))

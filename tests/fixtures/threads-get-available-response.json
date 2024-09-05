@@ -15,45 +15,6 @@
           "id": 195,
           "threadId": 160,
           "cleansedInput": "Write a short marketing email for a banking customer PERSON_0, whose email address is EMAIL_ADDRESS_0 and who lives at LOCATION_0. PERSON_1 was born on DATE_0 and identifies as Female",
-          "deidentifiedText": [
-            {
-              "deidText": "PERSON_1",
-              "hashText": "AJPh1q+0BljDlzbYRQ/nEBDhIAdJAzH4NEAF9ZZnhWM="
-            },
-            {
-              "deidText": "PERSON_1",
-              "hashText": "AJPh1q+0BljDlzbYRQ/nEBDhIAdJAzH4NEAF9ZZnhWM="
-            },
-            {
-              "deidText": "PERSON_0",
-              "hashText": "3iPE4rL9KeoSMBB4gh1YQ95UJNi3CBKS4H5fFo+sS+I="
-            },
-            {
-              "deidText": "PERSON_0",
-              "hashText": "3iPE4rL9KeoSMBB4gh1YQ95UJNi3CBKS4H5fFo+sS+I="
-            },
-            {
-              "deidText": "LOCATION_0",
-              "hashText": "CUykcXazh2OTOiSb5rznBITv0MJ+TSVOOTXFgWTf1ny7Z8erqCciI2EnhdOpxbgWm0TZAiNSsRZXBIXiZfpJeA=="
-            },
-            {
-              "deidText": "LOCATION_0",
-              "hashText": "CUykcXazh2OTOiSb5rznBITv0MJ+TSVOOTXFgWTf1ny7Z8erqCciI2EnhdOpxbgWm0TZAiNSsRZXBIXiZfpJeA=="
-            },
-            {
-              "deidText": "EMAIL_ADDRESS_0",
-              "hashText": "lLU75+5q8qmgm2/MgDFCgFd3s0Jd832w5/1I/euBNGYMtUBKmBOSeT+JpqOr/KPU"
-            },
-            {
-              "deidText": "EMAIL_ADDRESS_0",
-              "hashText": "lLU75+5q8qmgm2/MgDFCgFd3s0Jd832w5/1I/euBNGYMtUBKmBOSeT+JpqOr/KPU"
-            },
-            {
-              "deidText": "DATE_TIME_0",
-              "hashText": "6j6UCiYmKXOL/itaeYjNMXfhF5peus987MjuBKd2qVQ="
-            }
-          ],
-          "hashedDeidentifiedInput": "Write a short marketing email for a banking customer 3iPE4rL9KeoSMBB4gh1YQ95UJNi3CBKS4H5fFo+sS+I=, whose email address is lLU75+5q8qmgm2/MgDFCgFd3s0Jd832w5/1I/euBNGYMtUBKmBOSeT+JpqOr/KPU and who lives at CUykcXazh2OTOiSb5rznBITv0MJ+TSVOOTXFgWTf1ny7Z8erqCciI2EnhdOpxbgWm0TZAiNSsRZXBIXiZfpJeA==. AJPh1q+0BljDlzbYRQ/nEBDhIAdJAzH4NEAF9ZZnhWM= was born on 6j6UCiYmKXOL/itaeYjNMXfhF5peus987MjuBKd2qVQ= and identifies as Female",
           "rawInput": "Write a short marketing email for a banking customer Jane Gansbuhler, whose email address is egansbuhler0@pinterest.com and who lives at 14309 Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and identifies as Female",
           "rawOutput": "Here's a draft marketing email for PERSON_0:\n\nSubject: Personalized Banking Solutions for Your Life, PERSON_0\n\nDear PERSON_0,\n\nAs a valued customer living in LOCATION_0, we want to ensure that your banking experience is tailored to your unique needs. At [Bank Name], we pride ourselves on offering personalized financial solutions that grow with you through every stage of life.\n\nCongratulations on your recent birthday on DATE_0! As you embark on this new year, we understand that your financial priorities may have evolved. Whether you're planning for retirement, saving for a major purchase, or seeking investment opportunities, our dedicated team is here to guide you every step of the way.\n\nWe invite you to schedule a complimentary financial review with one of our expert advisors. During this consultation, we'll take the time to understand your goals and craft a customized strategy that aligns with your values and aspirations.\n\nAt [Bank Name], we believe that banking should be a seamless and rewarding experience. That's why we offer a comprehensive suite of services, including online and mobile banking, competitive rates, and a wide range of investment options to help your money work harder for you.\n\nTo get started, simply reply to this email or give us a call at [Phone Number]. We look forward to helping you achieve your financial dreams.\n\nSincerely,\n[Your Name]\n[Bank Name]\n\n[Bank Logo]\n\nPlease note that this is a draft, and you may want to review and modify it to align with your brand's tone and messaging. Additionally, be sure to comply with any relevant laws and regulations regarding marketing communications.",
           "hydratedOutput": "Here's a draft marketing email for Jane Gansbuhler:\n\nSubject: Personalized Banking Solutions for Your Life, Jane Gansbuhler\n\nDear Jane Gansbuhler,\n\nAs a valued customer living in 14309 Lindbergh Circle Alexander City Alabama, we want to ensure that your banking experience is tailored to your unique needs. At [Bank Name], we pride ourselves on offering personalized financial solutions that grow with you through every stage of life.\n\nCongratulations on your recent birthday on DATE_0! As you embark on this new year, we understand that your financial priorities may have evolved. Whether you're planning for retirement, saving for a major purchase, or seeking investment opportunities, our dedicated team is here to guide you every step of the way.\n\nWe invite you to schedule a complimentary financial review with one of our expert advisors. During this consultation, we'll take the time to understand your goals and craft a customized strategy that aligns with your values and aspirations.\n\nAt [Bank Name], we believe that banking should be a seamless and rewarding experience. That's why we offer a comprehensive suite of services, including online and mobile banking, competitive rates, and a wide range of investment options to help your money work harder for you.\n\nTo get started, simply reply to this email or give us a call at [Phone Number]. We look forward to helping you achieve your financial dreams.\n\nSincerely,\n[Your Name]\n[Bank Name]\n\n[Bank Logo]\n\nPlease note that this is a draft, and you may want to review and modify it to align with your brand's tone and messaging. Additionally, be sure to comply with any relevant laws and regulations regarding marketing communications.",
