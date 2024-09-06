@@ -26,18 +26,24 @@ class Chat(BaseModel):
     """Define the schema for a chat."""
 
     id: int
+
+    # References:
     thread_id: int = field(metadata=field_options(alias="threadId"))
-    deidentified_input: str = field(metadata=field_options(alias="deidentifiedInput"))
+
+    # Fields:
+    cleansed_input: str = field(metadata=field_options(alias="cleansedInput"))
     dedentified_text: list[DeidentifiedToken] = field(
         metadata=field_options(alias="deidentifiedText")
     )
     hashed_deidentified_input: str = field(
         metadata=field_options(alias="hashedDeidentifiedInput")
     )
-    input: str
-    llm_output: str = field(metadata=field_options(alias="llmOutput"))
-    output: str
+    hydrated_output: str = field(metadata=field_options(alias="hydratedOutput"))
+    raw_input: str = field(metadata=field_options(alias="rawInput"))
+    raw_output: str = field(metadata=field_options(alias="rawOutput"))
     status: str
+
+    # Timestamps:
     created_at: datetime = field(metadata=field_options(alias="createdAt"))
     updated_at: datetime | None = field(
         default=None, metadata=field_options(alias="updatedAt")
