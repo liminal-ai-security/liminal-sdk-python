@@ -333,14 +333,17 @@ class Client:
         cookie_jar = self._create_cookie_jar(cookies)
 
         # pylint: disable=contextmanager-generator-missing-cleanup
-        async with self._get_httpx_client() as client, client.stream(
-            method,
-            url,
-            headers=headers,
-            cookies=cookie_jar,
-            params=params,
-            json=json,
-        ) as resp:
+        async with (
+            self._get_httpx_client() as client,
+            client.stream(
+                method,
+                url,
+                headers=headers,
+                cookies=cookie_jar,
+                params=params,
+                json=json,
+            ) as resp,
+        ):
             async for line in resp.aiter_lines():
                 LOGGER.info("Received line of streaming response: %s", line)
                 yield line
