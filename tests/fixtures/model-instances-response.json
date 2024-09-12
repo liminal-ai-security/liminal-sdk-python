@@ -10,7 +10,8 @@
       "createdAt": "2024-02-29T11:27:03.792Z",
       "deletedAt": null,
       "updatedAt": "2024-02-29T11:27:03.792Z",
-      "teams": [],
+      "allowedTeams": [],
+      "allowedUsers": [],
       "modelConnections": [
         {
           "id": 1,
@@ -34,7 +35,8 @@
       "createdAt": "2024-02-29T11:27:03.792Z",
       "deletedAt": null,
       "updatedAt": "2024-02-29T11:27:03.792Z",
-      "teams": [],
+      "allowedTeams": [],
+      "allowedUsers": [],
       "modelConnections": []
     }
   ]
