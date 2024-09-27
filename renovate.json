@@ -16,7 +16,7 @@
   "packageRules": [
     {
       "description": "Don't pin Python versions (stay within our SemVer range)",
-      "matchPackageNames": ["python/cpython"],
+      "matchPackageNames": ["*python*"],
       "rangeStrategy": "replace"
     },
     {
