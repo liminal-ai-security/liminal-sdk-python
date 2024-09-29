@@ -147,6 +147,7 @@ disable = [
     "bare-except",                          # E722
     "bidirectional-unicode",                # PLE2502
     "binary-op-exception",                  # PLW0711
+    "boolean-chained-comparison",           # R1716
     "broad-exception-caught",               # W0718
     "cell-var-from-loop",                   # B023
     "comparison-of-constants",              # PLR0133
