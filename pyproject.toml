@@ -81,7 +81,7 @@ pytest = "8.3.3"
 pytest-asyncio = "0.24.0"
 pytest-cov = "5.0.0"
 pytest-httpx = "0.31.2"
-ruff = "0.6.7"
+ruff = "0.6.8"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/liminal-ai-security/liminal-sdk-python/issues"
@@ -147,6 +147,7 @@ disable = [
     "bare-except",                          # E722
     "bidirectional-unicode",                # PLE2502
     "binary-op-exception",                  # PLW0711
+    "boolean-chained-comparison",           # R1716
     "broad-exception-caught",               # W0718
     "cell-var-from-loop",                   # B023
     "comparison-of-constants",              # PLR0133
