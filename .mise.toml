@@ -1,5 +1,5 @@
 [tools]
-act = { version="0.2.67" }
+act = { version="0.2.68" }
 python = { version="3.12.6" }
 
 [env]
