@@ -18,6 +18,7 @@ jobs:
         python-version:
           - "3.11"
           - "3.12"
+          - "3.13"
 
     steps:
       - name: ⤵️ Check out code from GitHub
