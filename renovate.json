@@ -15,11 +15,13 @@
 
   "packageRules": [
     {
-      "dependencyDashboardApproval": true,
-      "matchUpdateTypes": ["major"]
+      "description": "Don't pin Python versions (stay within our SemVer range)",
+      "matchPackageNames": ["*python*"],
+      "rangeStrategy": "replace"
     },
     {
-      "matchPackageNames": ["python"],
+      "description": "Don't pin versions of transitive packages",
+      "matchPackageNames": ["anyio", "requests"],
       "rangeStrategy": "replace"
     }
   ]
