@@ -20,6 +20,7 @@ class ModelProviderKey(str, Enum):
     AWS_SAGEMAKER = "aws_sagemaker"
     AZURE_OPENAI = "azure_openai"
     COHERE = "cohere"
+    COPILOT_STUDIO = "copilot_studio"
     GOOGLE_VERTEX_AI = "google_vertex_ai"
     GOOGLE_AI_STUDIO = "google_ai_studio"
     HUGGINGFACE = "huggingface"
