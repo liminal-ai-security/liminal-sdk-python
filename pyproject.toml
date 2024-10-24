@@ -70,7 +70,7 @@ requests = ">=2.32.2"
 [tool.poetry.group.dev.dependencies]
 blacken-docs = "1.19.0"
 codespell = "2.3.0"
-coverage = {version = "7.6.3", extras = ["toml"]}
+coverage = {version = "7.6.4", extras = ["toml"]}
 darglint = "1.8.1"
 mypy = "1.12.1"
 packaging = "==24.1"
