@@ -48,7 +48,7 @@ def _patch_msal_fixture(
     msal_accounts: list[Mock],
     msal_cache_token_response: dict[str, Any],
     msal_token_by_device_flow_response: dict[str, Any],
-) -> Generator[None, None, None]:
+) -> Generator[None]:
     """Patch the MSAL library.
 
     Args:
@@ -92,7 +92,7 @@ async def mock_client_fixture(
     model_instances_response: dict[str, Any],
     patch_liminal_api_server: None,
     patch_msal: None,
-) -> AsyncGenerator[Client, None]:
+) -> AsyncGenerator[Client]:
     """Return a fixture for a Liminal client.
 
     Args:
