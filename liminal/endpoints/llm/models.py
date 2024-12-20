@@ -23,6 +23,7 @@ class ModelProviderKey(str, Enum):
     COPILOT_STUDIO = "copilot_studio"
     GOOGLE_VERTEX_AI = "google_vertex_ai"
     GOOGLE_AI_STUDIO = "google_ai_studio"
+    GROQ = "groq"
     HUGGINGFACE = "huggingface"
     MISTRAL = "mistral"
     OLLAMA = "ollama"
