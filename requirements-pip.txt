@@ -1,2 +1,2 @@
 # Install a specific version of pip before installing any other package:
-pip==24.2
+pip==24.3.1
