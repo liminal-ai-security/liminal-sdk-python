@@ -88,9 +88,9 @@ main() {
   fi
 
   msg "${BLUE}🚜 Installing dependencies...${NOFORMAT}"
-  pip3 install -r "$REPO_DIR/requirements-pip.txt"
-  pip3 install -r "$REPO_DIR/requirements-dev.txt"
-  poetry install
+  python -m ensurepip
+  python -m pip install -r "$REPO_DIR/requirements-dev.txt"
+  uv sync --extra dev
 
   msg "${BLUE}🚜 Installing pre-commit hooks...${NOFORMAT}"
   pre-commit install

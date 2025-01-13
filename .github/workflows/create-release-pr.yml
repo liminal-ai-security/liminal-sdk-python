@@ -31,27 +31,18 @@ jobs:
         with:
           python-version: 3.11.8
 
-      - name: ⤵️ Get pip cache directory
-        id: pip-cache
-        run: |
-          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
-
-      - name: ⤵️ Establish pip cache
-        uses: actions/cache@v4
+      - name: 🏗 Install uv
+        uses: astral-sh/setup-uv@v5
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: "${{ runner.os }}-pip-\
-            ${{ hashFiles('.github/workflows/requirements.txt') }}"
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          version: "0.5.18"
 
       - name: 🏗 Install workflow dependencies
         run: |
-          pip install -r .github/workflows/requirements.txt
+          uv sync --extra gh_action_create_release_pr
 
       - name: 🔢 Update pyproject.toml version
         run: |
-          python -c "import toml; d = toml.load('pyproject.toml'); d['tool']['poetry']['version'] = '${{ inputs.version }}'; toml.dump(d, open('pyproject.toml', 'w'))"
+          python -c "import toml; d = toml.load('pyproject.toml'); d['project']['version'] = '${{ inputs.version }}'; toml.dump(d, open('pyproject.toml', 'w'))"
           git checkout -b release/${{ inputs.version }}
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"

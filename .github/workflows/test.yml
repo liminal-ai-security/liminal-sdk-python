@@ -29,38 +29,16 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: ⤵️ Get pip cache directory
-        id: pip-cache
-        run: |
-          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
-
-      - name: ⤵️ Establish pip cache
-        uses: actions/cache@v4
+      - name: 🏗 Install uv
+        uses: astral-sh/setup-uv@v5
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: "${{ runner.os }}-pip-\
-            ${{ hashFiles('.github/workflows/requirements.txt') }}"
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          cache-dependency-glob: "uv.lock"
+          enable-cache: true
+          version: "0.5.18"
 
       - name: 🏗 Install workflow dependencies
         run: |
-          pip install -r .github/workflows/requirements.txt
-          poetry config virtualenvs.create true
-          poetry config virtualenvs.in-project true
-
-      - name: ⤵️ Establish poetry cache
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: "venv-${{ steps.setup-python.outputs.python-version }}-\
-            ${{ hashFiles('poetry.lock') }}"
-          restore-keys: |
-            venv-${{ steps.setup-python.outputs.python-version }}-
-
-      - name: 🏗 Install package dependencies
-        run: |
-          poetry install --no-interaction
+          uv sync --extra gh_action_test
 
       - name: 🚀 Run pytest
-        run: poetry run pytest --cov liminal tests
+        run: pytest --cov liminal tests
