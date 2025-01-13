@@ -60,7 +60,7 @@ version = "2024.09.0b1"
 cryptography = "==43.0.3"
 httpx = "0.28.1"
 mashumaro = "3.14"
-msal = "1.31.0"
+msal = "1.31.1"
 python = ">=3.11,<3.13"
 
 # Below are pinned sub-dependencies to improve security of the main dependencies of the SDK
