@@ -39,7 +39,7 @@ jobs:
 
       - name: 🔢 Update pyproject.toml version
         run: |
-          ./scripts/bump-version.py "${{ inputs.version }}"
+          uv run ./scripts/bump-version.py "${{ inputs.version }}"
           git checkout -b release/${{ inputs.version }}
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
