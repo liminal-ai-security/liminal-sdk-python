@@ -51,6 +51,7 @@ gh_workflow_lint_and_analyze = [
   "codespell==2.3.0",
   "darglint==1.8.1",
   "mypy==1.14.1",
+  "pre-commit==4.0.1",
   "pre-commit-hooks==5.0.0",
   "pylint==3.3.3",
   "ruff==0.9.1",
