@@ -73,7 +73,7 @@ codespell = "2.3.0"
 coverage = {version = "7.6.10", extras = ["toml"]}
 darglint = "1.8.1"
 mypy = "1.14.1"
-packaging = "==24.1"
+packaging = "==24.2"
 pre-commit = "4.0.1"
 pre-commit-hooks = "5.0.0"
 pylint = "3.3.3"
