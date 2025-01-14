@@ -39,4 +39,5 @@ jobs:
 
       - name: Run pre-commit hooks
         run: |
-          uv run pre-commit --files ${{ steps.changed-files.outputs.all_changed_files }}
+          uv run pre-commit run \
+            --files ${{ steps.changed-files.outputs.all_changed_files }}
