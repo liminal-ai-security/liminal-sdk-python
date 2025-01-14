@@ -260,7 +260,7 @@ def prompt_stream_response_iterator_fixture(
         A fixture for a prompt stream iterator.
 
     """
-    if param := request.param.values[0]:  # noqa: PD011
+    if param := request.param.values[0]:
         return param
 
     chunks = prompt_stream_response.split(" ")

@@ -31,6 +31,10 @@ jobs:
         run: |
           uv sync --extra gh_workflow_lint_and_analyze
 
+      - name: 🏗 Add uv binaries to the path
+        run: |
+          echo "./.venv/bin" >> $GITHUB_PATH
+
       - name: Get all changed files
         id: changed-files
         uses: tj-actions/changed-files@v45.0.6
