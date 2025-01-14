@@ -38,11 +38,11 @@ jobs:
 
       - name: 🏗 Install workflow dependencies
         run: |
-          uv sync --extra gh_workflow_create_release_pr
+          uv sync --extra release
 
       - name: 🔢 Update pyproject.toml version
         run: |
-          python -c "import toml; d = toml.load('pyproject.toml'); d['project']['version'] = '${{ inputs.version }}'; toml.dump(d, open('pyproject.toml', 'w'))"
+          ./scripts/bump-version.py "${{ inputs.version }}"
           git checkout -b release/${{ inputs.version }}
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"

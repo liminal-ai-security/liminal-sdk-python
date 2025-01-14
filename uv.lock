@@ -366,7 +366,7 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-dev = [
+all = [
     { name = "blacken-docs" },
     { name = "codespell" },
     { name = "darglint" },
@@ -379,12 +379,14 @@ dev = [
     { name = "pytest-cov" },
     { name = "pytest-httpx" },
     { name = "ruff" },
+    { name = "tomli" },
+    { name = "tomli-w" },
     { name = "uv" },
 ]
-gh-workflow-create-release-pr = [
-    { name = "toml" },
+build = [
+    { name = "uv" },
 ]
-gh-workflow-lint-and-analyze = [
+lint = [
     { name = "blacken-docs" },
     { name = "codespell" },
     { name = "darglint" },
@@ -396,7 +398,11 @@ gh-workflow-lint-and-analyze = [
     { name = "pytest-asyncio" },
     { name = "ruff" },
 ]
-gh-workflow-test = [
+release = [
+    { name = "tomli" },
+    { name = "tomli-w" },
+]
+test = [
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
@@ -406,39 +412,29 @@ gh-workflow-test = [
 [package.metadata]
 requires-dist = [
     { name = "anyio", specifier = ">=4.4.0" },
-    { name = "blacken-docs", marker = "extra == 'dev'", specifier = "==1.19.1" },
-    { name = "blacken-docs", marker = "extra == 'gh-workflow-lint-and-analyze'", specifier = "==1.19.1" },
-    { name = "codespell", marker = "extra == 'dev'", specifier = "==2.3.0" },
-    { name = "codespell", marker = "extra == 'gh-workflow-lint-and-analyze'", specifier = "==2.3.0" },
+    { name = "blacken-docs", marker = "extra == 'lint'", specifier = "==1.19.1" },
+    { name = "codespell", marker = "extra == 'lint'", specifier = "==2.3.0" },
     { name = "cryptography", specifier = "==43.0.3" },
-    { name = "darglint", marker = "extra == 'dev'", specifier = "==1.8.1" },
-    { name = "darglint", marker = "extra == 'gh-workflow-lint-and-analyze'", specifier = "==1.8.1" },
+    { name = "darglint", marker = "extra == 'lint'", specifier = "==1.8.1" },
     { name = "httpx", specifier = "==0.28.1" },
+    { name = "liminal-sdk-python", extras = ["build", "lint", "release", "test"], marker = "extra == 'all'" },
     { name = "mashumaro", specifier = "==3.15" },
     { name = "msal", specifier = "==1.31.1" },
-    { name = "mypy", marker = "extra == 'dev'", specifier = "==1.14.1" },
-    { name = "mypy", marker = "extra == 'gh-workflow-lint-and-analyze'", specifier = "==1.14.1" },
-    { name = "pre-commit", marker = "extra == 'dev'", specifier = "==4.0.1" },
-    { name = "pre-commit", marker = "extra == 'gh-workflow-lint-and-analyze'", specifier = "==4.0.1" },
-    { name = "pre-commit-hooks", marker = "extra == 'dev'", specifier = "==5.0.0" },
-    { name = "pre-commit-hooks", marker = "extra == 'gh-workflow-lint-and-analyze'", specifier = "==5.0.0" },
-    { name = "pylint", marker = "extra == 'dev'", specifier = "==3.3.3" },
-    { name = "pylint", marker = "extra == 'gh-workflow-lint-and-analyze'", specifier = "==3.3.3" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = "==8.3.4" },
-    { name = "pytest", marker = "extra == 'gh-workflow-lint-and-analyze'", specifier = "==8.3.4" },
-    { name = "pytest", marker = "extra == 'gh-workflow-test'", specifier = "==8.3.4" },
-    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = "==0.25.2" },
-    { name = "pytest-asyncio", marker = "extra == 'gh-workflow-lint-and-analyze'", specifier = "==0.25.2" },
-    { name = "pytest-asyncio", marker = "extra == 'gh-workflow-test'", specifier = "==0.25.2" },
-    { name = "pytest-cov", marker = "extra == 'dev'", specifier = "==6.0.0" },
-    { name = "pytest-cov", marker = "extra == 'gh-workflow-test'", specifier = "==6.0.0" },
-    { name = "pytest-httpx", marker = "extra == 'dev'", specifier = "==0.35.0" },
-    { name = "pytest-httpx", marker = "extra == 'gh-workflow-test'", specifier = "==0.35.0" },
+    { name = "mypy", marker = "extra == 'lint'", specifier = "==1.14.1" },
+    { name = "pre-commit", marker = "extra == 'lint'", specifier = "==4.0.1" },
+    { name = "pre-commit-hooks", marker = "extra == 'lint'", specifier = "==5.0.0" },
+    { name = "pylint", marker = "extra == 'lint'", specifier = "==3.3.3" },
+    { name = "pytest", marker = "extra == 'lint'", specifier = "==8.3.4" },
+    { name = "pytest", marker = "extra == 'test'", specifier = "==8.3.4" },
+    { name = "pytest-asyncio", marker = "extra == 'lint'", specifier = "==0.25.2" },
+    { name = "pytest-asyncio", marker = "extra == 'test'", specifier = "==0.25.2" },
+    { name = "pytest-cov", marker = "extra == 'test'", specifier = "==6.0.0" },
+    { name = "pytest-httpx", marker = "extra == 'test'", specifier = "==0.35.0" },
     { name = "requests", specifier = ">=2.32.2" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = "==0.9.1" },
-    { name = "ruff", marker = "extra == 'gh-workflow-lint-and-analyze'", specifier = "==0.9.1" },
-    { name = "toml", marker = "extra == 'gh-workflow-create-release-pr'", specifier = "==0.10.2" },
-    { name = "uv", marker = "extra == 'dev'", specifier = "==0.5.18" },
+    { name = "ruff", marker = "extra == 'lint'", specifier = "==0.9.1" },
+    { name = "tomli", marker = "extra == 'release'", specifier = "==2.2.1" },
+    { name = "tomli-w", marker = "extra == 'release'", specifier = "==1.1.0" },
+    { name = "uv", marker = "extra == 'build'", specifier = "==0.5.18" },
 ]
 
 [[package]]
@@ -791,15 +787,6 @@ wheels = [
 ]
 
 [[package]]
-name = "toml"
-version = "0.10.2"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/be/ba/1f744cdc819428fc6b5084ec34d9b30660f6f9daaf70eead706e3203ec3c/toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f", size = 22253 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/44/6f/7120676b6d73228c96e17f1f794d8ab046fc910d781c8d151120c3f1569e/toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b", size = 16588 },
-]
-
-[[package]]
 name = "tomli"
 version = "2.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -826,6 +813,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/1c/9a/47c0449b98e6e7d1be6cbac02f93dd79003234ddc4aaab6ba07a9a7482e2/tomli-2.2.1-cp312-cp312-win32.whl", hash = "sha256:889f80ef92701b9dbb224e49ec87c645ce5df3fa2cc548664eb8a25e03127a98", size = 98875 },
     { url = "https://files.pythonhosted.org/packages/ef/60/9b9638f081c6f1261e2688bd487625cd1e660d0a85bd469e91d8db969734/tomli-2.2.1-cp312-cp312-win_amd64.whl", hash = "sha256:7fc04e92e1d624a4a63c76474610238576942d6b8950a2d7f908a340494e67e4", size = 109418 },
     { url = "https://files.pythonhosted.org/packages/6e/c2/61d3e0f47e2b74ef40a68b9e6ad5984f6241a942f7cd3bbfbdbd03861ea9/tomli-2.2.1-py3-none-any.whl", hash = "sha256:cb55c73c5f4408779d0cf3eef9f762b9c9f147a77de7b258bef0a5628adc85cc", size = 14257 },
+]
+
+[[package]]
+name = "tomli-w"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d4/19/b65f1a088ee23e37cdea415b357843eca8b1422a7b11a9eee6e35d4ec273/tomli_w-1.1.0.tar.gz", hash = "sha256:49e847a3a304d516a169a601184932ef0f6b61623fe680f836a2aa7128ed0d33", size = 6929 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c4/ac/ce90573ba446a9bbe65838ded066a805234d159b4446ae9f8ec5bbd36cbd/tomli_w-1.1.0-py3-none-any.whl", hash = "sha256:1403179c78193e3184bfaade390ddbd071cba48a32a2e62ba11aae47490c63f7", size = 6440 },
 ]
 
 [[package]]
