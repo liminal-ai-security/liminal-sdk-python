@@ -81,7 +81,7 @@ pytest = "8.3.4"
 pytest-asyncio = "0.25.2"
 pytest-cov = "6.0.0"
 pytest-httpx = "0.35.0"
-ruff = "0.7.1"
+ruff = "0.9.1"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/liminal-ai-security/liminal-sdk-python/issues"
