@@ -27,7 +27,7 @@ license = "Apache-2.0"
 name = "liminal-sdk-python"
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
-version = "2024.09.0b1"
+version = "2025.01.0b0"
 
 [project.optional-dependencies]
 all = [
