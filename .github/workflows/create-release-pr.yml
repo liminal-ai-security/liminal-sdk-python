@@ -21,9 +21,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: development
 
       - name: 🏗 Set up Python 3.11
         id: setup-python
@@ -38,11 +35,11 @@ jobs:
 
       - name: 🏗 Install workflow dependencies
         run: |
-          uv sync --extra gh_workflow_create_release_pr
+          uv sync --extra release
 
       - name: 🔢 Update pyproject.toml version
         run: |
-          python -c "import toml; d = toml.load('pyproject.toml'); d['project']['version'] = '${{ inputs.version }}'; toml.dump(d, open('pyproject.toml', 'w'))"
+          uv run ./scripts/bump-version.py "${{ inputs.version }}"
           git checkout -b release/${{ inputs.version }}
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
