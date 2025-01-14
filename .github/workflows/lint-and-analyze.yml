@@ -20,38 +20,16 @@ jobs:
         with:
           python-version: 3.11.8
 
-      - name: ⤵️ Get pip cache directory
-        id: pip-cache
-        run: |
-          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
-
-      - name: ⤵️ Establish pip cache
-        uses: actions/cache@v4
+      - name: 🏗 Install uv
+        uses: astral-sh/setup-uv@v5
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: "${{ runner.os }}-pip-\
-            ${{ hashFiles('requirements-dev.txt') }}"
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          cache-dependency-glob: "uv.lock"
+          enable-cache: true
+          version: "0.5.18"
 
       - name: 🏗 Install workflow dependencies
         run: |
-          pip install -r requirements-dev.txt
-          poetry config virtualenvs.create true
-          poetry config virtualenvs.in-project true
-
-      - name: ⤵️ Establish poetry cache
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: "venv-${{ steps.setup-python.outputs.python-version }}-\
-            ${{ hashFiles('poetry.lock') }}"
-          restore-keys: |
-            venv-${{ steps.setup-python.outputs.python-version }}-
-
-      - name: 🏗 Install package dependencies
-        run: |
-          poetry install --no-interaction
+          uv sync --extra gh_workflow_lint_and_analyze
 
       - name: Get all changed files
         id: changed-files
@@ -60,8 +38,6 @@ jobs:
           fetch_depth: 0
 
       - name: Run pre-commit hooks
-        uses: pre-commit/action@v3.0.1
-        env:
-          SKIP: no-commit-to-branch
-        with:
-          extra_args: --files ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          uv run pre-commit run \
+            --files ${{ steps.changed-files.outputs.all_changed_files }}

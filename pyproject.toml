@@ -1,6 +1,69 @@
 [build-system]
-requires = [ "poetry-core==1.9.1",]
+requires = [ "poetry-core==2.0.1" ]
 build-backend = "poetry.core.masonry.api"
+
+[project]
+classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "anyio>=4.4.0",
+  "cryptography==43.0.3",
+  "httpx==0.28.1",
+  "mashumaro==3.15",
+  "msal==1.31.1",
+  "requests>=2.32.2",
+]
+description = "The Liminal SDK for Python"
+license = "Apache-2.0"
+name = "liminal-sdk-python"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+version = "2024.09.0b1"
+
+[project.optional-dependencies]
+dev = [
+  "blacken-docs==1.19.1",
+  "codespell==2.3.0",
+  "darglint==1.8.1",
+  "mypy==1.14.1",
+  "pre-commit==4.0.1",
+  "pre-commit-hooks==5.0.0",
+  "pylint==3.3.3",
+  "pytest==8.3.4",
+  "pytest-asyncio==0.25.2",
+  "pytest-cov==6.0.0",
+  "pytest-httpx==0.35.0",
+  "ruff==0.9.1",
+  "uv==0.5.18",
+]
+gh_workflow_create_release_pr = [
+  "toml==0.10.2",
+]
+gh_workflow_lint_and_analyze = [
+  "blacken-docs==1.19.1",
+  "codespell==2.3.0",
+  "darglint==1.8.1",
+  "mypy==1.14.1",
+  "pre-commit-hooks==5.0.0",
+  "pre-commit==4.0.1",
+  "pylint==3.3.3",
+  "pytest-asyncio==0.25.2",
+  "pytest==8.3.4",
+  "ruff==0.9.1",
+]
+gh_workflow_test = [
+  "pytest==8.3.4",
+  "pytest-asyncio==0.25.2",
+  "pytest-cov==6.0.0",
+  "pytest-httpx==0.35.0",
+]
 
 [tool.coverage.report]
 exclude_lines = [
@@ -36,56 +99,10 @@ warn_unused_configs = true
 warn_unused_ignores = true
 
 [tool.poetry]
-classifiers = [
-  "License :: OSI Approved :: Apache Software License",
-  "Programming Language :: Python",
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: Implementation :: CPython",
-  "Programming Language :: Python :: Implementation :: PyPy",
-]
-authors = [ "Aaron Bach <ab@liminal.ai>",]
-description = "The Liminal SDK for Python"
-license = "Apache-2.0"
-name = "liminal-sdk-python"
+authors = [ "Liminal AI <info@liminal.ai>" ]
 packages = [
     { include = "liminal" },
 ]
-readme = "README.md"
-repository = "https://github.com/liminal-ai-security/liminal-sdk-python"
-version = "2024.09.0b1"
-
-[tool.poetry.dependencies]
-cryptography = "==43.0.3"
-httpx = "0.28.1"
-mashumaro = "3.15"
-msal = "1.31.1"
-python = ">=3.11,<3.13"
-
-# Below are pinned sub-dependencies to improve security of the main dependencies of the SDK
-anyio = ">=4.4.0"
-requests = ">=2.32.2"
-
-[tool.poetry.group.dev.dependencies]
-blacken-docs = "1.19.1"
-codespell = "2.3.0"
-coverage = {version = "7.6.10", extras = ["toml"]}
-darglint = "1.8.1"
-mypy = "1.14.1"
-packaging = "==24.2"
-pre-commit = "4.0.1"
-pre-commit-hooks = "5.0.0"
-pylint = "3.3.3"
-pytest = "8.3.4"
-pytest-asyncio = "0.25.2"
-pytest-cov = "6.0.0"
-pytest-httpx = "0.35.0"
-ruff = "0.9.1"
-
-[tool.poetry.urls]
-"Bug Tracker" = "https://github.com/liminal-ai-security/liminal-sdk-python/issues"
-Changelog = "https://github.com/liminal-ai-security/liminal-sdk-python/releases"
 
 [tool.pylint.BASIC]
 class-const-naming-style = "any"
