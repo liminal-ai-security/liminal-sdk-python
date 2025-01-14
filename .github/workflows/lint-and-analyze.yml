@@ -29,7 +29,7 @@ jobs:
 
       - name: 🏗 Install workflow dependencies
         run: |
-          uv sync --extra gh_workflow_lint_and_analyze
+          uv sync --extra lint
 
       - name: Get all changed files
         id: changed-files

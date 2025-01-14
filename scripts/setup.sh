@@ -90,7 +90,7 @@ main() {
   msg "${BLUE}🚜 Installing dependencies...${NOFORMAT}"
   python -m ensurepip
   python -m pip install -r "$REPO_DIR/requirements-dev.txt"
-  uv sync --extra dev
+  uv sync --extra all
 
   msg "${BLUE}🚜 Installing pre-commit hooks...${NOFORMAT}"
   pre-commit install
