@@ -36,6 +36,7 @@ pip install liminal-sdk-python
 
 - Python 3.11
 - Python 3.12
+- Python 3.13
 
 # Quickstart
 

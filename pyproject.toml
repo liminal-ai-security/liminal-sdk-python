@@ -11,6 +11,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
@@ -26,7 +27,7 @@ description = "The Liminal SDK for Python"
 license = "Apache-2.0"
 name = "liminal-sdk-python"
 readme = "README.md"
-requires-python = ">=3.11,<3.13"
+requires-python = ">=3.11,<3.14"
 version = "2024.09.0b1"
 
 [project.optional-dependencies]
