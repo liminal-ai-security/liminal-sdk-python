@@ -38,7 +38,7 @@ jobs:
 
       - name: 🏗 Install workflow dependencies
         run: |
-          uv sync --extra gh_action_test
+          uv sync --extra gh_workflow_test
 
       - name: 🚀 Run pytest
         run: pytest --cov liminal tests

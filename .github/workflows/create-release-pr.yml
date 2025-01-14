@@ -38,7 +38,7 @@ jobs:
 
       - name: 🏗 Install workflow dependencies
         run: |
-          uv sync --extra gh_action_create_release_pr
+          uv sync --extra gh_workflow_create_release_pr
 
       - name: 🔢 Update pyproject.toml version
         run: |
