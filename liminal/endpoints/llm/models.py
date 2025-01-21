@@ -29,6 +29,7 @@ class ModelProviderKey(str, Enum):
     OLLAMA = "ollama"
     OPENAI = "openai"
     PERPLEXITY = "perplexity"
+    XAI = "xai"
 
 
 @dataclass(frozen=True, kw_only=True)
