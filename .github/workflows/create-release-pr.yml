@@ -31,7 +31,7 @@ jobs:
       - name: 🏗 Install uv
         uses: astral-sh/setup-uv@v5
         with:
-          version: "0.5.18"
+          pyproject-file: pyproject.toml
 
       - name: 🏗 Install workflow dependencies
         run: |
@@ -64,7 +64,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: ✏️ Run Release Drafter
-        uses: release-drafter/release-drafter@v6.0.0
+        uses: release-drafter/release-drafter@v6.1.0
         with:
           tag: ${{ inputs.version }}
           name: ${{ inputs.version }}
