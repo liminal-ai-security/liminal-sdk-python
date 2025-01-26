@@ -36,7 +36,7 @@ all = [
 ]
 lint = [
     "blacken-docs==1.19.1",
-    "codespell==2.3.0",
+    "codespell==2.4.0",
     "darglint==1.8.1",
     "mypy==1.14.1",
     "pre-commit-hooks==5.0.0",
