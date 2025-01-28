@@ -8,16 +8,18 @@ from unittest.mock import Mock
 import pytest
 from pytest_httpx import HTTPXMock, IteratorStream
 
-from liminal import AsyncClient
+from liminal import AsyncClient, Client
 from liminal.endpoints.prompt.models import StreamResponseChunk
 from tests.common import TEST_API_SERVER_URL
 
 
 @pytest.mark.asyncio
-async def test_analyze(
-    httpx_mock: HTTPXMock, mock_client: AsyncClient, prompt_analyze_response: dict[str, Any]
+async def test_analyze_async(
+    httpx_mock: HTTPXMock,
+    mock_client: AsyncClient,
+    prompt_analyze_response: dict[str, Any],
 ) -> None:
-    """Test the analyze endpoint.
+    """Test the analyze endpoint (async client).
 
     Args:
     ----
@@ -44,15 +46,48 @@ async def test_analyze(
     assert len(findings.findings) == 5
 
 
+@pytest.mark.parametrize("mock_client", ["sync"], indirect=True)
+def test_analyze_sync(
+    httpx_mock: HTTPXMock,
+    mock_client: Client,
+    prompt_analyze_response: dict[str, Any],
+) -> None:
+    """Test the analyze endpoint (sync client).
+
+    Args:
+    ----
+        httpx_mock: The HTTPX mock fixture.
+        mock_client: A mock Liminal client.
+        prompt_analyze_response: An analyze response.
+
+    """
+    httpx_mock.add_response(
+        method="POST",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/analyze",
+        json=prompt_analyze_response,
+    )
+
+    findings = mock_client.prompt.analyze(
+        123,
+        (
+            "Write a short marketing email for a banking customer Jane Gansbuhler, "
+            "whose email address is egansbuhler0@pinterest.com and who lives at 14309 "
+            "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
+            "identifies as Female"
+        ),
+    )
+    assert len(findings.findings) == 5
+
+
 @pytest.mark.asyncio
-async def test_cleanse_and_hydrate(
+async def test_cleanse_and_hydrate_async(
     httpx_mock: HTTPXMock,
     mock_client: AsyncClient,
     prompt_analyze_response: dict[str, Any],
     prompt_cleanse_response: dict[str, Any],
     prompt_hydrate_response: dict[str, Any],
 ) -> None:
-    """Test the cleanse endpoint.
+    """Test the cleanse endpoint (async client).
 
     Args:
     ----
@@ -118,6 +153,80 @@ async def test_cleanse_and_hydrate(
     )
 
 
+@pytest.mark.parametrize("mock_client", ["sync"], indirect=True)
+def test_cleanse_and_hydrate_sync(
+    httpx_mock: HTTPXMock,
+    mock_client: Client,
+    prompt_analyze_response: dict[str, Any],
+    prompt_cleanse_response: dict[str, Any],
+    prompt_hydrate_response: dict[str, Any],
+) -> None:
+    """Test the cleanse endpoint (sync client).
+
+    Args:
+    ----
+        httpx_mock: The HTTPX mock fixture.
+        mock_client: A mock Liminal client.
+        prompt_analyze_response: An analyze response.
+        prompt_cleanse_response: A cleanse response.
+        prompt_hydrate_response: A hydrate response.
+
+    """
+    httpx_mock.add_response(
+        method="POST",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/analyze",
+        json=prompt_analyze_response,
+    )
+    httpx_mock.add_response(
+        method="POST",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/cleanse",
+        json=prompt_cleanse_response,
+    )
+    httpx_mock.add_response(
+        method="POST",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/hydrate",
+        json=prompt_hydrate_response,
+    )
+
+    findings = mock_client.prompt.analyze(
+        123,
+        (
+            "Write a short marketing email for a banking customer Jane Gansbuhler, "
+            "whose email address is egansbuhler0@pinterest.com and who lives at 14309 "
+            "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
+            "identifies as Female"
+        ),
+    )
+    assert len(findings.findings) == 5
+
+    cleansed = mock_client.prompt.cleanse(
+        123,
+        (
+            "Write a short marketing email for a banking customer Jane Gansbuhler, "
+            "whose email address is egansbuhler0@pinterest.com and who lives at 14309 "
+            "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
+            "identifies as Female"
+        ),
+        findings=findings,
+        thread_id=123,
+    )
+    assert len(cleansed.items) == 5
+    assert len(cleansed.items_hashed) == 5
+    assert cleansed.text == (
+        "Write a short marketing email for a banking customer PERSON_0, whose email "
+        "address is EMAIL_ADDRESS_0 and who lives at LOCATION_0. PERSON_1 was born on "
+        "DATE_0 and identifies as Female"
+    )
+
+    hydrated = mock_client.prompt.hydrate(
+        123, "Tell PERSON_0 that we are grateful for their business.", thread_id=123
+    )
+    assert len(hydrated.items) == 1
+    assert hydrated.text == (
+        "Tell Jane Gansbuhler that we are grateful for their business."
+    )
+
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("prompt_stream_response_iterator", "should_log_warning"),
@@ -143,7 +252,7 @@ async def test_cleanse_and_hydrate(
     ],
     indirect=["prompt_stream_response_iterator"],
 )
-async def test_stream(
+async def test_stream_async(
     caplog: Mock,
     httpx_mock: HTTPXMock,
     mock_client: AsyncClient,
@@ -151,7 +260,7 @@ async def test_stream(
     prompt_stream_response_iterator: IteratorStream,
     should_log_warning: bool,
 ) -> None:
-    """Test the stream endpoint.
+    """Test the stream endpoint (async client).
 
     We test for both a fully-functional stream and a stream that, for whatever reason,
     returns an incomplete JSON string chunk.
@@ -203,6 +312,103 @@ async def test_stream(
     # Walk through the stream to ensure that each chunk is properly parsed as a
     # StreamResponseChunk object:
     async for chunk in response:
+        assert isinstance(chunk, StreamResponseChunk)
+
+    log_generator = (
+        m for m in caplog.messages if "Stream returned incomplete JSON chunk" in m
+    )
+
+    if should_log_warning:
+        assert any(log_generator)
+    else:
+        assert not any(log_generator)
+
+
+@pytest.mark.parametrize("mock_client", ["sync"], indirect=True)
+@pytest.mark.parametrize(
+    ("prompt_stream_response_iterator", "should_log_warning"),
+    [
+        (
+            pytest.param(None),
+            False,
+        ),
+        (
+            pytest.param(
+                IteratorStream(
+                    [
+                        b"{'content': 'This '}",
+                        b"{'content': 'is '}",
+                        b"{'content': 'an '}",
+                        b"{'content': 'incomplete",
+                        b"{'content': 'test.'}",
+                    ]
+                )
+            ),
+            True,
+        ),
+    ],
+    indirect=["prompt_stream_response_iterator"],
+)
+def test_stream_sync(
+    caplog: Mock,
+    httpx_mock: HTTPXMock,
+    mock_client: Client,
+    prompt_analyze_response: dict[str, Any],
+    prompt_stream_response_iterator: IteratorStream,
+    should_log_warning: bool,
+) -> None:
+    """Test the stream endpoint (sync client).
+
+    We test for both a fully-functional stream and a stream that, for whatever reason,
+    returns an incomplete JSON string chunk.
+
+    Args:
+    ----
+        caplog: The caplog fixture.
+        httpx_mock: The HTTPX mock fixture.
+        mock_client: A mock Liminal client.
+        prompt_analyze_response: An analyze response.
+        prompt_stream_response_iterator: A stream response iterator.
+        should_log_warning: A flag indicating whether a warning should be logged.
+
+    """
+    httpx_mock.add_response(
+        method="POST",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/analyze",
+        json=prompt_analyze_response,
+    )
+    httpx_mock.add_response(
+        method="POST",
+        url=f"{TEST_API_SERVER_URL}/api/v1/prompts/submit",
+        stream=prompt_stream_response_iterator,
+    )
+
+    findings = mock_client.prompt.analyze(
+        123,
+        (
+            "Write a short marketing email for a banking customer Jane Gansbuhler, "
+            "whose email address is egansbuhler0@pinterest.com and who lives at 14309 "
+            "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
+            "identifies as Female"
+        ),
+    )
+    assert len(findings.findings) == 5
+
+    response = mock_client.prompt.stream(
+        123,
+        (
+            "Write a short marketing email for a banking customer Jane Gansbuhler, "
+            "whose email address is egansbuhler0@pinterest.com and who lives at 14309 "
+            "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
+            "identifies as Female"
+        ),
+        findings=findings,
+        thread_id=123,
+    )
+
+    # Walk through the stream to ensure that each chunk is properly parsed as a
+    # StreamResponseChunk object:
+    for chunk in response:
         assert isinstance(chunk, StreamResponseChunk)
 
     log_generator = (
