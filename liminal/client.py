@@ -380,7 +380,7 @@ class Client:
     @classmethod
     def authenticate_from_auth_provider(
         cls, api_server_url: str, auth_provider: AuthProvider
-    ) -> AsyncClient:
+    ) -> Client:
         """Authenticate with the Liminal API server (using the auth provider).
 
         Args:
@@ -393,14 +393,15 @@ class Client:
             A new client instance.
 
         """
-        return run_sync(
+        async_client = run_sync(
             AsyncClient.authenticate_from_auth_provider(api_server_url, auth_provider)
         )
+        return cls(async_client)
 
     @classmethod
     def authenticate_from_session_id(
         cls, api_server_url: str, session_id: str
-    ) -> AsyncClient:
+    ) -> Client:
         """Authenticate with the Liminal API server (using a session).
 
         Args:
@@ -414,12 +415,13 @@ class Client:
             A new client instance.
 
         """
-        return run_sync(
+        async_client = run_sync(
             AsyncClient.authenticate_from_session_id(api_server_url, session_id)
         )
+        return cls(async_client)
 
     @classmethod
-    def authenticate_from_token(cls, api_server_url: str, token: str) -> AsyncClient:
+    def authenticate_from_token(cls, api_server_url: str, token: str) -> Client:
         """Authenticate with the Liminal API server (using a Liminal-provided token).
 
         Args:
@@ -428,7 +430,10 @@ class Client:
             token: The token to use.
 
         """
-        return run_sync(AsyncClient.authenticate_from_token(api_server_url, token))
+        async_client = run_sync(
+            AsyncClient.authenticate_from_token(api_server_url, token)
+        )
+        return cls(async_client)
 
     @property
     def session_id(self) -> str | None:

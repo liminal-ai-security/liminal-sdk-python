@@ -12,7 +12,7 @@ import pytest
 import pytest_asyncio
 from pytest_httpx import HTTPXMock, IteratorStream
 
-from liminal import AsyncClient
+from liminal import AsyncClient, Client
 from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from liminal.client import DEFAULT_REQUEST_TIMEOUT
 from tests.common import (
@@ -86,14 +86,14 @@ def _patch_msal_fixture(
         yield
 
 
-@pytest_asyncio.fixture(name="mock_client")
-async def mock_client_fixture(
+@pytest_asyncio.fixture(name="mock_async_client")
+async def mock_async_client_fixture(
     httpx_mock: HTTPXMock,
     model_instances_response: dict[str, Any],
     patch_liminal_api_server: None,
     patch_msal: None,
 ) -> AsyncGenerator[AsyncClient]:
-    """Return a fixture for a Liminal client.
+    """Return a fixture for an async Liminal client.
 
     Args:
     ----
@@ -104,7 +104,7 @@ async def mock_client_fixture(
 
     Returns:
     -------
-        A fixture for a Liminal client.
+        A fixture for an async Liminal client.
 
     """
     microsoft_auth_provider = DeviceCodeFlowProvider(TEST_TENANT_ID, TEST_CLIENT_ID)
@@ -113,6 +113,56 @@ async def mock_client_fixture(
             TEST_API_SERVER_URL, microsoft_auth_provider, httpx_client=httpx_client
         )
         yield client
+
+
+@pytest.fixture(name="mock_client")
+def mock_client_fixture(request: pytest.FixtureRequest) -> AsyncClient | Client:
+    """Return a fixture for a Liminal client.
+
+    Args:
+    ----
+        request: The pytest request object.
+
+    Returns:
+    -------
+        A fixture for a Liminal client.
+
+    """
+    client_map = {
+        "async": "mock_async_client",
+        "sync": "mock_sync_client",
+    }
+
+    client_type = request.param if hasattr(request, "param") else "async"
+    client_fixture_name = client_map[client_type]
+    return request.getfixturevalue(client_fixture_name)
+
+
+@pytest.fixture(name="mock_sync_client")
+async def mock_sync_client_fixture(
+    httpx_mock: HTTPXMock,
+    model_instances_response: dict[str, Any],
+    patch_liminal_api_server: None,
+    patch_msal: None,
+) -> Client:
+    """Return a fixture for a sync Liminal client.
+
+    Args:
+    ----
+        httpx_mock: The HTTPX mock fixture.
+        model_instances_response: The model instances response.
+        patch_liminal_api_server: Ensure the Liminal API server is patched.
+        patch_msal: Ensure the MSAL library is patched.
+
+    Returns:
+    -------
+        A fixture for a sync Liminal client.
+
+    """
+    microsoft_auth_provider = DeviceCodeFlowProvider(TEST_TENANT_ID, TEST_CLIENT_ID)
+    return Client.authenticate_from_auth_provider(
+        TEST_API_SERVER_URL, microsoft_auth_provider
+    )
 
 
 @pytest.fixture(name="msal_accounts")
