@@ -6,6 +6,7 @@ from collections.abc import Awaitable, Callable
 from typing import cast
 
 from liminal.const import SOURCE
+from liminal.endpoints import SDKEndpoint
 from liminal.endpoints.thread.models import Thread
 from liminal.endpoints.thread.schemas import (
     CreateThreadResponse,
@@ -15,7 +16,7 @@ from liminal.endpoints.thread.schemas import (
 from liminal.helpers.typing import ValidatedResponseT
 
 
-class ThreadEndpoint:
+class ThreadEndpoint(SDKEndpoint):
     """Define the threads endpoint."""
 
     def __init__(

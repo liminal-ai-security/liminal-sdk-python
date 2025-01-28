@@ -8,13 +8,13 @@ from typing import Any
 import pytest
 from pytest_httpx import HTTPXMock
 
-from liminal import Client
+from liminal import AsyncClient
 from tests.common import TEST_API_SERVER_URL
 
 
 @pytest.mark.asyncio
 async def test_create(
-    httpx_mock: HTTPXMock, mock_client: Client, threads_create_response: dict[str, Any]
+    httpx_mock: HTTPXMock, mock_client: AsyncClient, threads_create_response: dict[str, Any]
 ) -> None:
     """Test the create thread method.
 
@@ -45,7 +45,7 @@ async def test_create(
 @pytest.mark.asyncio
 async def test_get_available(
     httpx_mock: HTTPXMock,
-    mock_client: Client,
+    mock_client: AsyncClient,
     threads_get_available_response: dict[str, Any],
 ) -> None:
     """Test the get available threads method.
@@ -70,7 +70,7 @@ async def test_get_available(
 @pytest.mark.asyncio
 async def test_get_by_id(
     httpx_mock: HTTPXMock,
-    mock_client: Client,
+    mock_client: AsyncClient,
     threads_get_by_id_response: dict[str, Any],
 ) -> None:
     """Test the get available threads method.

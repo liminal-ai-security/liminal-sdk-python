@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import asyncio
 from collections.abc import AsyncIterator
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager
 from json.decoder import JSONDecodeError
 from typing import Any, Final
 
-from httpx import AsyncClient, Cookies, HTTPStatusError, Response
+from httpx import AsyncClient as AsyncHttpxClient, Cookies, HTTPStatusError, Response
 from mashumaro.codecs.json import json_decode
 from mashumaro.exceptions import (
     MissingField,
@@ -17,25 +19,30 @@ from mashumaro.exceptions import (
 
 from liminal.auth import AuthProvider
 from liminal.const import LOGGER
+from liminal.endpoints import SyncEndpointWrapper
 from liminal.endpoints.llm import LLMEndpoint
 from liminal.endpoints.prompt import PromptEndpoint
 from liminal.endpoints.thread import ThreadEndpoint
 from liminal.errors import RequestError
+from liminal.helpers import run_sync
 from liminal.helpers.typing import ValidatedResponseT
 
 DEFAULT_REQUEST_TIMEOUT: Final[int] = 60
 
 
-class Client:
-    """Define the client class."""
+class AsyncClient:
+    """Define an async-friendly client."""
 
     def __init__(
         self,
         api_server_url: str,
         *,
-        httpx_client: AsyncClient | None = None,
+        httpx_client: AsyncHttpxClient | None = None,
     ) -> None:
         """Initialize.
+
+        Note that this class is not meant to be instantiated directly; instead, one of
+        the classmethods below should be used.
 
         Args:
         ----
@@ -45,11 +52,8 @@ class Client:
         """
         self._api_server_url = api_server_url
         self._httpx_client = httpx_client
-
-        # Token information:
         self._session_id: str | None = None
 
-        # Define endpoints:
         self.llm = LLMEndpoint(self._request_and_validate)
         self.prompt = PromptEndpoint(self._request_and_validate, self._stream)
         self.thread = ThreadEndpoint(self._request_and_validate)
@@ -60,8 +64,8 @@ class Client:
         api_server_url: str,
         auth_provider: AuthProvider,
         *,
-        httpx_client: AsyncClient | None = None,
-    ) -> Client:
+        httpx_client: AsyncHttpxClient | None = None,
+    ) -> AsyncClient:
         """Authenticate with the Liminal API server (using the auth provider).
 
         Args:
@@ -91,16 +95,16 @@ class Client:
         api_server_url: str,
         session_id: str,
         *,
-        httpx_client: AsyncClient | None = None,
-    ) -> Client:
+        httpx_client: AsyncHttpxClient | None = None,
+    ) -> AsyncClient:
         """Authenticate with the Liminal API server (using a session).
 
         Args:
         ----
             api_server_url: The URL of the Liminal API server.
-            httpx_client: An optional HTTPX client to use.
             session_id: The session ID to use. If not provided, the session that was
                 used to authenticate the user initially will be used.
+            httpx_client: An optional HTTPX client to use.
 
         Returns:
         -------
@@ -120,8 +124,8 @@ class Client:
         api_server_url: str,
         token: str,
         *,
-        httpx_client: AsyncClient | None = None,
-    ) -> Client:
+        httpx_client: AsyncHttpxClient | None = None,
+    ) -> AsyncClient:
         """Authenticate with the Liminal API server (using a Liminal-provided token).
 
         Args:
@@ -170,7 +174,7 @@ class Client:
         return Cookies(raw_cookies)
 
     @asynccontextmanager
-    async def _get_httpx_client(self) -> AsyncIterator[AsyncClient]:
+    async def _get_httpx_client(self) -> AsyncIterator[AsyncHttpxClient]:
         """Get an HTTPX client.
 
         Returns
@@ -181,7 +185,7 @@ class Client:
         if running_client := self._httpx_client and not self._httpx_client.is_closed:
             client = self._httpx_client
         else:
-            client = AsyncClient(timeout=DEFAULT_REQUEST_TIMEOUT)
+            client = AsyncHttpxClient(timeout=DEFAULT_REQUEST_TIMEOUT)
 
         yield client
 
@@ -347,3 +351,92 @@ class Client:
             async for line in resp.aiter_lines():
                 LOGGER.info("Received line of streaming response: %s", line)
                 yield line
+
+
+class Client:
+    """Define an sync-friendly client."""
+
+    def __init__(self, async_client: AsyncClient) -> None:
+        """Initialize.
+
+        This is intended to be a lightweight wrapper around the AsyncClient class.
+
+        Note that this class is not meant to be instantiated directly; instead, one of
+        the classmethods below should be used.
+
+        Args:
+        ----
+            async_client: The async client to wrap.
+
+        """
+        self._async_client = async_client
+        self._executor = ThreadPoolExecutor(max_workers=1)
+        self._loop = asyncio.get_event_loop()
+
+        self.llm = SyncEndpointWrapper(self._async_client.llm)
+        self.prompt = SyncEndpointWrapper(self._async_client.prompt)
+        self.thread = SyncEndpointWrapper(self._async_client.thread)
+
+    @classmethod
+    def authenticate_from_auth_provider(
+        cls, api_server_url: str, auth_provider: AuthProvider
+    ) -> AsyncClient:
+        """Authenticate with the Liminal API server (using the auth provider).
+
+        Args:
+        ----
+            api_server_url: The URL of the Liminal API server.
+            auth_provider: The auth provider to use.
+
+        Returns:
+        -------
+            A new client instance.
+
+        """
+        return run_sync(
+            AsyncClient.authenticate_from_auth_provider(api_server_url, auth_provider)
+        )
+
+    @classmethod
+    def authenticate_from_session_id(
+        cls, api_server_url: str, session_id: str
+    ) -> AsyncClient:
+        """Authenticate with the Liminal API server (using a session).
+
+        Args:
+        ----
+            api_server_url: The URL of the Liminal API server.
+            session_id: The session ID to use. If not provided, the session that was
+                used to authenticate the user initially will be used.
+
+        Returns:
+        -------
+            A new client instance.
+
+        """
+        return run_sync(
+            AsyncClient.authenticate_from_session_id(api_server_url, session_id)
+        )
+
+    @classmethod
+    def authenticate_from_token(cls, api_server_url: str, token: str) -> AsyncClient:
+        """Authenticate with the Liminal API server (using a Liminal-provided token).
+
+        Args:
+        ----
+            api_server_url: The URL of the Liminal API server.
+            token: The token to use.
+
+        """
+        return run_sync(AsyncClient.authenticate_from_token(api_server_url, token))
+
+    @property
+    def session_id(self) -> str | None:
+        """Return the session ID.
+
+        Returns
+        -------
+            The session ID.
+
+        """
+        return self._async_client.session_id

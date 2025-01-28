@@ -7,14 +7,14 @@ import json
 import pytest
 from pytest_httpx import HTTPXMock
 
-from liminal import Client
+from liminal import AsyncClient
 from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from liminal.errors import RequestError
 from tests.common import TEST_API_SERVER_URL, TEST_CLIENT_ID, TEST_TENANT_ID
 
 
 @pytest.mark.asyncio
-async def test_bad_endpoint(httpx_mock: HTTPXMock, mock_client: Client) -> None:
+async def test_bad_endpoint(httpx_mock: HTTPXMock, mock_client: AsyncClient) -> None:
     """Test for a bad endpoint.
 
     Args:
@@ -48,7 +48,7 @@ async def test_bad_endpoint_generated_client(
 
     """
     microsoft_auth_provider = DeviceCodeFlowProvider(TEST_TENANT_ID, TEST_CLIENT_ID)
-    _ = await Client.authenticate_from_auth_provider(
+    _ = await AsyncClient.authenticate_from_auth_provider(
         TEST_API_SERVER_URL, microsoft_auth_provider
     )
 
@@ -58,7 +58,7 @@ async def test_bad_endpoint_generated_client(
     "content", [b"This is unexpected", json.dumps({"foo": "bar"}).encode()]
 )
 async def test_unexpected_response(
-    content: bytes, httpx_mock: HTTPXMock, mock_client: Client
+    content: bytes, httpx_mock: HTTPXMock, mock_client: AsyncClient
 ) -> None:
     """Test for a bad endpoint.
 

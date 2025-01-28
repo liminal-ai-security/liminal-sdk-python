@@ -6,7 +6,7 @@ import httpx
 import pytest
 from pytest_httpx import HTTPXMock
 
-from liminal import Client
+from liminal import AsyncClient
 from tests.common import (
     TEST_API_SERVER_URL,
     TEST_HTTPX_DEFAULT_TIMEOUT,
@@ -34,7 +34,7 @@ async def test_auth_via_session_id(httpx_mock: HTTPXMock, patch_msal: None) -> N
     )
 
     async with httpx.AsyncClient(timeout=TEST_HTTPX_DEFAULT_TIMEOUT) as httpx_client:
-        client = await Client.authenticate_from_session_id(
+        client = await AsyncClient.authenticate_from_session_id(
             TEST_API_SERVER_URL, TEST_SESSION_ID, httpx_client=httpx_client
         )
         assert client.session_id is not None
@@ -59,7 +59,7 @@ async def test_auth_via_token(httpx_mock: HTTPXMock, patch_msal: None) -> None:
     )
 
     async with httpx.AsyncClient(timeout=TEST_HTTPX_DEFAULT_TIMEOUT) as httpx_client:
-        client = await Client.authenticate_from_token(
+        client = await AsyncClient.authenticate_from_token(
             TEST_API_SERVER_URL, TEST_TOKEN, httpx_client=httpx_client
         )
         assert client.session_id is not None

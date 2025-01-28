@@ -12,7 +12,7 @@ import pytest
 import pytest_asyncio
 from pytest_httpx import HTTPXMock, IteratorStream
 
-from liminal import Client
+from liminal import AsyncClient
 from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from liminal.client import DEFAULT_REQUEST_TIMEOUT
 from tests.common import (
@@ -92,7 +92,7 @@ async def mock_client_fixture(
     model_instances_response: dict[str, Any],
     patch_liminal_api_server: None,
     patch_msal: None,
-) -> AsyncGenerator[Client]:
+) -> AsyncGenerator[AsyncClient]:
     """Return a fixture for a Liminal client.
 
     Args:
@@ -109,7 +109,7 @@ async def mock_client_fixture(
     """
     microsoft_auth_provider = DeviceCodeFlowProvider(TEST_TENANT_ID, TEST_CLIENT_ID)
     async with httpx.AsyncClient(timeout=DEFAULT_REQUEST_TIMEOUT) as httpx_client:
-        client = await Client.authenticate_from_auth_provider(
+        client = await AsyncClient.authenticate_from_auth_provider(
             TEST_API_SERVER_URL, microsoft_auth_provider, httpx_client=httpx_client
         )
         yield client

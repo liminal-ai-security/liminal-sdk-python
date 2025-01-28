@@ -9,6 +9,7 @@ from typing import Any, cast
 from mashumaro.codecs.json import json_decode
 
 from liminal.const import LOGGER, SOURCE
+from liminal.endpoints import SDKEndpoint
 from liminal.endpoints.prompt.models import (
     AnalysisFindings,
     CleanseData,
@@ -25,7 +26,7 @@ from liminal.endpoints.prompt.schemas import (
 from liminal.helpers.typing import ValidatedResponseT
 
 
-class PromptEndpoint:
+class PromptEndpoint(SDKEndpoint):
     """Define the prompts endpoint."""
 
     def __init__(

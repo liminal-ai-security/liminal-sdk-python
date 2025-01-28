@@ -5,13 +5,14 @@ from __future__ import annotations
 from collections.abc import Awaitable, Callable
 from typing import cast
 
+from liminal.endpoints import SDKEndpoint
 from liminal.endpoints.llm.models import ModelInstance
 from liminal.endpoints.llm.schemas import GetAvailableModelInstancesResponse
 from liminal.errors import ModelInstanceUnknownError
 from liminal.helpers.typing import ValidatedResponseT
 
 
-class LLMEndpoint:
+class LLMEndpoint(SDKEndpoint):
     """Define the LLM endpoint."""
 
     def __init__(

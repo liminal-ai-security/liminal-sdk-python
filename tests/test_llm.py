@@ -8,14 +8,16 @@ from typing import Any
 import pytest
 from pytest_httpx import HTTPXMock
 
-from liminal import Client
+from liminal import AsyncClient
 from liminal.errors import ModelInstanceUnknownError
 from tests.common import TEST_API_SERVER_URL
 
 
 @pytest.mark.asyncio
 async def test_get_available_model_instances(
-    httpx_mock: HTTPXMock, mock_client: Client, model_instances_response: dict[str, Any]
+    httpx_mock: HTTPXMock,
+    mock_client: AsyncClient,
+    model_instances_response: dict[str, Any],
 ) -> None:
     """Test getting available model instances.
 
@@ -59,7 +61,7 @@ async def test_get_available_model_instances(
 )
 async def test_get_model_instance_by_name(
     httpx_mock: HTTPXMock,
-    mock_client: Client,
+    mock_client: AsyncClient,
     model_instance_name: str,
     model_instances_response: dict[str, Any],
     should_exist: bool,

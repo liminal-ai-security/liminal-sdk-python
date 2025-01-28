@@ -8,14 +8,14 @@ from unittest.mock import Mock
 import pytest
 from pytest_httpx import HTTPXMock, IteratorStream
 
-from liminal import Client
+from liminal import AsyncClient
 from liminal.endpoints.prompt.models import StreamResponseChunk
 from tests.common import TEST_API_SERVER_URL
 
 
 @pytest.mark.asyncio
 async def test_analyze(
-    httpx_mock: HTTPXMock, mock_client: Client, prompt_analyze_response: dict[str, Any]
+    httpx_mock: HTTPXMock, mock_client: AsyncClient, prompt_analyze_response: dict[str, Any]
 ) -> None:
     """Test the analyze endpoint.
 
@@ -47,7 +47,7 @@ async def test_analyze(
 @pytest.mark.asyncio
 async def test_cleanse_and_hydrate(
     httpx_mock: HTTPXMock,
-    mock_client: Client,
+    mock_client: AsyncClient,
     prompt_analyze_response: dict[str, Any],
     prompt_cleanse_response: dict[str, Any],
     prompt_hydrate_response: dict[str, Any],
@@ -146,7 +146,7 @@ async def test_cleanse_and_hydrate(
 async def test_stream(
     caplog: Mock,
     httpx_mock: HTTPXMock,
-    mock_client: Client,
+    mock_client: AsyncClient,
     prompt_analyze_response: dict[str, Any],
     prompt_stream_response_iterator: IteratorStream,
     should_log_warning: bool,
@@ -218,7 +218,7 @@ async def test_stream(
 @pytest.mark.asyncio
 async def test_submit(
     httpx_mock: HTTPXMock,
-    mock_client: Client,
+    mock_client: AsyncClient,
     prompt_analyze_response: dict[str, Any],
     prompt_submit_response: dict[str, Any],
 ) -> None:

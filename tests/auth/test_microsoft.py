@@ -8,7 +8,7 @@ import httpx
 import pytest
 from pytest_httpx import HTTPXMock
 
-from liminal import Client
+from liminal import AsyncClient
 from liminal.auth.microsoft.device_code_flow import DeviceCodeFlowProvider
 from liminal.errors import AuthError
 from tests.common import (
@@ -43,7 +43,7 @@ async def test_auth_via_device_code_flow(
     """
     microsoft_auth_provider = DeviceCodeFlowProvider(TEST_TENANT_ID, TEST_CLIENT_ID)
     async with httpx.AsyncClient(timeout=TEST_HTTPX_DEFAULT_TIMEOUT) as httpx_client:
-        _ = await Client.authenticate_from_auth_provider(
+        _ = await AsyncClient.authenticate_from_auth_provider(
             TEST_API_SERVER_URL, microsoft_auth_provider, httpx_client=httpx_client
         )
 
@@ -72,6 +72,6 @@ async def test_auth_via_device_code_flow_timeout(
         with pytest.raises(
             AuthError, match="Timed out waiting for authentication challenge"
         ):
-            _ = await Client.authenticate_from_auth_provider(
+            _ = await AsyncClient.authenticate_from_auth_provider(
                 TEST_API_SERVER_URL, microsoft_auth_provider, httpx_client=httpx_client
             )
