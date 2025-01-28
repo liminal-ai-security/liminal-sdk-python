@@ -139,7 +139,7 @@ def mock_client_fixture(request: pytest.FixtureRequest) -> AsyncClient | Client:
 
 
 @pytest.fixture(name="mock_sync_client")
-async def mock_sync_client_fixture(
+def mock_sync_client_fixture(
     httpx_mock: HTTPXMock,
     model_instances_response: dict[str, Any],
     patch_liminal_api_server: None,
