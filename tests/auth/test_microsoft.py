@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import NamedTuple
 from unittest.mock import Mock
 
 import httpx
@@ -19,12 +20,18 @@ from tests.common import (
 )
 
 
+class AuthViaDeviceCodeFlowTest(NamedTuple):
+    """Define an auth via device code flow test."""
+
+    msal_accounts: list[Mock]
+
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    "msal_accounts",
+    AuthViaDeviceCodeFlowTest._fields,
     [
-        [],
-        [Mock()],
+        AuthViaDeviceCodeFlowTest(msal_accounts=[]),
+        AuthViaDeviceCodeFlowTest(msal_accounts=[Mock()]),
     ],
 )
 async def test_auth_via_device_code_flow(
@@ -48,9 +55,20 @@ async def test_auth_via_device_code_flow(
         )
 
 
+class AuthViaDeviceCodeFlowTimeoutTest(NamedTuple):
+    """Define an auth via device code flow timeout test."""
+
+    mock_msal_acquire_token_by_device_flow: Mock
+
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    "mock_msal_acquire_token_by_device_flow", [Mock(side_effect=TimeoutError)]
+    AuthViaDeviceCodeFlowTimeoutTest._fields,
+    [
+        AuthViaDeviceCodeFlowTimeoutTest(
+            mock_msal_acquire_token_by_device_flow=Mock(side_effect=TimeoutError)
+        )
+    ],
 )
 async def test_auth_via_device_code_flow_timeout(
     httpx_mock: HTTPXMock,
