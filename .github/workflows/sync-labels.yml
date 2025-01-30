@@ -5,8 +5,8 @@ on:
     branches:
       - development
     paths:
+      - .github/config/labels.yml
       - .github/workflows/sync-labels.yml
-      - .github/labels.yml
 
   workflow_dispatch:
 
@@ -17,14 +17,9 @@ permissions:
 jobs:
   sync-labels:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run label syncer
-        uses: micnncim/action-label-syncer@v1.3.0
+      - uses: actions/checkout@v4
+      - name: Sync Labels
+        uses: liminal-ai-security/actions-hub/.github/actions/sync-labels@v5
         with:
-          manifest: .github/labels.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          label_path: "./.github/config/labels.yml"
