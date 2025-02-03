@@ -21,6 +21,8 @@ categories:
       - "dependencies"
       - "maintenance"
 
+change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
+
 exclude-labels:
   - "release"
 
