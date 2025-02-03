@@ -32,9 +32,9 @@ version = "2024.09.0b1"
 
 [project.optional-dependencies]
 all = [
-    "liminal-sdk-python[dev,lint,release,test]",
+    "liminal-sdk-python[build,lint,release,test]",
 ]
-dev = [
+build = [
     "uv==0.5.24",
 ]
 lint = [

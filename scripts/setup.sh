@@ -93,7 +93,7 @@ main() {
   fi
   if ! command -v "uv" &>/dev/null; then
     # shellcheck disable=SC1087
-    python -m pip install "$REPO_DIR[dev]"
+    python -m pip install "$REPO_DIR[build]"
   fi
   uv sync --extra all
 
