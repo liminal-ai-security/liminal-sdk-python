@@ -88,8 +88,13 @@ main() {
   fi
 
   msg "${BLUE}🚜 Installing dependencies...${NOFORMAT}"
-  python -m ensurepip
-  python -m pip install -r "$REPO_DIR/requirements-dev.txt"
+  if ! command -v "pip" &>/dev/null; then
+    python -m ensurepip
+  fi
+  if ! command -v "uv" &>/dev/null; then
+    # shellcheck disable=SC1087
+    python -m pip install "$REPO_DIR[build]"
+  fi
   uv sync --extra all
 
   msg "${BLUE}🚜 Installing pre-commit hooks...${NOFORMAT}"
