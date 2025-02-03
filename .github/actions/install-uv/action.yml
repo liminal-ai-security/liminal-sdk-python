@@ -15,4 +15,4 @@ runs:
       with:
         cache-dependency-glob: "uv.lock"
         enable-cache: true
-        version: ${{ steps.uv-version-outputs.version }}
+        version: ${{ steps.uv-version.outputs.version }}
