@@ -91,7 +91,7 @@ jobs:
           pr_current_labels=$(echo "$PR_CURRENT_LABELS_JSON" | jq '.[].name')
 
           # Determine the Conventional Commit type based upon the PR title:
-          commit_type="$(echo "$pr_title" | cut -d: -f1 | sed 's/(.*)//g')"
+          commit_type="$(echo "$pr_title" | cut -d: -f1 | sed 's/(.*)//g; s/!//g')"
           echo "Detected Conventional Commit type: '$commit_type'"
 
           if [[ -z "$commit_type" ]]; then
