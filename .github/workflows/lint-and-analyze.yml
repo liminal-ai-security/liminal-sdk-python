@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: 3.11.8
 
-      - name: Install uv
+      - name: 🚜 Install uv
         uses: ./.github/actions/install-uv
 
       - name: 🏗 Install workflow dependencies

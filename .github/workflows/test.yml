@@ -33,7 +33,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install uv
+      - name: 🚜 Install uv
         uses: ./.github/actions/install-uv
 
       - name: 🏗 Install workflow dependencies
