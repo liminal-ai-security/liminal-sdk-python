@@ -41,7 +41,7 @@ lint = [
     "blacken-docs==1.19.1",
     "codespell==2.4.1",
     "darglint==1.8.1",
-    "mypy==1.14.1",
+    "mypy==1.15.0",
     "pre-commit-hooks==5.0.0",
     "pre-commit==4.1.0",
     "pylint==3.3.4",
