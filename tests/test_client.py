@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from typing import NamedTuple
 
 import pytest
 from pytest_httpx import HTTPXMock
@@ -53,9 +54,19 @@ async def test_bad_endpoint_generated_client(
     )
 
 
+class UnexpectedResponseTest(NamedTuple):
+    """Define an unexpected response test."""
+
+    content: bytes
+
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    "content", [b"This is unexpected", json.dumps({"foo": "bar"}).encode()]
+    UnexpectedResponseTest._fields,
+    [
+        UnexpectedResponseTest(content=b"This is unexpected"),
+        UnexpectedResponseTest(content=json.dumps({"foo": "bar"}).encode()),
+    ],
 )
 async def test_unexpected_response(
     content: bytes, httpx_mock: HTTPXMock, mock_client: Client
@@ -72,7 +83,7 @@ async def test_unexpected_response(
     httpx_mock.add_response(
         method="GET",
         url=f"{TEST_API_SERVER_URL}/api/v1/model-instances",
-        content=b"This is unexpected",
+        content=content,
     )
 
     with pytest.raises(RequestError, match="Could not validate response"):

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, NamedTuple
 
 import pytest
 from pytest_httpx import HTTPXMock
@@ -48,13 +48,20 @@ async def test_get_available_model_instances(
     )
 
 
+class GetModelInstanceByNameTest(NamedTuple):
+    """Define a get model instance by name test."""
+
+    model_instance_name: str
+    should_exist: bool
+
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    ("model_instance_name", "should_exist"),
+    GetModelInstanceByNameTest._fields,
     [
-        ("GPT3.5", True),
-        ("GPT3.6", False),
-        ("GPT4", False),
+        GetModelInstanceByNameTest(model_instance_name="GPT3.5", should_exist=True),
+        GetModelInstanceByNameTest(model_instance_name="GPT3.6", should_exist=False),
+        GetModelInstanceByNameTest(model_instance_name="GPT4", should_exist=False),
     ],
 )
 async def test_get_model_instance_by_name(

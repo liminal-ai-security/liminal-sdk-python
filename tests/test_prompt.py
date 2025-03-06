@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, NamedTuple
 from unittest.mock import Mock
 
+from _pytest.mark.structures import ParameterSet
 import pytest
 from pytest_httpx import HTTPXMock, IteratorStream
 
@@ -118,16 +119,23 @@ async def test_cleanse_and_hydrate(
     )
 
 
+class StreamTest(NamedTuple):
+    """Define a stream test."""
+
+    prompt_stream_response_iterator: ParameterSet
+    should_log_warning: bool
+
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("prompt_stream_response_iterator", "should_log_warning"),
     [
-        (
-            pytest.param(None),
-            False,
+        StreamTest(
+            prompt_stream_response_iterator=pytest.param(None),
+            should_log_warning=False,
         ),
-        (
-            pytest.param(
+        StreamTest(
+            prompt_stream_response_iterator=pytest.param(
                 IteratorStream(
                     [
                         b"{'content': 'This '}",
@@ -138,7 +146,7 @@ async def test_cleanse_and_hydrate(
                     ]
                 )
             ),
-            True,
+            should_log_warning=True,
         ),
     ],
     indirect=["prompt_stream_response_iterator"],

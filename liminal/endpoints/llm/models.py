@@ -21,14 +21,16 @@ class ModelProviderKey(str, Enum):
     AZURE_OPENAI = "azure_openai"
     COHERE = "cohere"
     COPILOT_STUDIO = "copilot_studio"
-    GOOGLE_VERTEX_AI = "google_vertex_ai"
+    DEEPSEEK = "deepseek"
     GOOGLE_AI_STUDIO = "google_ai_studio"
+    GOOGLE_VERTEX_AI = "google_vertex_ai"
     GROQ = "groq"
     HUGGINGFACE = "huggingface"
     MISTRAL = "mistral"
     OLLAMA = "ollama"
     OPENAI = "openai"
     PERPLEXITY = "perplexity"
+    XAI = "xai"
 
 
 @dataclass(frozen=True, kw_only=True)

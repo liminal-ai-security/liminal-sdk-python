@@ -20,12 +20,8 @@ jobs:
         with:
           python-version: 3.11.8
 
-      - name: 🏗 Install uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          cache-dependency-glob: "uv.lock"
-          enable-cache: true
-          pyproject-file: pyproject.toml
+      - name: 🚜 Install uv
+        uses: ./.github/actions/install-uv
 
       - name: 🏗 Install workflow dependencies
         run: |
@@ -33,7 +29,7 @@ jobs:
 
       - name: Get all changed files
         id: changed-files
-        uses: tj-actions/changed-files@v45.0.6
+        uses: tj-actions/changed-files@v45.0.7
         with:
           fetch_depth: 0
 
