@@ -26,6 +26,7 @@ class ModelProviderKey(str, Enum):
     GOOGLE_VERTEX_AI = "google_vertex_ai"
     GROQ = "groq"
     HUGGINGFACE = "huggingface"
+    IBM_WATSONX = "ibm_watsonx"
     MISTRAL = "mistral"
     OLLAMA = "ollama"
     OPENAI = "openai"
