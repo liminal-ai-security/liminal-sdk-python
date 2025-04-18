@@ -4,34 +4,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
 
 from mashumaro import field_options
 
 from liminal.helpers.model import BaseModel
-
-
-# Define enums to use as types:
-class ModelProviderKey(str, Enum):
-    """Define the enum for the model provider key."""
-
-    ANTHROPIC = "anthropic"
-    AWS_BEDROCK = "aws_bedrock"
-    AWS_SAGEMAKER = "aws_sagemaker"
-    AZURE_OPENAI = "azure_openai"
-    COHERE = "cohere"
-    COPILOT_STUDIO = "copilot_studio"
-    DEEPSEEK = "deepseek"
-    GOOGLE_AI_STUDIO = "google_ai_studio"
-    GOOGLE_VERTEX_AI = "google_vertex_ai"
-    GROQ = "groq"
-    HUGGINGFACE = "huggingface"
-    IBM_WATSONX = "ibm_watsonx"
-    MISTRAL = "mistral"
-    OLLAMA = "ollama"
-    OPENAI = "openai"
-    PERPLEXITY = "perplexity"
-    XAI = "xai"
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -46,7 +22,7 @@ class ModelConnection(BaseModel):
     # Fields:
     credentials: dict[str, str] | None = field(default_factory=dict)
     model: str
-    provider_key: ModelProviderKey = field(metadata=field_options(alias="providerKey"))
+    provider_key: str = field(metadata=field_options(alias="providerKey"))
 
     # Timestamps:
     created_at: datetime = field(metadata=field_options(alias="createdAt"))
