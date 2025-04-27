@@ -468,7 +468,7 @@ requires-dist = [
     { name = "httpx", specifier = "==0.28.1" },
     { name = "liminal-sdk-python", extras = ["build", "lint", "release", "test"], marker = "extra == 'all'" },
     { name = "mashumaro", specifier = "==3.15" },
-    { name = "msal", specifier = "==1.32.0" },
+    { name = "msal", specifier = "==1.32.1" },
     { name = "mypy", marker = "extra == 'lint'", specifier = "==1.15.0" },
     { name = "pre-commit", marker = "extra == 'lint'", specifier = "==4.2.0" },
     { name = "pre-commit-hooks", marker = "extra == 'lint'", specifier = "==5.0.0" },
@@ -510,16 +510,16 @@ wheels = [
 
 [[package]]
 name = "msal"
-version = "1.32.0"
+version = "1.32.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
     { name = "pyjwt", extra = ["crypto"] },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/aa/5f/ef42ef25fba682e83a8ee326a1a788e60c25affb58d014495349e37bce50/msal-1.32.0.tar.gz", hash = "sha256:5445fe3af1da6be484991a7ab32eaa82461dc2347de105b76af92c610c3335c2", size = 149817, upload_time = "2025-03-12T21:23:51.844Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7a/fe/dbf56cfcf85eebdf7079d2cd5d8c7e73cd04cc276394f4f194504406fd59/msal-1.32.1.tar.gz", hash = "sha256:9a36837fa9ead0b63f3d7aed51f9af5d586e482fbec196bbb8e5dc9492ee0f1a", size = 151125, upload_time = "2025-04-24T18:22:37.102Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/93/5a/2e663ef56a5d89eba962941b267ebe5be8c5ea340a9929d286e2f5fac505/msal-1.32.0-py3-none-any.whl", hash = "sha256:9dbac5384a10bbbf4dae5c7ea0d707d14e087b92c5aa4954b3feaa2d1aa0bcb7", size = 114655, upload_time = "2025-03-12T21:23:50.268Z" },
+    { url = "https://files.pythonhosted.org/packages/dc/b2/2be80f7e46c3610cd045d31fc6f36b9e55ffcdc992b5952661163da7989f/msal-1.32.1-py3-none-any.whl", hash = "sha256:f9d278fbe4d261232da52424c4a77d6e7f1485d1fc6a8aab6134b5f328a4e9ce", size = 115126, upload_time = "2025-04-24T18:22:35.387Z" },
 ]
 
 [[package]]
