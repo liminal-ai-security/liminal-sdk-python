@@ -468,7 +468,7 @@ requires-dist = [
     { name = "httpx", specifier = "==0.28.1" },
     { name = "liminal-sdk-python", extras = ["build", "lint", "release", "test"], marker = "extra == 'all'" },
     { name = "mashumaro", specifier = "==3.15" },
-    { name = "msal", specifier = "==1.32.1" },
+    { name = "msal", specifier = "==1.32.2" },
     { name = "mypy", marker = "extra == 'lint'", specifier = "==1.15.0" },
     { name = "pre-commit", marker = "extra == 'lint'", specifier = "==4.2.0" },
     { name = "pre-commit-hooks", marker = "extra == 'lint'", specifier = "==5.0.0" },
@@ -510,16 +510,16 @@ wheels = [
 
 [[package]]
 name = "msal"
-version = "1.32.1"
+version = "1.32.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
     { name = "pyjwt", extra = ["crypto"] },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7a/fe/dbf56cfcf85eebdf7079d2cd5d8c7e73cd04cc276394f4f194504406fd59/msal-1.32.1.tar.gz", hash = "sha256:9a36837fa9ead0b63f3d7aed51f9af5d586e482fbec196bbb8e5dc9492ee0f1a", size = 151125, upload_time = "2025-04-24T18:22:37.102Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7f/94/e855c8347c181caf5f3f7e0641cfbe09a4275882db4b90f8f525e91bc399/msal-1.32.2.tar.gz", hash = "sha256:81622b1bfcc3bde9146b72cdd240599791e652a69371422d3b4cc907501a6c65", size = 151387, upload_time = "2025-04-25T04:15:57.849Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/dc/b2/2be80f7e46c3610cd045d31fc6f36b9e55ffcdc992b5952661163da7989f/msal-1.32.1-py3-none-any.whl", hash = "sha256:f9d278fbe4d261232da52424c4a77d6e7f1485d1fc6a8aab6134b5f328a4e9ce", size = 115126, upload_time = "2025-04-24T18:22:35.387Z" },
+    { url = "https://files.pythonhosted.org/packages/68/b2/466eef0b0447d5ad4319fda63d899b88d04fc4e1bab4630bed3583795b04/msal-1.32.2-py3-none-any.whl", hash = "sha256:2e8cafac9063dd522d4bd5a8ac7f2d5f897d66c72b3953c90a1aa7e570d2b917", size = 115277, upload_time = "2025-04-25T04:15:56.19Z" },
 ]
 
 [[package]]
