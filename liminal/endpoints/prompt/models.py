@@ -18,13 +18,14 @@ class AnalysisFinding(BaseModel):
     data type was detected, and what the current policy is for this type of data.
     """
 
-    start: int
+    custom_term: str = field(metadata=field_options(alias="customTerm"))
     end: int
+    policy_action: str = field(metadata=field_options(alias="policyAction"))
     score: float
     score_category: str = field(metadata=field_options(alias="scoreCategory"))
+    start: int
     text: str
     type: str
-    policy_action: str = field(metadata=field_options(alias="policyAction"))
 
 
 @dataclass(frozen=True, kw_only=True)
