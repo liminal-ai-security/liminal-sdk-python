@@ -8,7 +8,8 @@
         "start": 53,
         "text": "Jane Gansbuhler",
         "type": "PERSON",
-        "policyAction": "redact"
+        "policyAction": "redact",
+        "customTerm": null
       },
       {
         "end": 119,
@@ -17,7 +18,8 @@
         "start": 93,
         "text": "egansbuhler0@pinterest.com",
         "type": "EMAIL_ADDRESS",
-        "policyAction": "redact"
+        "policyAction": "redact",
+        "customTerm": null
       },
       {
         "end": 182,
@@ -26,7 +28,8 @@
         "start": 137,
         "text": "14309 Lindbergh Circle Alexander City Alabama",
         "type": "LOCATION",
-        "policyAction": "mask"
+        "policyAction": "mask",
+        "customTerm": null
       },
       {
         "end": 188,
@@ -35,7 +38,8 @@
         "start": 184,
         "text": "Jane",
         "type": "PERSON",
-        "policyAction": "redact"
+        "policyAction": "redact",
+        "customTerm": null
       },
       {
         "end": 209,
@@ -44,7 +48,8 @@
         "start": 201,
         "text": "6/5/1961",
         "type": "DATE_TIME",
-        "policyAction": "mask"
+        "policyAction": "mask",
+        "customTerm": null
       }
     ],
     "text": "Write a short marketing email for a banking customer Jane Gansbuhler, whose email address is egansbuhler0@pinterest.com and who lives at 14309 Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and identifies as Female"
