@@ -45,7 +45,7 @@ lint = [
     "pre-commit-hooks==5.0.0",
     "pre-commit==4.2.0",
     "pylint==3.3.7",
-    "pytest-asyncio==1.0.0",
+    "pytest-asyncio==1.1.0",
     "pytest==8.4.1",
     "ruff==0.12.3",
 ]
@@ -55,7 +55,7 @@ release = [
 ]
 test = [
     "pytest==8.4.1",
-    "pytest-asyncio==1.0.0",
+    "pytest-asyncio==1.1.0",
     "pytest-cov==6.2.1",
     "pytest-httpx==0.35.0",
 ]
