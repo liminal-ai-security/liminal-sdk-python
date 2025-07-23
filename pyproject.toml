@@ -35,19 +35,19 @@ all = [
     "liminal-sdk-python[build,lint,release,test]",
 ]
 build = [
-    "uv==0.7.14",
+    "uv==0.8.0",
 ]
 lint = [
     "blacken-docs==1.19.1",
     "codespell==2.4.1",
     "darglint==1.8.1",
-    "mypy==1.16.1",
+    "mypy==1.17.0",
     "pre-commit-hooks==5.0.0",
     "pre-commit==4.2.0",
     "pylint==3.3.7",
-    "pytest-asyncio==1.0.0",
+    "pytest-asyncio==1.1.0",
     "pytest==8.4.1",
-    "ruff==0.12.0",
+    "ruff==0.12.4",
 ]
 release = [
     "tomli==2.2.1",
@@ -55,7 +55,7 @@ release = [
 ]
 test = [
     "pytest==8.4.1",
-    "pytest-asyncio==1.0.0",
+    "pytest-asyncio==1.1.0",
     "pytest-cov==6.2.1",
     "pytest-httpx==0.35.0",
 ]
