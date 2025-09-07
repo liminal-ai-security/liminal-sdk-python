@@ -57,7 +57,7 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Set labels
-        uses: actions/labeler@v5
+        uses: actions/labeler@v6
         with:
           configuration-path: ./.github/config/labeler.yml
           sync-labels: true
