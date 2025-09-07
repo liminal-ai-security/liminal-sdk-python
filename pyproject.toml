@@ -35,7 +35,7 @@ all = [
     "liminal-sdk-python[build,lint,release,test]",
 ]
 build = [
-    "uv==0.8.13",
+    "uv==0.8.15",
 ]
 lint = [
     "blacken-docs==1.19.1",
