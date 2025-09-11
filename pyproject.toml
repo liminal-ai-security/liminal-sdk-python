@@ -38,7 +38,7 @@ build = [
     "uv==0.8.15",
 ]
 lint = [
-    "blacken-docs==1.19.1",
+    "blacken-docs==1.20.0",
     "codespell==2.4.1",
     "darglint==1.8.1",
     "mypy==1.17.1",
