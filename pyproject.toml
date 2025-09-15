@@ -47,7 +47,7 @@ lint = [
     "pylint==3.3.8",
     "pytest-asyncio==1.1.0",
     "pytest==8.4.2",
-    "ruff==0.12.12",
+    "ruff==0.13.0",
 ]
 release = [
     "tomli==2.2.1",
@@ -112,20 +112,20 @@ max-attributes = 20
 max-line-length = 88
 
 [tool.pylint.MAIN]
-py-version = "3.11"
+fail-on = [
+    "I",
+]
+jobs = 2
 ignore = [
     "tests",
 ]
-jobs = 2
 init-hook = "from pathlib import Path; import sys; from pylint.config import find_default_config_files; sys.path.append( str(Path(next(find_default_config_files())).parent.joinpath('pylint/plugins'))\n    ) "
 load-plugins = [
     "pylint.extensions.code_style",
     "pylint.extensions.typing",
 ]
 persistent = false
-fail-on = [
-    "I",
-]
+py-version = "3.11"
 
 [tool.pylint."MESSAGES CONTROL"]
 disable = [
@@ -467,10 +467,7 @@ max-line-length-suggestions = 72
 target-version = "py311"
 
 [tool.ruff.lint]
-select = [
-    "ALL"
-]
-
+future-annotations = true
 ignore = [
     "A005",    # Shadowing a Python standard-library module
     "D202",    # No blank lines allowed after function docstring
@@ -498,14 +495,17 @@ ignore = [
     "Q003",
     "W191",
 ]
+select = [
+    "ALL"
+]
 
 [tool.ruff.lint.isort]
+combine-as-imports = true
 force-sort-within-sections = true
 known-first-party = [
     "liminal",
     "tests",
 ]
-combine-as-imports = true
 split-on-trailing-comma = false
 
 [tool.ruff.lint.per-file-ignores]
