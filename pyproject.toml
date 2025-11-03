@@ -47,7 +47,7 @@ lint = [
     "pylint==4.0.2",
     "pytest-asyncio==1.2.0",
     "pytest==8.4.2",
-    "ruff==0.14.2",
+    "ruff==0.14.3",
 ]
 release = [
     "tomli==2.3.0",
