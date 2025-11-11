@@ -17,7 +17,7 @@ classifiers = [
 ]
 dependencies = [
     "anyio>=4.4.0",
-    "cryptography==44.0.1",
+    "cryptography==46.0.3",
     "httpx==0.28.1",
     "mashumaro==3.17",
     "msal==1.34.0",
