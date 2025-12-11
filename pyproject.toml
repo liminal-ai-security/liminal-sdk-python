@@ -9,9 +9,9 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
@@ -27,7 +27,7 @@ description = "The Liminal SDK for Python"
 license = "Apache-2.0"
 name = "liminal-sdk-python"
 readme = "README.md"
-requires-python = ">=3.14,<3.15"
+requires-python = ">=3.12,<3.15"
 version = "2024.09.0b1"
 
 [project.optional-dependencies]
@@ -84,7 +84,7 @@ follow_imports = "silent"
 ignore_missing_imports = true
 no_implicit_optional = true
 platform = "linux"
-python_version = "3.11"
+python_version = "3.12"
 show_error_codes = true
 strict_equality = true
 warn_incomplete_stub = true
@@ -125,7 +125,7 @@ load-plugins = [
     "pylint.extensions.typing",
 ]
 persistent = false
-py-version = "3.11"
+py-version = "3.12"
 
 [tool.pylint."MESSAGES CONTROL"]
 disable = [
