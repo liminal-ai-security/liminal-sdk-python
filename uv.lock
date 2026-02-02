@@ -566,7 +566,7 @@ requires-dist = [
     { name = "darglint", marker = "extra == 'lint'", specifier = "==1.8.1" },
     { name = "httpx", specifier = "==0.28.1" },
     { name = "liminal-sdk-python", extras = ["build", "lint", "release", "test"], marker = "extra == 'all'" },
-    { name = "mashumaro", specifier = "==3.17" },
+    { name = "mashumaro", specifier = "==3.18" },
     { name = "msal", specifier = "==1.34.0" },
     { name = "mypy", marker = "extra == 'lint'", specifier = "==1.19.1" },
     { name = "pre-commit", marker = "extra == 'lint'", specifier = "==4.5.1" },
@@ -588,14 +588,14 @@ provides-extras = ["all", "build", "lint", "release", "test"]
 
 [[package]]
 name = "mashumaro"
-version = "3.17"
+version = "3.18"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f8/67/c4e235256baf6837106d2620c7123eb1e5786c704c7f7d7fa488ad6afc61/mashumaro-3.17.tar.gz", hash = "sha256:de1d8b1faffee58969c7f97e35963a92480a38d4c9858e92e0721efec12258ed", size = 189877, upload-time = "2025-10-03T21:09:27.281Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/eb/be/64b91309b2f612f38da650fbd930cd7461a0261e49c2d61067e2c3269da3/mashumaro-3.18.tar.gz", hash = "sha256:4ce1f2378b72791a8bcb5950241b9f6ba244876f7f4c0765289d10b4dc98d5a4", size = 190463, upload-time = "2026-01-30T18:34:39.404Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f8/2d/edc147aa1dce9e0e377687d453e62fdfcbccc08cd35d0b7413e3485c4b92/mashumaro-3.17-py3-none-any.whl", hash = "sha256:3964e2c804f62de9e4c58fb985de71dcd716f9507cc18374b1bd5c4f1a1b879b", size = 94198, upload-time = "2025-10-03T21:09:25.436Z" },
+    { url = "https://files.pythonhosted.org/packages/e0/3c/2841a524385a9778bc66ea61d1f1496ca02b66e4835761d17f3646b7cb5c/mashumaro-3.18-py3-none-any.whl", hash = "sha256:eeb4d243df742985fb3179ee11d170079b1c1fa6100288bd499311b5a8ea453e", size = 94266, upload-time = "2026-01-30T18:34:37.568Z" },
 ]
 
 [[package]]
