@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Lint title
-        uses: amannn/action-semantic-pull-request@v5
+        uses: amannn/action-semantic-pull-request@v6
         id: lint-title
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -54,10 +54,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set labels
-        uses: actions/labeler@v5
+        uses: actions/labeler@v6
         with:
           configuration-path: ./.github/config/labeler.yml
           sync-labels: true

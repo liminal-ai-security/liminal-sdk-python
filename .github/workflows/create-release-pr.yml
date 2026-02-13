@@ -20,13 +20,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: 🏗 Set up Python 3.11
+      - name: 🏗 Set up Python
         id: setup-python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
-          python-version: 3.13.3
+          python-version: 3.14.3
 
       - name: 🚜 Install uv
         uses: ./.github/actions/install-uv
@@ -62,7 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: ✏️ Run Release Drafter
-        uses: release-drafter/release-drafter@v6.1.0
+        uses: release-drafter/release-drafter@v6.2.0
         with:
           tag: ${{ inputs.version }}
           name: ${{ inputs.version }}
