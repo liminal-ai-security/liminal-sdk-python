@@ -77,12 +77,12 @@ class Client:
         """
         client = cls(api_server_url, httpx_client=httpx_client)
         provider_access_token = await auth_provider.get_access_token()
-        liminal_auth_response = await client._request(  # noqa: SLF001
+        liminal_auth_response = await client._request(
             "GET",
             "/api/v1/auth/login/oauth/access-token",
             headers={"Authorization": f"Bearer {provider_access_token}"},
         )
-        client._save_session_id_from_auth_response(liminal_auth_response)  # noqa: SLF001
+        client._save_session_id_from_auth_response(liminal_auth_response)
         return client
 
     @classmethod
@@ -108,10 +108,10 @@ class Client:
 
         """
         client = cls(api_server_url, httpx_client=httpx_client)
-        session_id_response = await client._request(  # noqa: SLF001
+        session_id_response = await client._request(
             "GET", "/api/v1/users/me", cookies={"session": session_id}
         )
-        client._save_session_id_from_auth_response(session_id_response)  # noqa: SLF001
+        client._save_session_id_from_auth_response(session_id_response)
         return client
 
     @classmethod
@@ -132,12 +132,12 @@ class Client:
 
         """
         client = cls(api_server_url, httpx_client=httpx_client)
-        liminal_auth_response = await client._request(  # noqa: SLF001
+        liminal_auth_response = await client._request(
             "POST",
             "/api/v1/auth/test-automation/login",
             headers={"x-test-automation-api-key": token},
         )
-        client._save_session_id_from_auth_response(liminal_auth_response)  # noqa: SLF001
+        client._save_session_id_from_auth_response(liminal_auth_response)
         return client
 
     @property
@@ -332,7 +332,6 @@ class Client:
         url = f"{self._api_server_url}{endpoint}"
         cookie_jar = self._create_cookie_jar(cookies)
 
-        # pylint: disable=contextmanager-generator-missing-cleanup
         async with (
             self._get_httpx_client() as client,
             client.stream(
