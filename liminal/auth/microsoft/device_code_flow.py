@@ -18,7 +18,7 @@ from liminal.errors import AuthError
 DEFAULT_AUTH_CHALLENGE_TIMEOUT: Final[int] = 60
 
 
-class DeviceCodeFlowProvider(AuthProvider):  # pylint: disable=too-few-public-methods
+class DeviceCodeFlowProvider(AuthProvider):
     """Define a Microsoft auth provider."""
 
     AUTHORITY_URL: Final[str] = "https://login.microsoftonline.com"
