@@ -1,7 +1,7 @@
 """Define auth providers."""
 
 
-class AuthProvider:  # pylint: disable=too-few-public-methods
+class AuthProvider:
     """Define an auth provider abstract base class."""
 
     async def get_access_token(self) -> str:

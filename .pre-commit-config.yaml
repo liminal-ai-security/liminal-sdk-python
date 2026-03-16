@@ -97,11 +97,6 @@ repos:
         args:
           - --branch=development
           - --branch=main
-      - id: pylint
-        name: "🌟 Starring code with pylint"
-        language: system
-        types: [python]
-        entry: uv run pylint
       - id: ruff
         name: "👔 Enforcing style guide with ruff"
         language: system
