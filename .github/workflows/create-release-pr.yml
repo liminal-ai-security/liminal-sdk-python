@@ -62,7 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: ✏️ Run Release Drafter
-        uses: release-drafter/release-drafter@v7.1.0
+        uses: release-drafter/release-drafter@v7.1.1
         with:
           tag: ${{ inputs.version }}
           name: ${{ inputs.version }}
