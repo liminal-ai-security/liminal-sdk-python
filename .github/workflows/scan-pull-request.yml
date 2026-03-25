@@ -29,7 +29,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Create error comment
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@v3
         if: ${{ always() && steps.lint-title.outputs.error_message != null }}
         with:
           header: lint-title-error-comment
@@ -42,7 +42,7 @@ jobs:
             ${{ steps.lint-title.outputs.error_message }}
             ```
       - name: Delete error comment
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@v3
         if: ${{ steps.lint-title.outputs.error_message == null }}
         with:
           header: lint-title-error-comment
