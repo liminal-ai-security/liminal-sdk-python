@@ -6,7 +6,6 @@ from dataclasses import dataclass, field
 
 from mashumaro import field_options
 
-from liminal.endpoints.thread.models import DeidentifiedToken
 from liminal.helpers.model import BaseModel
 
 
@@ -102,9 +101,6 @@ class SubmitData(BaseModel):
     input_text: str = field(metadata=field_options(alias="inputText"))
     deidentified_input_text_data: CleanseData = field(
         metadata=field_options(alias="deidentifiedInputTextData")
-    )
-    deidentified_context_history: list[DeidentifiedToken] = field(
-        metadata=field_options(alias="deidentifiedContextHistory")
     )
     llm_model: str = field(metadata=field_options(alias="llmModel"))
     raw_llm_response_text: str = field(
