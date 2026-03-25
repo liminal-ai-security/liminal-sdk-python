@@ -28,7 +28,7 @@ license = "Apache-2.0"
 name = "liminal-sdk-python"
 readme = "README.md"
 requires-python = ">=3.12,<3.15"
-version = "2024.09.0b1"
+version = "2026.03.0b0"
 
 [project.optional-dependencies]
 all = [
@@ -106,17 +106,14 @@ target-version = "py311"
 [tool.ruff.lint]
 future-annotations = true
 ignore = [
-    "A005",    # Shadowing a Python standard-library module
-    "D202",    # No blank lines allowed after function docstring
-    "D203",    # 1 blank line required before class docstring
-    "D213",    # Multi-line docstring summary should start at the second line
-    "PLR0913", # This is subjective
-    "PLW2901", # Outer {outer_kind} variable {name} overwritten by inner {inner_kind} target
-    "PT012",   # `pytest.raises()` block should contain a single simple statement
-    "TCH",     # flake8-type-checking
-
-    # May conflict with the formatter:
-    # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+    "A005",
+    "D202",
+    "D203",
+    "D213",
+    "PLR0913",
+    "PLW2901",
+    "PT012",
+    "TCH",
     "COM812",
     "COM819",
     "D206",
@@ -133,7 +130,7 @@ ignore = [
     "W191",
 ]
 select = [
-    "ALL"
+    "ALL",
 ]
 
 [tool.ruff.lint.isort]
