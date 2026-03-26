@@ -493,7 +493,7 @@ wheels = [
 
 [[package]]
 name = "liminal-sdk-python"
-version = "2024.9.0b1"
+version = "2026.3.0b0"
 source = { editable = "." }
 dependencies = [
     { name = "anyio" },
