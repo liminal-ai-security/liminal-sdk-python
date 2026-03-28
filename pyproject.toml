@@ -49,7 +49,7 @@ lint = [
     "ruff==0.15.7",
 ]
 release = [
-    "tomli==2.4.0",
+    "tomli==2.4.1",
     "tomli-w==1.2.0",
 ]
 test = [
