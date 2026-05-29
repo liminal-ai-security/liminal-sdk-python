@@ -19,7 +19,7 @@ dependencies = [
     "anyio>=4.4.0",
     "cryptography==48.0.0",
     "httpx==0.28.1",
-    "mashumaro==3.21",
+    "mashumaro==3.22",
     "msal==1.36.0",
     "requests>=2.32.2",
 ]
