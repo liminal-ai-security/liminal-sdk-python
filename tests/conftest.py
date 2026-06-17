@@ -329,18 +329,3 @@ def threads_get_by_id_response_fixture() -> dict[str, Any]:
     )
 
 
-@pytest.fixture(
-    name="threads_get_deidentified_context_history_response", scope="session"
-)
-def get_deidentified_context_history_response_fixture() -> dict[str, Any]:
-    """Return a fixture for a thread's deidentified context history response.
-
-    Returns
-    -------
-        A fixture for a thread's deidentified context history response.
-
-    """
-    return cast(
-        dict[str, Any],
-        json.loads(load_fixture("threads-deidentified-context-history-response.json")),
-    )
