@@ -327,5 +327,3 @@ def threads_get_by_id_response_fixture() -> dict[str, Any]:
     return cast(
         dict[str, Any], json.loads(load_fixture("threads-get-by-id-response.json"))
     )
-
-
