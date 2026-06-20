@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.0
 
       - name: Run label syncer
         uses: micnncim/action-label-syncer@v1.3.0
