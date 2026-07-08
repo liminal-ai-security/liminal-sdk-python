@@ -17,7 +17,7 @@ class AnalysisFinding(BaseModel):
     data type was detected, and what the current policy is for this type of data.
     """
 
-    custom_term: str = field(metadata=field_options(alias="customTerm"))
+    info_type_name: str = field(metadata=field_options(alias="infoTypeName"))
     end: int
     policy_action: str = field(metadata=field_options(alias="policyAction"))
     score: float
