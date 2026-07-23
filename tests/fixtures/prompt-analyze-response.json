@@ -2,9 +2,9 @@
   "data": {
     "findings": [
       {
+        "action": "redact",
         "end": 68,
         "infoType": "PERSON",
-        "policyAction": "redact",
         "score": 1,
         "scoreCategory": "VERY LIKELY",
         "start": 53,
@@ -12,9 +12,9 @@
         "text": "Jane Gansbuhler"
       },
       {
+        "action": "redact",
         "end": 119,
         "infoType": "EMAIL_ADDRESS",
-        "policyAction": "redact",
         "score": 1,
         "scoreCategory": "VERY LIKELY",
         "start": 93,
@@ -22,9 +22,9 @@
         "text": "egansbuhler0@pinterest.com"
       },
       {
+        "action": "mask",
         "end": 182,
         "infoType": "LOCATION",
-        "policyAction": "mask",
         "score": 1,
         "scoreCategory": "VERY LIKELY",
         "start": 137,
@@ -32,9 +32,9 @@
         "text": "14309 Lindbergh Circle Alexander City Alabama"
       },
       {
+        "action": "redact",
         "end": 188,
         "infoType": "PERSON",
-        "policyAction": "redact",
         "score": 1,
         "scoreCategory": "VERY LIKELY",
         "start": 184,
@@ -42,9 +42,9 @@
         "text": "Jane"
       },
       {
+        "action": "mask",
         "end": 209,
         "infoType": "DATE",
-        "policyAction": "mask",
         "score": 1,
         "scoreCategory": "VERY LIKELY",
         "start": 201,
