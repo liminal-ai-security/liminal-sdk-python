@@ -68,12 +68,14 @@ class PromptEndpoint:
             A request payload.
 
         """
-        payload = {
+        payload: dict[str, Any] = {
             "modelInstanceId": model_instance_id,
             "source": SOURCE,
             "text": prompt,
-            "threadId": thread_id,
         }
+
+        if thread_id is not None:
+            payload["threadId"] = thread_id
 
         if findings:
             payload["findings"] = [
