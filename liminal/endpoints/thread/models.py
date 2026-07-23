@@ -14,14 +14,6 @@ from liminal.helpers.model import BaseModel
 
 
 @dataclass(frozen=True, kw_only=True)
-class DeidentifiedToken(BaseModel):
-    """Define the schema for a deidentified token."""
-
-    deid_text: str = field(metadata=field_options(alias="deidText"))
-    hash_text: str = field(metadata=field_options(alias="hashText"))
-
-
-@dataclass(frozen=True, kw_only=True)
 class Chat(BaseModel):
     """Define the schema for a chat."""
 

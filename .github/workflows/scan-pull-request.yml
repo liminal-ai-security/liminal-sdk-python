@@ -54,10 +54,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7.0.1
 
       - name: Set labels
-        uses: actions/labeler@v6.1.0
+        uses: actions/labeler@v7.0.0
         with:
           configuration-path: ./.github/config/labeler.yml
           sync-labels: true
