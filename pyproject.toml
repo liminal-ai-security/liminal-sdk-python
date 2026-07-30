@@ -28,14 +28,14 @@ license = "Apache-2.0"
 name = "liminal-sdk-python"
 readme = "README.md"
 requires-python = ">=3.12,<3.15"
-version = "2026.7.0b0"
+version = "2026.07.1b0"
 
 [project.optional-dependencies]
 all = [
     "liminal-sdk-python[build,lint,release,test]",
 ]
 build = [
-    "uv==0.11.29",
+    "uv==0.11.32",
 ]
 lint = [
     "blacken-docs==1.20.0",
@@ -43,10 +43,10 @@ lint = [
     "darglint==1.8.1",
     "mypy==2.3.0",
     "pre-commit-hooks==6.0.0",
-    "pre-commit==4.6.0",
+    "pre-commit==4.6.1",
     "pytest-asyncio==1.4.0",
     "pytest==9.1.1",
-    "ruff==0.15.22",
+    "ruff==0.16.0",
 ]
 release = [
     "tomli==2.4.1",
