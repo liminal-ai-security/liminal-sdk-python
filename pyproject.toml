@@ -17,7 +17,7 @@ classifiers = [
 ]
 dependencies = [
     "anyio>=4.4.0",
-    "cryptography==49.0.0",
+    "cryptography==50.0.0",
     "httpx==0.28.1",
     "mashumaro==3.22",
     "msal==1.37.0",
@@ -28,14 +28,14 @@ license = "Apache-2.0"
 name = "liminal-sdk-python"
 readme = "README.md"
 requires-python = ">=3.12,<3.15"
-version = "2026.07.1b0"
+version = "2026.08.0b0"
 
 [project.optional-dependencies]
 all = [
     "liminal-sdk-python[build,lint,release,test]",
 ]
 build = [
-    "uv==0.11.32",
+    "uv==0.12.1",
 ]
 lint = [
     "blacken-docs==1.20.0",
@@ -46,7 +46,7 @@ lint = [
     "pre-commit==4.6.1",
     "pytest-asyncio==1.4.0",
     "pytest==9.1.1",
-    "ruff==0.16.0",
+    "ruff==0.16.1",
 ]
 release = [
     "tomli==2.4.1",
