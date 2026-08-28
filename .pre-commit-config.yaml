@@ -83,11 +83,11 @@ repos:
         language: system
         types: [python]
         entry: uv run ruff format
-      - id: mypy
-        name: "🆎 Performing static type checking using mypy"
+      - id: ty
+        name: "🆎 Performing static type checking using ty"
         language: system
         types: [python]
-        entry: uv run mypy
+        entry: uv run ty check
       - id: no-commit-to-branch
         name: "🛑 Checking for commit to protected branch"
         language: system
