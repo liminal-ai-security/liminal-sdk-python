@@ -66,12 +66,10 @@ async def main() -> None:
         findings = await liminal.prompt.analyze(model_instance.id, prompt)
         _LOGGER.info("Analysis findings: %s", findings)
 
-        # Send a prompt to an LLM and get a response (choosing to include the findings
-        # and deidentified context history we've already retrieved):
+        # Send a prompt to an LLM and get a response:
         response = await liminal.prompt.submit(
             model_instance.id,
             prompt,
-            findings=findings,
             thread_id=created_thread.id,
         )
         _LOGGER.info("LLM response: %s", response)

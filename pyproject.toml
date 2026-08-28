@@ -129,6 +129,9 @@ known-first-party = [
 split-on-trailing-comma = false
 
 [tool.ruff.lint.per-file-ignores]
+"examples/*" = [
+    "ASYNC250",
+]
 "tests/*" = [
     "ARG001",
     "FBT001",
