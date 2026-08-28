@@ -1,0 +1,24 @@
+name: "Install prek"
+description: "Installs prek (pinned to the version used by this repo)"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get prek version from .mise.toml
+      id: prek-version
+      shell: bash
+      run: |
+        echo "version=$(grep 'prek' .mise.toml | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')" >> $GITHUB_OUTPUT
+
+    - name: Install prek
+      shell: bash
+      run: |
+        VERSION="${{ steps.prek-version.outputs.version }}"
+        TARGET="x86_64-unknown-linux-gnu"
+        TMPDIR=$(mktemp -d)
+        curl -fsSL \
+          "https://github.com/j178/prek/releases/download/v${VERSION}/prek-${TARGET}.tar.gz" \
+          | tar -xz -C "$TMPDIR"
+        find "$TMPDIR" -name "prek" -type f -exec install -m 755 {} /usr/local/bin/prek \;
+        rm -rf "$TMPDIR"
+        prek --version

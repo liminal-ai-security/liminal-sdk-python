@@ -23,6 +23,9 @@ jobs:
       - name: 🚜 Install uv
         uses: ./.github/actions/install-uv
 
+      - name: 🚜 Install prek
+        uses: ./.github/actions/install-prek
+
       - name: 🏗 Install workflow dependencies
         run: |
           uv sync --extra lint
@@ -33,7 +36,7 @@ jobs:
         with:
           fetch_depth: 0
 
-      - name: Run pre-commit hooks
+      - name: Run prek hooks
         run: |
-          uv run pre-commit run \
+          prek run \
             --files ${{ steps.changed-files.outputs.all_changed_files }}

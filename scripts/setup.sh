@@ -59,7 +59,7 @@ setup_colors() {
 
 validate_dependencies_exist() {
   local dependencies=(
-    "pre-commit"
+    "prek"
     "python"
   )
 
@@ -97,8 +97,8 @@ main() {
   fi
   uv sync --extra all
 
-  msg "${BLUE}🚜 Installing pre-commit hooks...${NOFORMAT}"
-  pre-commit install
+  msg "${BLUE}🚜 Installing prek hooks...${NOFORMAT}"
+  prek install
 
   # At this stage, we should have all of our dependencies installed; confirm that:
   validate_dependencies_exist

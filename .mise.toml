@@ -1,5 +1,6 @@
 [tools]
 act = { version="0.2.89" }
+prek = { version="0.5.0" }
 python = { version="3.14.7" }
 
 [env]
