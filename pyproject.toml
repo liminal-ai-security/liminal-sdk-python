@@ -17,7 +17,7 @@ classifiers = [
 ]
 dependencies = [
     "anyio>=4.4.0",
-    "cryptography==50.0.0",
+    "cryptography==50.0.1",
     "httpx==0.28.1",
     "mashumaro==3.22",
     "msal==1.38.0",
@@ -35,18 +35,18 @@ all = [
     "liminal-sdk-python[build,lint,release,test]",
 ]
 build = [
-    "uv==0.12.5",
+    "uv==0.12.6",
 ]
 lint = [
     "blacken-docs==1.20.0",
     "codespell==2.4.3",
     "darglint==1.8.1",
-    "mypy==2.3.1",
     "pre-commit-hooks==6.0.0",
     "pre-commit==4.6.2",
     "pytest-asyncio==1.4.0",
     "pytest==9.1.1",
     "ruff==0.16.4",
+    "ty==0.0.75",
 ]
 release = [
     "tomli==2.4.1",
@@ -72,26 +72,6 @@ source = [
     "liminal",
 ]
 
-[tool.mypy]
-check_untyped_defs = true
-disallow_incomplete_defs = true
-disallow_subclassing_any = true
-disallow_untyped_calls = true
-disallow_untyped_decorators = true
-disallow_untyped_defs = true
-follow_imports = "silent"
-ignore_missing_imports = true
-no_implicit_optional = true
-platform = "linux"
-python_version = "3.12"
-show_error_codes = true
-strict_equality = true
-warn_incomplete_stub = true
-warn_redundant_casts = true
-warn_unreachable = true
-warn_unused_configs = true
-warn_unused_ignores = true
-
 [tool.poetry]
 authors = [
     "Liminal AI <info@liminal.ai>",
@@ -101,18 +81,21 @@ packages = [
 ]
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py312"
 
 [tool.ruff.lint]
 future-annotations = true
 ignore = [
     "A005",    # Shadowing a Python standard-library module
+    "CPY001",  # Missing copyright notice at top of file; we don't use header notices
     "D202",    # No blank lines allowed after function docstring
     "D203",    # 1 blank line required before class docstring
     "D213",    # Multi-line docstring summary should start at the second line
     "PLR0913", # This is subjective
+    "PLR0917", # This is subjective (positional-argument variant of PLR0913)
     "PLW2901", # Outer {outer_kind} variable {name} overwritten by inner {inner_kind} target
     "PT012",   # `pytest.raises()` block should contain a single simple statement
+    "S603",    # Nearly every subprocess call raises this; silly
     "TCH",     # flake8-type-checking
 
     # May conflict with the formatter:
@@ -153,6 +136,10 @@ split-on-trailing-comma = false
     "S101",
     "SLF001",
 ]
+
+[tool.ty.environment]
+python = "./.venv"
+python-version = "3.12"
 
 [tool.vulture]
 min_confidence = 100
