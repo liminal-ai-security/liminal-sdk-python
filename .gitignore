@@ -42,9 +42,6 @@ airflow.db
 *.crt
 *.key
 
-# pre-commit
-pre-commit.pyz
-
 # Ruff
 .ruff_cache
 
