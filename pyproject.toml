@@ -87,15 +87,12 @@ target-version = "py312"
 future-annotations = true
 ignore = [
     "A005",
-    "CPY001",
     "D202",
     "D203",
     "D213",
     "PLR0913",
-    "PLR0917",
     "PLW2901",
     "PT012",
-    "S603",
     "TCH",
     "COM812",
     "COM819",
