@@ -56,7 +56,6 @@ async def main() -> None:
             resp = liminal.prompt.stream(
                 model_instance.id,
                 prompt,
-                findings=findings,
                 thread_id=created_thread.id,
             )
 

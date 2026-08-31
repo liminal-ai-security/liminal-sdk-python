@@ -45,12 +45,7 @@ class PromptEndpoint:
         self._stream = stream
 
     def _generate_payload_for_request(
-        self,
-        model_instance_id: int,
-        prompt: str,
-        *,
-        thread_id: int | None = None,
-        findings: AnalysisFindings | None = None,
+        self, model_instance_id: int, prompt: str, *, thread_id: int | None = None
     ) -> dict[str, Any]:
         """Generate a payload for the request.
 
@@ -60,8 +55,6 @@ class PromptEndpoint:
             prompt: The prompt to submit.
             thread_id: The ID of the thread to submit the prompt for. If this is not
                 provided, a thread will be created automatically.
-            findings: The findings from the analyze endpoint. If this is not provided,
-                the analyze endpoint will be called automatically.
 
         Returns:
         -------
@@ -76,11 +69,6 @@ class PromptEndpoint:
 
         if thread_id is not None:
             payload["threadId"] = thread_id
-
-        if findings:
-            payload["findings"] = [
-                finding.to_dict(by_alias=True) for finding in findings.findings
-            ]
 
         return payload
 
@@ -118,7 +106,6 @@ class PromptEndpoint:
         prompt: str,
         *,
         thread_id: int | None = None,
-        findings: AnalysisFindings | None = None,
     ) -> CleanseData:
         """Cleanse a prompt of sensitive data.
 
@@ -128,8 +115,6 @@ class PromptEndpoint:
             prompt: The prompt to cleanse.
             thread_id: The ID of the thread to cleanse the prompt for. If this is not
                 provided, a thread will be created automatically.
-            findings: The findings from the analyze endpoint. If this is not provided,
-                findings will be created automatically.
 
         Returns:
         -------
@@ -137,7 +122,7 @@ class PromptEndpoint:
 
         """
         payload = self._generate_payload_for_request(
-            model_instance_id, prompt, thread_id=thread_id, findings=findings
+            model_instance_id, prompt, thread_id=thread_id
         )
         response = cast(
             CleanseResponse,
@@ -193,7 +178,6 @@ class PromptEndpoint:
         prompt: str,
         *,
         thread_id: int | None = None,
-        findings: AnalysisFindings | None = None,
     ) -> AsyncIterator[StreamResponseChunk]:
         """Submit a prompt to a thread and stream a response from the LLM.
 
@@ -203,8 +187,6 @@ class PromptEndpoint:
             prompt: The prompt to submit.
             thread_id: The ID of the thread to submit the prompt for. If this is not
                 provided, a thread will be created automatically.
-            findings: The findings from the analyze endpoint. If this is not provided,
-                the analyze endpoint will be called automatically.
 
         Returns:
         -------
@@ -212,7 +194,7 @@ class PromptEndpoint:
 
         """
         payload = self._generate_payload_for_request(
-            model_instance_id, prompt, thread_id=thread_id, findings=findings
+            model_instance_id, prompt, thread_id=thread_id
         )
         payload["isStreaming"] = True
         async for chunk in self._stream("POST", "/api/v1/prompts/submit", json=payload):
@@ -228,7 +210,6 @@ class PromptEndpoint:
         prompt: str,
         *,
         thread_id: int | None = None,
-        findings: AnalysisFindings | None = None,
     ) -> SubmitData:
         """Submit a prompt to a thread and get a complete response from the LLM.
 
@@ -238,8 +219,6 @@ class PromptEndpoint:
             prompt: The prompt to submit.
             thread_id: The ID of the thread to submit the prompt for. If this is not
                 provided, a thread will be created automatically.
-            findings: The findings from the analyze endpoint. If this is not provided,
-                the analyze endpoint will be called automatically.
 
         Returns:
         -------
@@ -247,7 +226,7 @@ class PromptEndpoint:
 
         """
         payload = self._generate_payload_for_request(
-            model_instance_id, prompt, thread_id=thread_id, findings=findings
+            model_instance_id, prompt, thread_id=thread_id
         )
         response = cast(
             SubmitResponse,

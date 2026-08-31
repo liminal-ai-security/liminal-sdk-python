@@ -55,7 +55,6 @@ async def main() -> None:
             response = await liminal.prompt.submit(
                 model_instance.id,
                 prompt,
-                findings=findings,
                 thread_id=created_thread.id,
             )
             _LOGGER.info("LLM response: %s", response)

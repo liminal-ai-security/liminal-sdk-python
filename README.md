@@ -207,27 +207,24 @@ model_instance = await liminal.llm.get_model_instance(model_instance_name)
 thread = await liminal.thread.get_by_id(123)
 # >>> Thread(...)
 
-# Analayze a prompt for sensitive info:
+# Analyze a prompt for sensitive info:
 findings = await liminal.prompt.analyze(model_instance.id, "Here is a sensitive prompt")
 # >>> AnalyzeResponse(...)
 
 # Cleanse input text by applying the policies defined in the Liminal admin
-# dashboard. You can optionally provide existing analysis finidings; if not
-# provided, analyze is # called automatically):
+# dashboard:
 cleansed = await liminal.prompt.cleanse(
     model_instance.id,
     "Here is a sensitive prompt",
-    findings=findings,
     thread_id=thread.id,
 )
 # >>> CleanseResponse(...)
 
-# Submit a prompt to an LLM, cleansing it in the process (once again, providing optional
-# findings), and receive the whole response:
+# Submit a prompt to an LLM, cleansing it in the process, and receive the whole
+# response:
 response = await liminal.prompt.submit(
     model_instance.id,
     "Here is a sensitive prompt",
-    findings=findings,
     thread_id=thread.id,
 )
 # >>> SubmitResponse(...)
@@ -236,7 +233,6 @@ response = await liminal.prompt.submit(
 response = liminal.prompt.stream(
     model_instance.id,
     "Here is a sensitive prompt",
-    findings=findings,
     thread_id=thread.id,
 )
 async for chunk in resp:

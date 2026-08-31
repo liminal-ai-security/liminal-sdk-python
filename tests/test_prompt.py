@@ -99,7 +99,6 @@ async def test_cleanse_and_hydrate(
             "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
             "identifies as Female"
         ),
-        findings=findings,
         thread_id=123,
     )
     assert len(cleansed.items) == 5
@@ -204,7 +203,6 @@ async def test_stream(
             "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
             "identifies as Female"
         ),
-        findings=findings,
         thread_id=123,
     )
 
@@ -270,7 +268,6 @@ async def test_submit(
             "Lindbergh Circle Alexander City Alabama. Jane was born on 6/5/1961 and "
             "identifies as Female"
         ),
-        findings=findings,
         thread_id=123,
     )
 
