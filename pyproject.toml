@@ -45,7 +45,7 @@ lint = [
     "pre-commit==4.6.2",
     "pytest-asyncio==1.4.0",
     "pytest==9.1.1",
-    "ruff==0.16.4",
+    "ruff==0.16.5",
     "ty==0.0.77",
 ]
 release = [
