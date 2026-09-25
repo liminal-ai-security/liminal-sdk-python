@@ -17,13 +17,13 @@ jobs:
 
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
 
       - name: 🏗 Set up Python
         id: setup-python
-        uses: actions/setup-python@v7.0.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: 3.14.7
 
@@ -31,6 +31,8 @@ jobs:
         uses: ./.github/actions/install-uv
 
       - name: 🚀 Publish to PyPi
+        env:
+          PYPI_API_KEY: ${{ secrets.PYPI_API_KEY }}
         run: |
           uv build
-          uv publish --token ${{ secrets.PYPI_API_KEY }}
+          uv publish --token $PYPI_API_KEY
