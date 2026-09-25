@@ -49,7 +49,7 @@ jobs:
           delete: true
 
   set-labels:
-    name: 🏷️ Set Labels
+    name: 🏷️ Set PR Labels
 
     runs-on: ubuntu-latest
 
