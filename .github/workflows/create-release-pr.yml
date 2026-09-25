@@ -20,11 +20,11 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: 🏗 Set up Python
         id: setup-python
-        uses: actions/setup-python@v7.0.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: 3.14.7
 
@@ -36,33 +36,36 @@ jobs:
           uv sync --extra release
 
       - name: 🔢 Update pyproject.toml version
+        env: 
+          VERSION: ${{ inputs.version }}
         run: |
-          uv run ./scripts/bump-version.py "${{ inputs.version }}"
-          git checkout -b release/${{ inputs.version }}
+          uv run ./scripts/bump-version.py "$VERSION"
+          git checkout -b release/$VERSION
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add pyproject.toml
-          git commit -m "Update version to ${{ inputs.version }}"
+          git commit -m "Update version to $VERSION"
           git tag \
-            -a ${{ inputs.version }} \
-            -m "Release ${{ inputs.version }}"
-          git push origin release/${{ inputs.version }}
-          git push origin tag ${{ inputs.version }}
+            -a $VERSION \
+            -m "Release $VERSION"
+          git push origin release/$VERSION
+          git push origin tag $VERSION
 
       - name: 📝 Create the PR
+        env: 
+          VERSION: ${{ inputs.version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr create \
-            --head release/${{ inputs.version }} \
+            --head release/$VERSION \
             --base main \
-            --title "chore(release): ${{ inputs.version }}" \
+            --title "chore(release): $VERSION" \
             --body-file ".github/PULL_REQUEST_TEMPLATE/release.md" \
             --draft \
             --label release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: ✏️ Run Release Drafter
-        uses: release-drafter/release-drafter@v7.7.0
+        uses: release-drafter/release-drafter@34d80673e067bdc0c24568d3af899c216adcfaa9 # v7.7.0
         with:
           tag: ${{ inputs.version }}
           name: ${{ inputs.version }}
