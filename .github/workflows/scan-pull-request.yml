@@ -23,13 +23,13 @@ jobs:
 
     steps:
       - name: Lint title
-        uses: amannn/action-semantic-pull-request@v6.1.1
+        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
         id: lint-title
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Create error comment
-        uses: marocchino/sticky-pull-request-comment@v3.0.5
+        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
         if: ${{ always() && steps.lint-title.outputs.error_message != null }}
         with:
           header: lint-title-error-comment
@@ -42,22 +42,22 @@ jobs:
             ${{ steps.lint-title.outputs.error_message }}
             ```
       - name: Delete error comment
-        uses: marocchino/sticky-pull-request-comment@v3.0.5
+        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
         if: ${{ steps.lint-title.outputs.error_message == null }}
         with:
           header: lint-title-error-comment
           delete: true
 
   set-labels:
-    name: 🏷️ Set Labels
+    name: 🏷️ Set PR Labels
 
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Set labels
-        uses: actions/labeler@v7.0.0
+        uses: actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13 # v7.0.0
         with:
           configuration-path: ./.github/config/labeler.yml
           sync-labels: true
@@ -68,6 +68,7 @@ jobs:
           PR_CURRENT_LABELS_JSON: ${{ toJson(github.event.pull_request.labels) }}
           PR_TITLE: ${{ github.event.pull_request.title }}
           GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           # Create a mapping between Conventional Commit prefixes and our labels:
           label_map='{
@@ -126,7 +127,7 @@ jobs:
           # Apply the label changes:
           if [[ -n "$labels_to_remove_csv" || -n "$labels_to_add_csv" ]]; then
             gh pr edit \
-              "${{ github.event.pull_request.number }}" \
+              "$PR_NUMBER" \
               ${labels_to_add_csv:+--add-label "$labels_to_add_csv"} \
               ${labels_to_remove_csv:+--remove-label "$labels_to_remove_csv"}
           else
