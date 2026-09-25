@@ -36,7 +36,7 @@ jobs:
           uv sync --extra release
 
       - name: 🔢 Update pyproject.toml version
-        env: 
+        env:
           VERSION: ${{ inputs.version }}
         run: |
           uv run ./scripts/bump-version.py "$VERSION"
@@ -52,7 +52,7 @@ jobs:
           git push origin tag $VERSION
 
       - name: 📝 Create the PR
-        env: 
+        env:
           VERSION: ${{ inputs.version }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
