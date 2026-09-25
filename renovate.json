@@ -23,6 +23,11 @@
       "description": "Don't pin versions of transitive packages",
       "matchPackageNames": ["anyio", "requests"],
       "rangeStrategy": "replace"
+    },
+    {
+      "description": "Pin GitHub Actions to commit SHAs for supply-chain security",
+      "matchManagers": ["github-actions"],
+      "pinDigests": true
     }
   ]
 }
