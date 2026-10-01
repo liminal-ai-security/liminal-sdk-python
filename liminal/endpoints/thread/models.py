@@ -54,7 +54,9 @@ class Thread(BaseModel):
     id: int
 
     # References:
-    model_instance_id: int = field(metadata=field_options(alias="modelInstanceId"))
+    model_instance_id: int | None = field(
+        metadata=field_options(alias="modelInstanceId")
+    )
     user_id: int = field(metadata=field_options(alias="userId"))
 
     # Fields:
@@ -63,7 +65,9 @@ class Thread(BaseModel):
     type: ThreadType
 
     # Relations:
-    model_instance: ModelInstance = field(metadata=field_options(alias="modelInstance"))
+    model_instance: ModelInstance | None = field(
+        metadata=field_options(alias="modelInstance")
+    )
 
     # Timestamps:
     created_at: datetime = field(metadata=field_options(alias="createdAt"))

@@ -90,3 +90,35 @@ async def test_get_by_id(
 
     thread = await mock_client.thread.get_by_id(161)
     assert thread.name == "My thread"
+
+
+@pytest.mark.asyncio
+async def test_get_by_id_without_model_instance(
+    httpx_mock: HTTPXMock,
+    mock_client: Client,
+    threads_get_by_id_response: dict[str, Any],
+) -> None:
+    """Test getting a thread whose model instance is not returned.
+
+    Args:
+    ----
+        httpx_mock: The HTTPX mock fixture.
+        mock_client: A mock Liminal client.
+        threads_get_by_id_response: The response from the endpoint.
+
+    """
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{TEST_API_SERVER_URL}/api/v1/threads/161",
+        json={
+            "data": {
+                **threads_get_by_id_response["data"],
+                "modelInstance": None,
+                "modelInstanceId": None,
+            }
+        },
+    )
+
+    thread = await mock_client.thread.get_by_id(161)
+    assert thread.model_instance is None
+    assert thread.model_instance_id is None
