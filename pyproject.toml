@@ -27,7 +27,7 @@ description = "The Liminal SDK for Python"
 license = "Apache-2.0"
 name = "liminal-sdk-python"
 readme = "README.md"
-requires-python = ">=3.12,<3.15"
+requires-python = ">=3.15,<3.16"
 version = "2024.09.0b1"
 
 [project.optional-dependencies]
